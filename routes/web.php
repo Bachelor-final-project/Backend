@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,8 +18,14 @@ Route::get('/notifications/', [DashboardController::class, 'index'])->name('noti
 Route::get('/profile/', [DashboardController::class, 'index'])->name('profile');
 Route::get('/static-sign-in/', [DashboardController::class, 'index'])->name('static-sign-in');
 Route::get('/static-sign-up/', [DashboardController::class, 'index'])->name('static-sign-up');
-Route::get('/logout/', [DashboardController::class, 'index'])->name('logout');
-Route::get('/login/', [DashboardController::class, 'index'])->name('login');
-Route::get('/register/', [DashboardController::class, 'index'])->name('register');
-Route::get('/user-profile/', [ProfileController::class, 'index'])->name('user-profile');
+// Route::get('/logout/', [DashboardController::class, 'index'])->name('logout');
+// Route::get('/login/', [DashboardController::class, 'index'])->name('login');
+// Route::get('/register/', [DashboardController::class, 'index'])->name('register');
+// Route::get('/user-profile/', [ProfileController::class, 'index'])->name('user-profile');
 Route::get('/user-management/', [ProfileController::class, 'index'])->name('user-management');
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:web');

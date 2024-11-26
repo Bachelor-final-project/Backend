@@ -20,5 +20,5 @@ models = [
 
 for model in models:
     print('Creating Model for: ',model)
-    system('php artisan make:model '+model+' -a --api')
+    system(f'docker exec -t php php artisan make:model {model} -a --api')
     print('Done.')
