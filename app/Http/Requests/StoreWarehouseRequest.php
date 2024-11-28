@@ -24,7 +24,9 @@ class StoreWarehouseRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'bio' => 'nullable|string',
+            'status' => 'required|in:open,close,full,not_available',
+            'location' => 'required|string|max:255',
         ];
     }
 }

@@ -8,5 +8,5 @@ for file in onlyfiles:
     if path.exists(resources_path + file + 'Resource.php'):
         print(file+'Resource' + 'already exists.. skip')
         continue
-    system('php artisan make:resource '+file+'Resource')
+    system(f'docker exec -t php php artisan make:resource '+file+'Resource')
     print('Finish.')
