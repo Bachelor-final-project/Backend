@@ -12,12 +12,8 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('warehouses', function (Blueprint $table) {
-            $table->id();
-            $table->string('bio')->nullable();
-            $table->string('status')->nullable();
-            $table->string('location')->nullable();
-            $table->timestamps();
+        Schema::table('beneficiaries', function (Blueprint $table) {
+            $table->foreign('father_id')->references('id')->on('beneficiaries');
         });
     }
 
@@ -28,6 +24,8 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('warehouses');
+        Schema::table('ben', function (Blueprint $table) {
+            //
+        });
     }
 };

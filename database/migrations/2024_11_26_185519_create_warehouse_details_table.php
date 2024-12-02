@@ -16,11 +16,11 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('unit_id');
-            $table->integer('amount');
+            $table->decimal('amount')->default(0);
             $table->timestamps();
 
-            $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDelete('cascade');
-            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
+            $table->foreign('warehouse_id')->references('id')->on('warehouses');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 

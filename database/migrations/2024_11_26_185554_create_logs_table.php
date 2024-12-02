@@ -14,12 +14,12 @@ return new class extends Migration {
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->string('entity_id');
-            $table->unsignedBigInteger('record_id');
-            $table->string('type');
+            $table->string('entity_id')->nullable();
+            $table->unsignedBigInteger('record_id')->nullable();
+            $table->string('type')->nullable();
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

@@ -26,8 +26,8 @@ class StoreProposalRequest extends FormRequest
         return [
             'donor_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
-            'body' => 'required|string',
-            'status' => 'required|in:accepted,unaccepted,pending,preparing,done',
+            'body' => 'sometimes|string',
+            'status' => 'required|integer',
             'notes' => 'nullable|string',
         ];
     }

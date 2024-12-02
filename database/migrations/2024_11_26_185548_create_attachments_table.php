@@ -16,12 +16,15 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('entity_id');
             $table->unsignedBigInteger('record_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('filename');
             $table->string('path');
             $table->string('file_extension', 10);
             $table->integer('filesize');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+
         });
     }
 

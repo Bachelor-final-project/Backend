@@ -16,12 +16,12 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('proposal_id');
             $table->unsignedBigInteger('beneficiary_id');
-            $table->string('status');
+            $table->integer('status'); // [1 => received, 2 => granted]
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('proposal_id')->references('id')->on('proposals')->onDelete('cascade');
-            $table->foreign('beneficiary_id')->references('id')->on('beneficiaries')->onDelete('cascade');
+            $table->foreign('proposal_id')->references('id')->on('proposals');
+            $table->foreign('beneficiary_id')->references('id')->on('beneficiaries');
         });
     }
 
