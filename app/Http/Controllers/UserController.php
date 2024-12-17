@@ -87,6 +87,7 @@ class UserController extends Controller
     }
 
     public function destroy(Request $request, User $user)
+
     {
         if (!$this->user->is_permitted_to('delete', User::class, $request))
             return response()->json(['message' => 'not_permitted'], 422);

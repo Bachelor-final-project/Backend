@@ -1066,6 +1066,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/153254cac5210eba8e14709f5eb7450e73fa690e",
                 "reference": "153254cac5210eba8e14709f5eb7450e73fa690e",
+
                 "shasum": ""
             },
             "require": {
@@ -1268,6 +1269,7 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2024-12-17T18:21:58+00:00"
+
         },
         {
             "name": "laravel/prompts",
@@ -1340,6 +1342,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/sanctum/zipball/698064236a46df016e64a7eb059b1414e0b281df",
                 "reference": "698064236a46df016e64a7eb059b1414e0b281df",
+
                 "shasum": ""
             },
             "require": {
@@ -1391,6 +1394,7 @@
                 "source": "https://github.com/laravel/sanctum"
             },
             "time": "2024-12-11T16:40:21+00:00"
+
         },
         {
             "name": "laravel/serializable-closure",
