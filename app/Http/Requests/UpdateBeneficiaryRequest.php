@@ -13,7 +13,7 @@ class UpdateBeneficiaryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,12 @@ class UpdateBeneficiaryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'sometimes|string|max:255',
+            'national_id' => 'sometimes|string|max:20|unique:beneficiaries,national_id',
+            'phone' => 'sometimes|string|max:20',
+            'email' => 'sometimes|email|max:255',
+            'dob' => 'sometimes|date',
+            'father_id' => 'sometimes|integer|exists:beneficiaries,id',
         ];
     }
 }

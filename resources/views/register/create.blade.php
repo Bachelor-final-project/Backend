@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-12">
                     <!-- Navbar -->
-                    <x-navbars.navs.guest signin='login' signup='register'></x-navbars.navs.guest>
+                    <x-navbars.navs.guest signup='auth.register' signin='auth.login'></x-navbars.navs.guest>
                     <!-- End Navbar -->
                 </div>
             </div>
@@ -37,7 +37,7 @@
                                                     value="{{ old('name') }}">
                                             </div>
                                             @error('name')
-                                            <p class='text-danger inputerror'>{{ $message }} </p>
+                                                <p class='text-danger inputerror'>{{ $message }} </p>
                                             @enderror
                                             <div class="input-group input-group-outline mt-3">
                                                 <label class="form-label">Email</label>
@@ -45,14 +45,14 @@
                                                     value="{{ old('email') }}">
                                             </div>
                                             @error('email')
-                                            <p class='text-danger inputerror'>{{ $message }} </p>
+                                                <p class='text-danger inputerror'>{{ $message }} </p>
                                             @enderror
                                             <div class="input-group input-group-outline mt-3">
                                                 <label class="form-label">Password</label>
                                                 <input type="password" class="form-control" name="password">
                                             </div>
                                             @error('password')
-                                            <p class='text-danger inputerror'>{{ $message }} </p>
+                                                <p class='text-danger inputerror'>{{ $message }} </p>
                                             @enderror
                                             <div class="form-check form-check-info text-start ps-0 mt-3">
                                                 <input class="form-check-input" type="checkbox" value=""
@@ -86,17 +86,17 @@
     </div>
 
     @push('js')
-    <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
-    <script>
-        $(function() {
-    
-        var text_val = $(".input-group input").val();
-        if (text_val === "") {
-          $(".input-group").removeClass('is-filled');
-        } else {
-          $(".input-group").addClass('is-filled');
-        }
-    });
-    </script>
+        <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
+        <script>
+            $(function() {
+
+                var text_val = $(".input-group input").val();
+                if (text_val === "") {
+                    $(".input-group").removeClass('is-filled');
+                } else {
+                    $(".input-group").addClass('is-filled');
+                }
+            });
+        </script>
     @endpush
 </x-layout>

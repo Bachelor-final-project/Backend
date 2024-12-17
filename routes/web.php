@@ -21,37 +21,50 @@ Route::get('/static-sign-up/', [DashboardController::class, 'index'])->name('sta
 // Route::get('/logout/', [DashboardController::class, 'index'])->name('logout');
 // Route::get('/login/', [DashboardController::class, 'index'])->name('login');
 // Route::get('/register/', [DashboardController::class, 'index'])->name('register');
-// Route::get('/user-profile/', [ProfileController::class, 'index'])->name('user-profile');
+Route::get('/user-profile/', [ProfileController::class, 'index'])->name('user-profile');
 Route::get('/user-management/', [ProfileController::class, 'index'])->name('user-management');
 
 
-// Route::post('/register', [AuthController::class, 'register']);
-// Route::post('/login', [AuthController::class, 'login']);
-// Route::post('/logout', [AuthController::class, 'logout']);
-// Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:web');
+$controllers = [];
 
-
-$controllers = require base_path('vendor/composer/autoload_classmap.php');
-$controllers = array_keys($controllers);
-$controllers = array_filter($controllers, function ($controller) {
-    return (strpos($controller, 'TenantControllers') !== false || strpos($controller, 'MasterControllers') !== false) && strlen($controller) > 0 && strpos($controller, 'Base') == false && strpos($controller, 'OAuth') == false;
-});
-array_map(function ($controller) {
-    if (method_exists($controller, 'routeName'))
-        Route::Resource($controller::routeName(), $controller);
-}, $controllers);
-
-Route::group([
-    'prefix' => 'auth',
-    'middleware' => 'web',
-    'as' => 'auth.'
-], function () {
-    $auth_routes = ['login', 'logout'];
-    foreach ($auth_routes as $auth_route) {
-        Route::post("/" . $auth_route, [AuthController::class, $auth_route])->name($auth_route);
-        // Route::post("/" . $auth_route, function () {
-        //     dd("Welcome");
-        // })->name($auth_route);
+foreach (glob(app_path('Http/Controllers/*.php')) as $file) {
+    $basename = basename($file, '.php');
+    $class = 'App\\Http\\Controllers\\' . $basename;
+    if (in_array($basename, ['AuthController.php', 'Controller.php'])) {
+        continue;
     }
-    Route::get("profile", [AuthController::class, 'profile']);
+    if (class_exists($class)) {
+        $reflection = new ReflectionClass($class);
+        if (!$reflection->isAbstract() && !$reflection->isInterface() && !$reflection->isTrait()) {
+            $controllers[] = $class;
+        }
+    }
+}
+Route::middleware(['web'])->group(function () use ($controllers) {
+    array_map(function ($controller) {
+        if (method_exists($controller, 'routeName')) {
+            // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
+            Route::resource($controller::routeName(), $controller);
+        }
+    }, $controllers);
 });
+
+Route::get('/login', [AuthController::class, 'create'])->name('auth.login');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+// Route::group([
+//     'prefix' => 'auth',
+//     'middleware' => 'web',
+//     'as' => 'auth.'
+// ], function () {
+//     $auth_routes = ['login', 'logout', 'register'];
+//     foreach ($auth_routes as $auth_route) {
+//         Route::post("/" . $auth_route, [AuthController::class, $auth_route])->name($auth_route);
+//         // Route::post("/" . $auth_route, function () {
+//         //     dd("Welcome");
+//         // })->name($auth_route);
+//     }
+//     Route::get("profile", [AuthController::class, 'profile']);
+// });
+
+

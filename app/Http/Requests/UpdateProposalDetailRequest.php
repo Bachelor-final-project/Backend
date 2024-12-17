@@ -13,7 +13,7 @@ class UpdateProposalDetailRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class UpdateProposalDetailRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'proposal_id' => 'sometimes|exists:proposals,id',
+            'unit_id' => 'sometimes|exists:units,id',
+            'value' => 'sometimes|numeric|min:0',
+            'notes' => 'sometimes|string',
         ];
     }
 }

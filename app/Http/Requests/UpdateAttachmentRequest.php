@@ -13,7 +13,7 @@ class UpdateAttachmentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateAttachmentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'entity_id' => 'required|integer',
+            'record_id' => 'required|integer',
+            'filename' => 'required|string|max:255',
         ];
     }
 }

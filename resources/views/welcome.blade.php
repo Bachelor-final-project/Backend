@@ -2,7 +2,7 @@
     <div class="container position-sticky z-index-sticky top-0">
         <div class="row">
             <div class="col-12">
-                <x-navbars.navs.guest signup='register' signin='login'></x-navbars.navs.guest>
+                <x-navbars.navs.guest signup='auth.register' signin='auth.login'></x-navbars.navs.guest>
             </div>
         </div>
     </div>
@@ -13,5 +13,5 @@
             <h1 class="text-light text-center">Welcome to Material Dashboard FREE Laravel Live Preview.</h1>
         </div>
     </div>
-        <x-footers.guest></x-footers.guest>
+    <x-footers.guest></x-footers.guest>
 </x-layout>

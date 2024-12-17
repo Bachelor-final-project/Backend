@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-12">
                 <!-- Navbar -->
-                <x-navbars.navs.guest signin='login' signup='register'></x-navbars.navs.guest>
+                <x-navbars.navs.guest signup='auth.register' signin='auth.login'></x-navbars.navs.guest>
                 <!-- End Navbar -->
             </div>
         </div>
@@ -14,12 +14,12 @@
         <div class="container text-center">
             <div class="row">
                 <div class="col-md-12">
-                  <h1 class="title text-light">405</h1>
-                  <h2 class="text-light">Method Not Allowed </h2>
-                  <h4 class="text-light">Ooooups! Looks like you got lost.</h4>
+                    <h1 class="title text-light">405</h1>
+                    <h2 class="text-light">Method Not Allowed </h2>
+                    <h4 class="text-light">Ooooups! Looks like you got lost.</h4>
                 </div>
-              </div>
+            </div>
         </div>
     </div>
-        <x-footers.guest></x-footers.guest>
+    <x-footers.guest></x-footers.guest>
 </x-layout>

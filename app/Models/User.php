@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Route;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory;
-    public static $controllable = true;
 
+    protected $appends = ['type_str', 'status_str'];
+    public static $controllable = true;
+    public const DEFAULTPASSWD = '123456';
     protected $hidden = [
         'password',
         'remember_token',
@@ -58,4 +60,26 @@ class User extends Authenticatable
         return true;
     }
 
+    public function getTypeStrAttribute()
+    {
+        return [1 => 'individual', 2 => 'organisation'][$this->type];
+    }
+
+    public function getStatusStrAttribute()
+    {
+        return [1 => 'Open', 2 => 'Closed', 3 => 'Blocked'][$this->status];
+    }
+    public static function headers()
+    {
+        return [
+            ['sortable' => true, 'value' => 'name', 'key' => 'name'],
+            ['sortable' => true, 'value' => 'email', 'key' => 'email'],
+            ['sortable' => true, 'value' => 'phone', 'key' => 'phone'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
+            ['sortable' => true, 'value' => 'type', 'key' => 'type_str'],
+            ['sortable' => true, 'value' => 'job title', 'key' => 'job_title'],
+            ['sortable' => true, 'value' => 'is active', 'key' => 'is_active'],
+            ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
 }

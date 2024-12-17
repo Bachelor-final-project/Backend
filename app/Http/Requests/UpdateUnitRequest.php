@@ -13,7 +13,7 @@ class UpdateUnitRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateUnitRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string',
+            'estimated_price' => 'sometimes|numeric|min:0',
         ];
     }
 }
