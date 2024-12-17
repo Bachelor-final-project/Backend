@@ -19,10 +19,18 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
-        return UserResource::collection(User::search($request)->sort($request)->paginate((request('per_page')??request('itemsPerPage'))??15));
+        return view("dashboard.users.index");
     }
+    // public function index(Request $request)
+    // {
+    //     return UserResource::collection(User::search($request)->sort($request)->paginate((request('per_page')??request('itemsPerPage'))??15));
+    // }
     public function store(Request $request)
     {
+        // return [
+        //     'status' => 'success',
+        //     'title' => 'تم اضافة المستخدم بنجاح',
+        // ];
         if(!$this->user->is_permitted_to('store',User::class,$request))
             return response()->json(['message'=>'not_permitted'],422);
 
@@ -57,6 +65,11 @@ class UserController extends Controller
                 $user->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
         }
         return new UserResource($user);
+    }
+    public function create(Request $request, User $user)
+    {
+        
+        return view('dashboard.users.create');
     }
     public function destroy(Request $request,User $user)
     {
