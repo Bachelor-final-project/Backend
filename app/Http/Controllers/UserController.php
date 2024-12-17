@@ -22,7 +22,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return view("", [
+        return view("dashboard.users.index", [
             'headers' => User::headers(),
         ]);
     }
@@ -34,7 +34,7 @@ class UserController extends Controller
 
     public function create()
     {
-        return view("", [
+        return view("dashboard.users.create", [
             'data_to_send' => 'Hello, World!'
         ]);
     }
