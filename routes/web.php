@@ -46,6 +46,10 @@ Route::middleware(['web'])->group(function () use ($controllers) {
             // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
             Route::resource($controller::routeName(), $controller);
         }
+        if (method_exists($controller, 'indexApi')) {
+            // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
+            Route::get($controller::routeName() . 'Api', [$controller, 'indexApi']);
+        }
     }, $controllers);
 });
 
