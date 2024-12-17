@@ -13,7 +13,7 @@ class UpdateWarehouseDetailRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateWarehouseDetailRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'warehouse_id' => 'sometimes|exists:warehouses,id',
+            'unit_id' => 'sometimes|exists:units,id',
+            'amount' => 'sometimes|integer|min:0',
         ];
     }
 }

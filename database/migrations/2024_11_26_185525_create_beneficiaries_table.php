@@ -19,8 +19,11 @@ return new class extends Migration {
             $table->string('phone');
             $table->string('email')->nullable();
             $table->date('dob')->nullable();
-            $table->string('father_id')->nullable();
+            $table->unsignedBigInteger('father_id')->nullable();
+
             $table->timestamps();
+
+
         });
     }
 

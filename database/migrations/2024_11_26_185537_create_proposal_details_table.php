@@ -20,8 +20,8 @@ return new class extends Migration {
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('proposal_id')->references('id')->on('proposals')->cascadeOnDelete();
-            $table->foreign('unit_id')->references('id')->on('units')->cascadeOnDelete();
+            $table->foreign('proposal_id')->references('id')->on('proposals');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 

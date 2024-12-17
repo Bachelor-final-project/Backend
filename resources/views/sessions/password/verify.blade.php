@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-12">
                 <!-- Navbar -->
-                <x-navbars.navs.guest signin='login' signup='register'></x-navbars.navs.guest>
+                <x-navbars.navs.guest signup='auth.register' signin='auth.login'></x-navbars.navs.guest>
                 <!-- End Navbar -->
             </div>
         </div>
@@ -25,33 +25,32 @@
                             </div>
                             <div class="card-body">
                                 @if (Session::has('status'))
-                                <div class="alert alert-success alert-dismissible text-white" role="alert">
-                                    <span class="text-sm">{{ Session::get('status') }}</span>
-                                    <button type="button" class="btn-close text-lg py-3 opacity-10"
-                                        data-bs-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                @elseif (Session::has('email'))
-
-                                <div class="alert alert-danger alert-dismissible text-white" role="alert">
-                                    <span class="text-sm">{{ Session::get('email') }}</span>
-                                    <button type="button" class="btn-close text-lg py-3 opacity-10"
-                                        data-bs-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                @endif
-                                @if (Session::has('demo'))
-                                <div class="row">
-                                    <div class="alert alert-danger alert-dismissible text-white" role="alert">
-                                        <span class="text-sm">{{ Session::get('demo') }}</span>
+                                    <div class="alert alert-success alert-dismissible text-white" role="alert">
+                                        <span class="text-sm">{{ Session::get('status') }}</span>
                                         <button type="button" class="btn-close text-lg py-3 opacity-10"
                                             data-bs-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                </div>
+                                @elseif (Session::has('email'))
+                                    <div class="alert alert-danger alert-dismissible text-white" role="alert">
+                                        <span class="text-sm">{{ Session::get('email') }}</span>
+                                        <button type="button" class="btn-close text-lg py-3 opacity-10"
+                                            data-bs-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                @endif
+                                @if (Session::has('demo'))
+                                    <div class="row">
+                                        <div class="alert alert-danger alert-dismissible text-white" role="alert">
+                                            <span class="text-sm">{{ Session::get('demo') }}</span>
+                                            <button type="button" class="btn-close text-lg py-3 opacity-10"
+                                                data-bs-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 @endif
                                 <form role="form" method="POST" action="{{ route('verify') }}" class="text-start">
                                     @csrf
@@ -60,7 +59,7 @@
                                         <input type="email" class="form-control" name="email">
                                     </div>
                                     @error('email')
-                                    <p class='text-danger inputerror'>{{ $message }} </p>
+                                        <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                     <div class="text-center">
                                         <button type="submit"
@@ -81,17 +80,17 @@
         </div>
     </main>
     @push('js')
-    <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
-    <script>
-        $(function() {
-    
-        var text_val = $(".input-group input").val();
-        if (text_val === "") {
-          $(".input-group").removeClass('is-filled');
-        } else {
-          $(".input-group").addClass('is-filled');
-        }
-    });
-    </script>
+        <script src="{{ asset('assets') }}/js/jquery.min.js"></script>
+        <script>
+            $(function() {
+
+                var text_val = $(".input-group input").val();
+                if (text_val === "") {
+                    $(".input-group").removeClass('is-filled');
+                } else {
+                    $(".input-group").addClass('is-filled');
+                }
+            });
+        </script>
     @endpush
 </x-layout>

@@ -13,7 +13,7 @@ class UpdateWarehouseRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateWarehouseRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'bio' => 'sometimes|string',
+            'status' => 'sometimes|integer',
+            'location' => 'sometimes|string|max:255',
         ];
     }
 }

@@ -13,7 +13,7 @@ class UpdateLogRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class UpdateLogRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'entity_id' => 'sometimes|string|max:255',
+            'record_id' => 'sometimes|integer',
+            'type' => 'sometimes|string|max:255',
+            'notes' => 'sometimes|string',
+            'user_id' => 'sometimes|exists:users,id',
         ];
     }
 }

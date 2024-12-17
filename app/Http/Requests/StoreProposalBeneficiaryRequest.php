@@ -13,7 +13,7 @@ class StoreProposalBeneficiaryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class StoreProposalBeneficiaryRequest extends FormRequest
         return [
             'proposal_id' => 'required|exists:proposals,id',
             'beneficiary_id' => 'required|exists:beneficiaries,id',
-            'status' => 'required|string|in:received,granted',
+            'status' => 'sometimes|integer',
             'notes' => 'nullable|string',
         ];
     }

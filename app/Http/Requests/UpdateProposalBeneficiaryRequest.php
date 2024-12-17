@@ -13,7 +13,7 @@ class UpdateProposalBeneficiaryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class UpdateProposalBeneficiaryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'proposal_id' => 'sometimes|exists:proposals,id',
+            'beneficiary_id' => 'sometimes|exists:beneficiaries,id',
+            'status' => 'sometimes|integer',
+            'notes' => 'sometimes|string',
         ];
     }
 }

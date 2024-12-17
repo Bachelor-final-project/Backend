@@ -13,7 +13,7 @@ class StoreBeneficiaryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class StoreBeneficiaryRequest extends FormRequest
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
             'dob' => 'nullable|date',
-            'father_id' => 'nullable|string|max:255',
+            'father_id' => 'nullable|integer|exists:beneficiaries,id',
         ];
     }
 }
