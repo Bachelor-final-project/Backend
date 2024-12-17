@@ -24,6 +24,7 @@ class User extends Authenticatable
 
     protected $guarded = [];
 
+    public static $datatableHeaders = ['id', 'name', 'type','actions'];
     public function is_permitted_to($name, $class_name, $request)
     {
         $permitted = true;

@@ -59,6 +59,7 @@
     },
     "config": {
         "optimize-autoloader": true,
+        "discard-changes" : true,
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {

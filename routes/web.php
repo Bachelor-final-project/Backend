@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -10,6 +11,9 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard/users', [UserController::class, 'index'])->name('users');
+Route::get('/dashboard/users/create', [UserController::class, 'create'])->name('users.create');
+Route::post('/dashboard/users/create', [UserController::class, 'store'])->name('users.store');
 Route::get('/tables/', [DashboardController::class, 'index'])->name('tables');
 Route::get('/billing/', [DashboardController::class, 'index'])->name('billing');
 Route::get('/virtual-reality/', [DashboardController::class, 'index'])->name('virtual-reality');
@@ -18,17 +22,17 @@ Route::get('/notifications/', [DashboardController::class, 'index'])->name('noti
 Route::get('/profile/', [DashboardController::class, 'index'])->name('profile');
 Route::get('/static-sign-in/', [DashboardController::class, 'index'])->name('static-sign-in');
 Route::get('/static-sign-up/', [DashboardController::class, 'index'])->name('static-sign-up');
-// Route::get('/logout/', [DashboardController::class, 'index'])->name('logout');
-// Route::get('/login/', [DashboardController::class, 'index'])->name('login');
-// Route::get('/register/', [DashboardController::class, 'index'])->name('register');
-// Route::get('/user-profile/', [ProfileController::class, 'index'])->name('user-profile');
+Route::get('/logout/', [DashboardController::class, 'index'])->name('logout');
+Route::get('/login/', [DashboardController::class, 'index'])->name('login');
+Route::get('/register/', [DashboardController::class, 'index'])->name('register');
+Route::get('/user-profile/', [ProfileController::class, 'index'])->name('user-profile');
 Route::get('/user-management/', [ProfileController::class, 'index'])->name('user-management');
 
 
-// Route::post('/register', [AuthController::class, 'register']);
-// Route::post('/login', [AuthController::class, 'login']);
-// Route::post('/logout', [AuthController::class, 'logout']);
-// Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:web');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/profile', [AuthController::class, 'profile'])->name('profile')->middleware('auth:web');
 
 
 $controllers = require base_path('vendor/composer/autoload_classmap.php');
