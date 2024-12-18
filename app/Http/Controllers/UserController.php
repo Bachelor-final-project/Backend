@@ -19,6 +19,7 @@ class UserController extends Controller
     {
         parent::__construct($request);
     }
+    
 
     public function index(Request $request)
     {
