@@ -11,7 +11,7 @@ class TableCard extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $modelClass)
+    public function __construct(public string $modelClass, public $headers)
     {
         //
     }
