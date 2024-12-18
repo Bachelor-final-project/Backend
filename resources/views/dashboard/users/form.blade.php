@@ -11,9 +11,9 @@
         const text_val = $(this).val();
         console.log(text_val);
         if (text_val === "") {
-          $(".input-group").removeClass('is-filled');
+          $(this).parent().removeClass('is-filled');
         } else {
-          $(".input-group").addClass('is-filled');
+          $(this).parent().addClass('is-filled');
         }
     });
         

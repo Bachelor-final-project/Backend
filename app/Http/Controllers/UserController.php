@@ -29,7 +29,9 @@ class UserController extends Controller
 
     public function indexApi(Request $request)
     {
+        // dd(User::get());
         return UserResource::collection(User::search($request)->sort($request)->paginate((request('per_page') ?? request('itemsPerPage')) ?? 15));
+        // return UserResource::collection(User::get());
     }
 
     public function create()
@@ -56,12 +58,12 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function show(Request $request, User $user)
-    {
-        if (!$this->user->is_permitted_to('view', User::class, $request))
-            return response()->json(['message' => 'not_permitted'], 422);
-        return new UserResource($user);
-    }
+    // public function show(Request $request, User $user)
+    // {
+    //     if (!$this->user->is_permitted_to('view', User::class, $request))
+    //         return response()->json(['message' => 'not_permitted'], 422);
+    //     return new UserResource($user);
+    // }
 
     public function edit()
     {

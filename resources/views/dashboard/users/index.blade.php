@@ -33,7 +33,7 @@
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row mb-4">
-            <x-table-card :model-class="User::class" />
+            <x-table-card :model-class="User::class" :headers="$headers"/>
             </div>
             <x-footers.auth></x-footers.auth>
         </div>
@@ -44,7 +44,10 @@
     <script>
         $('#addModal').on('show.bs.modal', function(){
             const modal = $(this);
-            $.get("{{ route('users.create') }}", function (data) {
+            $('#saveBtn').attr('disabled', true);
+            $.get("{{ route('user.create') }}", function (data) {
+                
+                $('#saveBtn').attr('disabled', false);
                 console.log('data fetched');
                 modal.find('.modal-body').html(data);
             });
@@ -62,118 +65,45 @@
             
         });
         $('#addModal').find("#saveBtn").on('click', function(){
-            const form = $('#form');
             $('#saveBtn').attr('disabled', true)
-
-                    $.ajax({
-                        url: form.attr('action'),
-                        type: form.attr('method'),
-                        data: form.serialize(),
-                        success:function(data){
-                            console.log('from success');
-                            if(!data){
-                                Toast.fire({
-                                    icon: "error",
-                                    title: "there is a problem"
-                                });
-                                return false;
-                            }
-
-                            Toast.fire({
-                                icon: data.status,
-                                title: data.title
-                            });
-                        },
-                        error:function (errors) {
-                            console.log('from error');
-                            console.log(errors);
-
-                            Toast.fire({
-                                icon: "error",
-                                title: errors.statusText
-                            });
-                        },
-                        complete: function(){
-                            $('#saveBtn').attr('disabled', false)
-
-                        }
-
-                    });
-        });
-    $('#createModalBtn').on('click', function () {
-        
-            Swal.fire({
-                title: "{{__('Add New User')}}",
-                showCancelButton: true,
-                showLoaderOnConfirm: true,
-                confirmButtonText: "{{__('Add')}}",
-                didOpen: () => {
-                    Swal.showLoading();
-                    $.get("{{ route('users.create') }}", function (data) {
-                        Swal.hideLoading();
-                        Swal.update({
-                            html: data
+            const form = $('#form');
+            console.log(form.attr('method'))
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success:function(data){
+                    console.log('from success');
+                    if(!data){
+                        Toast.fire({
+                            icon: "error",
+                            title: "there is a problem"
                         });
-                    });
+                        return false;
+                    }
 
+                    Toast.fire({
+                        icon: "success",
+                        title: data.message
+                    });
                 },
-                showCloseButton: true,
-                
-            }).then((result) => {
-                if(result.isConfirmed){
-                    console.log("it is confired");
-                    const form = $('#form');
-                    $.ajax({
-                        url: form.attr('action'),
-                        type: form.attr('method'),
-                        data: form.serialize(),
-                        success:function(data){
-                            Toast.fire({
-                                icon: data.status,
-                                title: data.title
-                            });
-                        },
-                        error:function (errors) {
-                            Toast.fire({
-                                icon: "error",
-                                title: data.title
-                            });
-                            // const entries = Object.entries(errors.responseJSON.errors);
-                            // console.log(entries);
-                            // var errors_message = document.createElement('div');
-                            // for(let x of entries){
-                            //     if(x[0].includes('.')){
-                            //         var key = x[0].split('.');
-                            //         errors_message = document.createElement('div');
-                            //         errors_message.classList.add('invalid-feedback');
-                            //         errors_message.classList.add('show');
-                            //         document.querySelectorAll('input[name="' + key[0] + '[]"]')[key[1]].classList.add('is-invalid');
-                            //         errors_message.innerHTML = x[1][0];
-                            //         document.querySelectorAll('input[name="' + key[0] + '[]"]')[key[1]].parentElement.appendChild(errors_message);
-                            //     }else {
-                            //         if (document.querySelector('input[name="' + x[0] + '"]')) {
-                            //             errors_message = document.createElement('div');
-                            //             errors_message.classList.add('invalid-feedback');
-                            //             errors_message.classList.add('show');
-                            //             document.querySelector('input[name="' + x[0] + '"]').classList.add('is-invalid');
-                            //             errors_message.innerHTML = x[1][0];
-                            //             document.querySelector('input[name="' + x[0] + '"]').parentElement.appendChild(errors_message);
-                            //         } else {
-                            //             errors_message = document.createElement('div');
-                            //             errors_message.classList.add('invalid-feedback');
-                            //             errors_message.classList.add('show');
-                            //             document.querySelector('input[name="area_name"]').classList.add('is-invalid');
-                            //             errors_message.innerHTML = x[1][0];
-                            //             document.querySelector('input[name="area_name"]').parentElement.appendChild(errors_message);
-                            //         }
-                            //     }
-                            // }
-                        }
+                error:function (errors) {
+                    console.log('from error');
+                    console.log(errors);
 
+                    Toast.fire({
+                        icon: "error",
+                        title: errors.responseJSON.message
                     });
+                },
+                complete: function(){
+                    $('#saveBtn').attr('disabled', false)
+
                 }
+
             });
-    });
+        });
+    
     </script>
     @endpush
 </x-layout>

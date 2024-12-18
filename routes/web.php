@@ -10,10 +10,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard/', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/dashboard/users', [UserController::class, 'index'])->name('users');
-Route::get('/dashboard/users/create', [UserController::class, 'create'])->name('users.create');
-Route::post('/dashboard/users/create', [UserController::class, 'store'])->name('users.store');
+Route::get('/dashboard/', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
+// Route::get('/dashboard/users', [UserController::class, 'index'])->name('users');
+// Route::get('/dashboard/users/create', [UserController::class, 'create'])->name('users.create');
+// Route::post('/dashboard/users/create', [UserController::class, 'store'])->name('users.store');
 Route::get('/tables/', [DashboardController::class, 'index'])->name('tables');
 Route::get('/billing/', [DashboardController::class, 'index'])->name('billing');
 Route::get('/virtual-reality/', [DashboardController::class, 'index'])->name('virtual-reality');
@@ -22,7 +22,7 @@ Route::get('/notifications/', [DashboardController::class, 'index'])->name('noti
 Route::get('/profile/', [DashboardController::class, 'index'])->name('profile');
 Route::get('/static-sign-in/', [DashboardController::class, 'index'])->name('static-sign-in');
 Route::get('/static-sign-up/', [DashboardController::class, 'index'])->name('static-sign-up');
-Route::get('/logout/', [DashboardController::class, 'index'])->name('logout');
+// Route::get('/logout/', [DashboardController::class, 'index'])->name('logout');
 // Route::get('/login/', [DashboardController::class, 'index'])->name('login');
 // Route::get('/register/', [DashboardController::class, 'index'])->name('register');
 
@@ -46,7 +46,7 @@ foreach (glob(app_path('Http/Controllers/*.php')) as $file) {
         }
     }
 }
-Route::middleware(['web'])->group(function () use ($controllers) {
+Route::middleware(['web'])->middleware('auth')->group(function () use ($controllers) {
     array_map(function ($controller) {
         if (method_exists($controller, 'routeName')) {
             // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
@@ -54,13 +54,16 @@ Route::middleware(['web'])->group(function () use ($controllers) {
         }
         if (method_exists($controller, 'indexApi')) {
             // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
-            Route::get($controller::routeName() . 'Api', [$controller, 'indexApi']);
+            Route::get($controller::routeName() . 'Api', [$controller, 'indexApi'])->name(strtolower($controller::routeName() . ".index.api"));
         }
     }, $controllers);
 });
 
 Route::get('/login', [AuthController::class, 'create'])->name('auth.login');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register', [AuthController::class, 'create'])->name('auth.register');
+Route::post('/register', [AuthController::class, 'login'])->name('register');
 
 // Route::group([
 //     'prefix' => 'auth',
