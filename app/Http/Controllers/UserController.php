@@ -28,6 +28,7 @@ class UserController extends Controller
     {
         return view("dashboard." . $this->routeName() . ".index", [
             'headers' => $this->getModelInstance()::headers(),
+
         ]);
     }
 
@@ -41,6 +42,7 @@ class UserController extends Controller
     public function create()
     {
         return view("dashboard." . $this->routeName() . ".create", [
+
             'data_to_send' => 'Hello, World!',
             $this->routeName() => $this->getModelInstance()
         ]);
@@ -74,6 +76,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return view("dashboard." . $this->routeName() . ".edit", [
+
             'data_to_send' => 'Hello, World!',
             $this->routeName() => $user
         ]);

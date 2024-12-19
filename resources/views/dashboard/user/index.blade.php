@@ -24,11 +24,26 @@
             const modal = $('#addModal');
             modal.find('#modalLongTitle').text("{{__('Create New User')}}")
             $('#saveBtn').attr('disabled', true);
-            $.get("{{ route('user.create') }}", function (data) {
+
+            // $.get("", function (data) {
                 
-                $('#saveBtn').attr('disabled', false);
-                console.log('data fetched');
-                modal.find('.modal-body').html(data);
+               
+            // });
+            $.ajax({
+                url: "{{ route('user.create') }}",
+                type: 'GET',
+                success: function(data){ 
+                    $('#saveBtn').attr('disabled', false);
+                    console.log('data fetched');
+                    modal.find('.modal-body').html(data);
+                },
+                error: function(data) {
+                    Toast.fire({
+                        icon: "error",
+                        title: data.responseJSON.message
+                    });
+                    modal.modal('hide');
+                }
             });
         });
         $(document).on('click', '.show-update-modal-btn', function(){
@@ -37,11 +52,23 @@
             modal.find('#modalLongTitle').text("{{__('Update User')}}")
             $('#saveBtn').attr('disabled', true);
             const id = $(this).data('id');
-            let base_route = "{{ route('user.index') }}";
-            $.get(base_route + "/" +id+"/edit", function (data) {
-                
-                $('#saveBtn').attr('disabled', false);
-                modal.find('.modal-body').html(data);
+
+            let route = "{{ route('user.index') }}/" + id + "/edit",
+
+            $.ajax({
+                url: route 
+                type: 'GET',
+                success: function(data){ 
+                    $('#saveBtn').attr('disabled', false);
+                    modal.find('.modal-body').html(data);
+                },
+                error: function(data) {
+                    Toast.fire({
+                        icon: "error",
+                        title: data.responseJSON.message
+                    });
+                    modal.modal('hide');
+                }
             });
         });
        });

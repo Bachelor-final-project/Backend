@@ -1,10 +1,10 @@
 
-<form action="{{ route('user.update', ['user' => $user]) }}" method="PUT" id="form">
-    @include('dashboard.user.form')
+
+<form action="{{ route('user.store') }}" method="POST" id="form">
+    @include('dashboard.users.form')
 </form>
 
 <script>
-
     $('#form').submit(function(event){
         $('input').removeClass('is-invalid');
         $('.invalid-feedback').remove();
