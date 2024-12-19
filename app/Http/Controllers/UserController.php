@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,12 +22,12 @@ class UserController extends Controller
     {
         parent::__construct($request);
     }
-    
+
 
     public function index(Request $request)
     {
-        return view("dashboard.users.index", [
-            'headers' => User::headers(),
+        return view("dashboard." . $this->routeName() . ".index", [
+            'headers' => $this->getModelInstance()::headers(),
         ]);
     }
 
@@ -37,62 +40,62 @@ class UserController extends Controller
 
     public function create()
     {
-        return view("dashboard.users.create", [
+        return view("dashboard." . $this->routeName() . ".create", [
             'data_to_send' => 'Hello, World!',
-            "user" => new User
+            $this->routeName() => $this->getModelInstance()
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        if (!$this->user->is_permitted_to('store', User::class, $request))
-            return response()->json(['message' => 'not_permitted'], 422);
+        // if (!$this->user->is_permitted_to('store', User::class, $request))
+        //     return response()->json(['message' => 'not_permitted'], 422);
 
-        $validator = Validator::make($request->all(), User::createRules($this->user));
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $user = User::create($validator->validated());
-        if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $user->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
+        // $validator = Validator::make($request->all(), User::createRules($this->user));
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 422);
+        // }
+        $user = User::create($request->validated());
+        // if ($request->translations) {
+        //     foreach ($request->translations as $translation)
+        //         $user->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
+        // }
         return new UserResource($user);
     }
 
-    // public function show(Request $request, User $user)
-    // {
-    //     if (!$this->user->is_permitted_to('view', User::class, $request))
-    //         return response()->json(['message' => 'not_permitted'], 422);
-    //     return new UserResource($user);
-    // }
-
-    public function edit(User $user)
+    public function show(Request $request, User $user)
     {
-        return view("dashboard.users.update", [
+        return view("dashboard." . $this->routeName() . ".show", [
             'data_to_send' => 'Hello, World!',
-            "user" => $user
+            $this->routeName() => $user
         ]);
     }
 
-    public function update(Request $request, User $user)
+    public function edit(User $user)
     {
-        if (!$this->user->is_permitted_to('update', User::class, $request))
-            return response()->json(['message' => 'not_permitted'], 422);
-        $validator = Validator::make($request->all(), User::updateRules($this->user));
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $user->update($validator->validated());
-        if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $user->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
+        return view("dashboard." . $this->routeName() . ".edit", [
+            'data_to_send' => 'Hello, World!',
+            $this->routeName() => $user
+        ]);
+    }
+
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        // if (!$this->user->is_permitted_to('update', User::class, $request))
+        //     return response()->json(['message' => 'not_permitted'], 422);
+        // $validator = Validator::make($request->all(), User::updateRules($this->user));
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 422);
+        // }
+        $user->update($request->validated());
+        // if ($request->translations) {
+        //     foreach ($request->translations as $translation)
+        //         $user->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
+        // }
         return new UserResource($user);
     }
 
     public function destroy(Request $request, User $user)
-
     {
         if (!$this->user->is_permitted_to('delete', User::class, $request))
             return response()->json(['message' => 'not_permitted'], 422);

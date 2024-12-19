@@ -22,11 +22,12 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     protected $guarded = [];
 
-    public static $datatableHeaders = ['id', 'name', 'type','actions'];
+    public static $datatableHeaders = ['id', 'name', 'type', 'actions'];
     public function scopeSearch($query, $request)
     {
     }
@@ -69,7 +70,7 @@ class User extends Authenticatable
 
     public function getTypeStrAttribute()
     {
-        return [1 => 'individual', 2 => 'organisation'][$this->type]?? "";
+        return [1 => 'individual', 2 => 'organisation'][$this->type] ?? "";
     }
 
     public function getStatusStrAttribute()

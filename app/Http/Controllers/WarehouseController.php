@@ -25,8 +25,8 @@ class WarehouseController extends Controller
 
     public function index(Request $request)
     {
-        return view("", [
-            'headers' => Warehouse::headers(),
+        return view("dashboard." . $this->routeName() . ".index", [
+            'headers' => $this->getModelInstance()::headers(),
         ]);
     }
 
@@ -37,8 +37,9 @@ class WarehouseController extends Controller
 
     public function create()
     {
-        return view("", [
-            'data_to_send' => 'Hello, World!'
+        return view("dashboard." . $this->routeName() . ".create", [
+            'data_to_send' => 'Hello, World!',
+            $this->routeName() => $this->getModelInstance()
         ]);
     }
 
@@ -51,13 +52,17 @@ class WarehouseController extends Controller
 
     public function show(Request $request, Warehouse $warehouse)
     {
-        return new WarehouseResource($warehouse);
+        return view("dashboard." . $this->routeName() . ".show", [
+            'data_to_send' => 'Hello, World!',
+            $this->routeName() => $warehouse
+        ]);
     }
 
-    public function edit()
+    public function edit(Warehouse $warehouse)
     {
-        return view("", [
+        return view("dashboard." . $this->routeName() . ".edit", [
             'data_to_send' => 'Hello, World!',
+            $this->routeName() => $warehouse
         ]);
     }
 

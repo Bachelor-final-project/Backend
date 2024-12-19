@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreBeneficiaryRequest;
+use App\Http\Requests\UpdateBeneficiaryRequest;
 use App\Http\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
 use Illuminate\Http\Request;
@@ -22,9 +25,8 @@ class BeneficiaryController extends Controller
 
     public function index(Request $request)
     {
-        return view("", [
-            'headers' => Beneficiary::headers(),
-
+        return view("dashboard." . $this->routeName() . ".index", [
+            'headers' => $this->getModelInstance()::headers(),
         ]);
     }
 
@@ -35,55 +37,58 @@ class BeneficiaryController extends Controller
 
     public function create()
     {
-        return view("", [
-            'data_to_send' => 'Hello, World!'
+        return view("dashboard." . $this->routeName() . ".create", [
+            'data_to_send' => 'Hello, World!',
+            $this->routeName() => $this->getModelInstance()
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreBeneficiaryRequest $request)
     {
-        if (!$this->user->is_permitted_to('store', Beneficiary::class, $request))
-            return response()->json(['message' => 'not_permitted'], 422);
+        // if (!$this->user->is_permitted_to('store', Beneficiary::class, $request))
+        //     return response()->json(['message' => 'not_permitted'], 422);
 
-        $validator = Validator::make($request->all(), Beneficiary::createRules($this->user));
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $beneficiary = Beneficiary::create($validator->validated());
-        if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $beneficiary->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
+        // $validator = Validator::make($request->all(), Beneficiary::createRules($this->user));
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 422);
+        // }
+        $beneficiary = Beneficiary::create($request->validated());
+        // if ($request->translations) {
+        //     foreach ($request->translations as $translation)
+        //         $beneficiary->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
+        // }
         return new BeneficiaryResource($beneficiary);
     }
 
     public function show(Request $request, Beneficiary $beneficiary)
     {
-        if (!$this->user->is_permitted_to('view', Beneficiary::class, $request))
-            return response()->json(['message' => 'not_permitted'], 422);
-        return new BeneficiaryResource($beneficiary);
-    }
-
-    public function edit()
-    {
-        return view("", [
+        return view("dashboard." . $this->routeName() . ".show", [
             'data_to_send' => 'Hello, World!',
+            $this->routeName() => $beneficiary
         ]);
     }
 
-    public function update(Request $request, Beneficiary $beneficiary)
+    public function edit(Beneficiary $beneficiary)
     {
-        if (!$this->user->is_permitted_to('update', Beneficiary::class, $request))
-            return response()->json(['message' => 'not_permitted'], 422);
-        $validator = Validator::make($request->all(), Beneficiary::updateRules($this->user));
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $beneficiary->update($validator->validated());
-        if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $beneficiary->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
+        return view("dashboard." . $this->routeName() . ".edit", [
+            'data_to_send' => 'Hello, World!',
+            $this->routeName() => $beneficiary
+        ]);
+    }
+
+    public function update(UpdateBeneficiaryRequest $request, Beneficiary $beneficiary)
+    {
+        // if (!$this->user->is_permitted_to('update', Beneficiary::class, $request))
+        //     return response()->json(['message' => 'not_permitted'], 422);
+        // $validator = Validator::make($request->all(), Beneficiary::updateRules($this->user));
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 422);
+        // }
+        $beneficiary->update($request->validated());
+        // if ($request->translations) {
+        //     foreach ($request->translations as $translation)
+        //         $beneficiary->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
+        // }
         return new BeneficiaryResource($beneficiary);
     }
 
