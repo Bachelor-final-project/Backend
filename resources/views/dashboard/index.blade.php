@@ -179,7 +179,7 @@
                         </div>
                         <div class="card-body px-0 pb-2">
                             <div class="table-responsive">
-                                <x-table :model-class="'User'"/>
+                                {{-- <x-table :model-class="'User'"/> --}}
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
@@ -483,7 +483,7 @@
                         </div>
                     </div>
                 </div> -->
-                <x-table-card :model-class="'User'" />
+                {{-- <x-table-card :model-class="'User'" /> --}}
                 <div class="col-lg-4 col-md-6">
                     <div class="card h-100">
                         <div class="card-header pb-0">

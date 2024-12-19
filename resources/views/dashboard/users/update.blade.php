@@ -1,6 +1,6 @@
 
 
-<form action="{{ route('user.store') }}" method="POST" id="form">
+<form action="{{ route('user.update', ['user' => $user]) }}" method="PUT" id="form">
     @include('dashboard.users.form')
 </form>
 

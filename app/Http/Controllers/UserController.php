@@ -19,6 +19,7 @@ class UserController extends Controller
     {
         parent::__construct($request);
     }
+    
 
     public function index(Request $request)
     {
@@ -37,7 +38,8 @@ class UserController extends Controller
     public function create()
     {
         return view("dashboard.users.create", [
-            'data_to_send' => 'Hello, World!'
+            'data_to_send' => 'Hello, World!',
+            "user" => new User
         ]);
     }
 
@@ -65,10 +67,11 @@ class UserController extends Controller
     //     return new UserResource($user);
     // }
 
-    public function edit()
+    public function edit(User $user)
     {
-        return view("", [
+        return view("dashboard.users.update", [
             'data_to_send' => 'Hello, World!',
+            "user" => $user
         ]);
     }
 

@@ -27,6 +27,12 @@ class User extends Authenticatable
     protected $guarded = [];
 
     public static $datatableHeaders = ['id', 'name', 'type','actions'];
+    public function scopeSearch($query, $request)
+    {
+    }
+    public function scopeSort($query, $request)
+    {
+    }
     public function is_permitted_to($name, $class_name, $request)
     {
         $permitted = true;
@@ -63,7 +69,7 @@ class User extends Authenticatable
 
     public function getTypeStrAttribute()
     {
-        return [1 => 'individual', 2 => 'organisation'][$this->type];
+        return [1 => 'individual', 2 => 'organisation'][$this->type]?? "";
     }
 
     public function getStatusStrAttribute()
