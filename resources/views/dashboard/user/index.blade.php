@@ -24,6 +24,7 @@
             const modal = $('#addModal');
             modal.find('#modalLongTitle').text("{{__('Create New User')}}")
             $('#saveBtn').attr('disabled', true);
+
             // $.get("", function (data) {
                 
                
@@ -51,6 +52,7 @@
             modal.find('#modalLongTitle').text("{{__('Update User')}}")
             $('#saveBtn').attr('disabled', true);
             const id = $(this).data('id');
+
             let route = "{{ route('user.index') }}/" + id + "/edit",
 
             $.ajax({

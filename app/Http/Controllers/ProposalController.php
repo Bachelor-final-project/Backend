@@ -25,8 +25,8 @@ class ProposalController extends Controller
 
     public function index(Request $request)
     {
-        return view("", [
-            'headers' => Proposal::headers(),
+        return view("dashboard." . $this->routeName() . ".index", [
+            'headers' => $this->getModelInstance()::headers(),
         ]);
     }
 
@@ -37,8 +37,9 @@ class ProposalController extends Controller
 
     public function create()
     {
-        return view("", [
-            'data_to_send' => 'Hello, World!'
+        return view("dashboard." . $this->routeName() . ".create", [
+            'data_to_send' => 'Hello, World!',
+            $this->routeName() => $this->getModelInstance()
         ]);
     }
 
@@ -51,13 +52,17 @@ class ProposalController extends Controller
 
     public function show(Request $request, Proposal $proposal)
     {
-        return new ProposalResource($proposal);
+        return view("dashboard." . $this->routeName() . ".show", [
+            'data_to_send' => 'Hello, World!',
+            $this->routeName() => $proposal
+        ]);
     }
 
-    public function edit()
+    public function edit(Proposal $proposal)
     {
-        return view("", [
+        return view("dashboard." . $this->routeName() . ".edit", [
             'data_to_send' => 'Hello, World!',
+            $this->routeName() => $proposal
         ]);
     }
 

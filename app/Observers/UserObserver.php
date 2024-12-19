@@ -17,9 +17,7 @@ class UserObserver
      */
     public function creating(User $user)
     {
-        if ($user->password) {
-            $user->password = Hash::make($user->password ?? User::DEFAULTPASSWD);
-        }
+        $user->password = Hash::make($user->password ?? User::DEFAULTPASSWD);
     }
     public function created(User $user)
     {
