@@ -87,10 +87,8 @@
                             Toast.fire({
                                 icon: "success",
                                 title: data.message
-                            }).then((result) => {
-                                /* Read more about handling dismissals below */
-                                window.location.href = "{{route('dashboard')}}"
-                            });;
+                            });
+                            window.location.href = "{{\Request::session()->get('url.intended')?? route('dashboard')}}"
                         },
                         error:function (errors) {
                             Toast.fire({
