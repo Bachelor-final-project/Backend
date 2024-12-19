@@ -9,7 +9,7 @@
         <!-- End Navbar -->
         <div class="container-fluid py-4">
             <div class="row mb-4">
-            <x-table-card :model-class="User::class" :headers="$headers"/>
+            <x-table-card :model-class="Beneficiary::class" :headers="$headers"/>
             </div>
             <x-footers.auth></x-footers.auth>
         </div>
@@ -22,9 +22,9 @@
        $(document).ready(function(){
         $('#showCreateModalBtn').on('click', function(){
             const modal = $('#addModal');
-            modal.find('#modalLongTitle').text("{{__('Create New User')}}")
+            modal.find('#modalLongTitle').text("{{__('Create New Beneficiary')}}")
             $('#saveBtn').attr('disabled', true);
-            $.get("{{ route('user.create') }}", function (data) {
+            $.get("{{ route('beneficiary.create') }}", function (data) {
                 
                 $('#saveBtn').attr('disabled', false);
                 console.log('data fetched');
@@ -34,10 +34,10 @@
         $(document).on('click', '.show-update-modal-btn', function(){
             console.log('show-update-modal-btn clicked');
             const modal = $('#addModal');
-            modal.find('#modalLongTitle').text("{{__('Update User')}}")
+            modal.find('#modalLongTitle').text("{{__('Update Beneficiary')}}")
             $('#saveBtn').attr('disabled', true);
             const id = $(this).data('id');
-            let base_route = "{{ route('user.index') }}";
+            let base_route = "{{ route('beneficiary.index') }}";
             $.get(base_route + "/" +id+"/edit", function (data) {
                 
                 $('#saveBtn').attr('disabled', false);

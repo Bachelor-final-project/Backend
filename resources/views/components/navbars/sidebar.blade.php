@@ -11,6 +11,46 @@
                 'icon' => 'group',
                 'route' => route('user.index')
             ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
+            [
+                'name' => __("Beneficiaries"),
+                'icon' => 'group',
+                'route' => route('beneficiary.index')
+            ],
         ];
 @endphp
 <aside
