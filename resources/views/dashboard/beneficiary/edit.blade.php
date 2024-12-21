@@ -1,7 +1,7 @@
 
 
-<form action="{{ route('user.update', ['user' => $user]) }}" method="PUT" id="form">
-    @include('dashboard.users.form')
+<form action="{{ route('beneficiary.update', ['beneficiary' => $beneficiary]) }}" method="PUT" id="form">
+    @include('dashboard.beneficiary.form')
 </form>
 
 <script>
@@ -11,8 +11,8 @@
         event.preventDefault(); // avoid to execute the actual submit of the form.
         return false;
     });
-
-    $('#addModal').find("#saveBtn").on('click', function(){
+    $("#saveBtn").off('click');
+    $("#saveBtn").on('click', function(){
             $('#saveBtn').attr('disabled', true)
             const form = $('#form');
             console.log(form.attr('method'))
@@ -32,8 +32,9 @@
 
                     Toast.fire({
                         icon: "success",
-                        title: data.message
+                        title: "Beneficiary has been updated successfully"
                     });
+                    $('#myTable').DataTable().ajax.reload()
                 },
                 error:function (errors) {
                     console.log('from error');

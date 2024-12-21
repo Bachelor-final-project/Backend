@@ -4,8 +4,143 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e4e7eed170f7766319a45a2f526b879",
+    "content-hash": "7a041fd59f00e080753b5477874f1e5c",
     "packages": [
+        {
+            "name": "appstract/laravel-blade-directives",
+            "version": "0.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/appstract/laravel-blade-directives.git",
+                "reference": "0302664c5c2176872bd42312a69218cf342beaa8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/appstract/laravel-blade-directives/zipball/0302664c5c2176872bd42312a69218cf342beaa8",
+                "reference": "0302664c5c2176872bd42312a69218cf342beaa8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Appstract\\BladeDirectives\\BladeDirectivesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Appstract\\BladeDirectives\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gijs Jorissen",
+                    "email": "hello@appstract.team",
+                    "homepage": "https://appstract.team",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Handy Blade directives",
+            "homepage": "https://github.com/appstract/laravel-blade-directives",
+            "keywords": [
+                "appstract",
+                "laravel-blade-directives"
+            ],
+            "support": {
+                "issues": "https://github.com/appstract/laravel-blade-directives/issues",
+                "source": "https://github.com/appstract/laravel-blade-directives/tree/master"
+            },
+            "time": "2017-10-09T09:22:20+00:00"
+        },
+        {
+            "name": "appstract/laravel-bootstrap-components",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/appstract/laravel-bootstrap-components.git",
+                "reference": "ccd0e1a68f685fe30bb2efc8effab4ba2864909f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/appstract/laravel-bootstrap-components/zipball/ccd0e1a68f685fe30bb2efc8effab4ba2864909f",
+                "reference": "ccd0e1a68f685fe30bb2efc8effab4ba2864909f",
+                "shasum": ""
+            },
+            "require": {
+                "appstract/laravel-blade-directives": "^0.4",
+                "laravel/framework": ">=5.4",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Appstract\\BootstrapComponents\\BootstrapComponentsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Appstract\\BootstrapComponents\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Olav van Schie",
+                    "email": "hello@appstract.team",
+                    "homepage": "https://appstract.team",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Bob Krijnen",
+                    "email": "hello@appstract.team",
+                    "homepage": "https://appstract.team",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Gijs Jorissen",
+                    "email": "hello@appstract.team",
+                    "homepage": "https://appstract.team",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Teun de Kleijne",
+                    "email": "hello@appstract.team",
+                    "homepage": "https://appstract.team",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Bootstrap components for Laravel",
+            "homepage": "https://github.com/appstract/laravel-bootstrap-components",
+            "keywords": [
+                "appstract",
+                "laravel-bootstrap-components"
+            ],
+            "support": {
+                "issues": "https://github.com/appstract/laravel-bootstrap-components/issues",
+                "source": "https://github.com/appstract/laravel-bootstrap-components/tree/master"
+            },
+            "abandoned": true,
+            "time": "2019-05-09T08:43:20+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.12.1",
@@ -2069,6 +2204,67 @@
                 }
             ],
             "time": "2024-12-08T08:18:47+00:00"
+        },
+        {
+            "name": "madbob/larastrap",
+            "version": "0.9.6",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/madbob/larastrap.git",
+                "reference": "f7053f007556ff799155c01097c048b87bd73ff3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/madbob%2Flarastrap/repository/archive.zip?sha=f7053f007556ff799155c01097c048b87bd73ff3",
+                "reference": "f7053f007556ff799155c01097c048b87bd73ff3",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.39",
+                "orchestra/testbench": "^8.15"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MadBob\\Larastrap\\LarastrapServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MadBob\\Larastrap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roberto Guido",
+                    "email": "info@madbob.org"
+                }
+            ],
+            "description": "Opinionated Bootstrap5 components for Laravel.",
+            "homepage": "https://larastrap.madbob.org/",
+            "keywords": [
+                "blade",
+                "bootstrap",
+                "bootstrap5",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://gitlab.com/madbob/larastrap/-/issues",
+                "source": "https://gitlab.com/madbob/larastrap/-/tree/0.9.6"
+            },
+            "funding": [
+                {
+                    "url": "https://www.madbob.org/donazioni/",
+                    "type": "other"
+                }
+            ],
+            "time": "2024-11-23T17:02:03+00:00"
         },
         {
             "name": "monolog/monolog",
