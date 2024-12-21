@@ -1,4 +1,5 @@
-<x-modal></x-modal>
+<x-modal id="mainModal"></x-modal>
+<x-modal id="showModal" :saveBtn="false"></x-modal>
 
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
     <x-navbars.sidebar activePage='dashboard'></x-navbars.sidebar>
@@ -21,7 +22,7 @@
 
        $(document).ready(function(){
         $('#showCreateModalBtn').on('click', function(){
-            const modal = $('#addModal');
+            const modal = $('#mainModal');
             modal.find('#modalLongTitle').text("{{__('Create New Beneficiary')}}")
             $('#saveBtn').attr('disabled', true);
             $.get("{{ route('beneficiary.create') }}", function (data) {
@@ -33,7 +34,7 @@
         });
         $(document).on('click', '.show-update-modal-btn', function(){
             console.log('show-update-modal-btn clicked');
-            const modal = $('#addModal');
+            const modal = $('#mainModal');
             modal.find('#modalLongTitle').text("{{__('Update Beneficiary')}}")
             $('#saveBtn').attr('disabled', true);
             const id = $(this).data('id');
@@ -41,6 +42,15 @@
             $.get(base_route + "/" +id+"/edit", function (data) {
                 
                 $('#saveBtn').attr('disabled', false);
+                modal.find('.modal-body').html(data);
+            });
+        });
+        $(document).on('click', '.show-show-modal-btn', function(){
+            const modal = $('#showModal');
+            modal.find('#showModalLongTitle').text("{{__('Beneficiary')}}")
+            const id = $(this).data('id');
+            let base_route = "{{ route('beneficiary.index') }}";
+            $.get(base_route + "/" +id, function (data) {
                 modal.find('.modal-body').html(data);
             });
         });

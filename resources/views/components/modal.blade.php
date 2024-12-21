@@ -1,5 +1,5 @@
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="{{$attributes['id']}}" tabindex="-1" role="dialog" aria-labelledby="mainModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalLongTitle">Modal title</h5>
@@ -14,7 +14,9 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveBtn">Save changes</button>
+          @if ($saveBtn)
+            <button type="button" class="btn btn-primary" id="saveBtn">Save changes</button>
+          @endif
         </div>
       </div>
     </div>
@@ -22,7 +24,7 @@
 
   @push('js')
   <script>
-  $('#addModal').on('hide.bs.modal', function(){
+  $('#mainModal').on('hide.bs.modal', function(){
     const modal = $(this);
     modal.find('#modalLongTitle').text('')
         modal.find('.modal-body').html(`

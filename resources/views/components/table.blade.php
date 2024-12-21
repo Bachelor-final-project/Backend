@@ -52,9 +52,20 @@
                     "render": function (id) {
                         console.log(id);
                         return `
-                        <button data-id="${id}" class="btn btn-info p-2 show-view-modal-btn" data-bs-toggle="modal" data-bs-target="#addModal"><i class="material-icons opacity-10">visibility</i></button>
-                        <button data-id="${id}" class="btn btn-warning p-2 show-update-modal-btn" data-bs-toggle="modal" data-bs-target="#addModal"><i class="material-icons opacity-10">edit</i></button>
-                        <button data-id="${id}" class="btn btn-danger p-2 show-delete-modal-btn"><i class="material-icons opacity-10">delete</i></button>
+                        @foreach ($headers as $header)
+                            @if ($header['key'] == 'actions')
+                                
+                                @if (in_array("show", $header['actions']))
+                                    <button data-id="${id}" class="btn btn-info p-2 show-show-modal-btn" data-bs-toggle="modal" data-bs-target="#showModal"><i class="material-icons opacity-10">visibility</i></button>
+                                @endif
+                                @if (in_array("update", $header['actions']))
+                                    <button data-id="${id}" class="btn btn-warning p-2 show-update-modal-btn" data-bs-toggle="modal" data-bs-target="#mainModal"><i class="material-icons opacity-10">edit</i></button>
+                                @endif
+                                @if (in_array("delete", $header['actions']))
+                                    <button data-id="${id}" class="btn btn-danger p-2 show-delete-modal-btn"><i class="material-icons opacity-10">delete</i></button>
+                                @endif
+                            @endif
+                        @endforeach
                         `;
                     }
                 }

@@ -8,12 +8,13 @@ use Illuminate\Contracts\View\View;
 
 class Modal extends Component
 {
+    public bool $saveBtn;
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct($saveBtn = true)
     {
-        //
+        $this->saveBtn = $saveBtn;
     }
 
     /**
