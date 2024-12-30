@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBeneficiaryRequest extends FormRequest
 {
@@ -25,11 +26,16 @@ class UpdateBeneficiaryRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'national_id' => 'sometimes|string|max:20|unique:beneficiaries,national_id',
+            'national_id' => [
+                'sometimes',
+                'string',
+                'max:20',
+                Rule::unique('beneficiaries', 'national_id')->ignore($this->route('beneficiary')), // ignore the current record value from the unique constrain
+            ],
             'phone' => 'sometimes|string|max:20',
             'email' => 'sometimes|email|max:255',
             'dob' => 'sometimes|date',
-            'father_id' => 'sometimes|integer|exists:beneficiaries,id',
+            'father_id' => 'nullable|integer|exists:beneficiaries,id',
         ];
     }
 }
