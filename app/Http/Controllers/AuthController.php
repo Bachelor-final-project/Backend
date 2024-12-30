@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Inertia\Inertia;
 
 class AuthController extends Controller
 {
@@ -21,7 +22,8 @@ class AuthController extends Controller
 
     public function create()
     {
-        return view('auth.login');
+        return Inertia::render('Auth/login');
+        // return view('auth.login');
     }
 
     public function login(Request $request)
