@@ -2,81 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\WarehouseDetail;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWarehouseDetailRequest;
 use App\Http\Requests\UpdateWarehouseDetailRequest;
-use App\Http\Resources\WarehouseDetailResource;
-use App\Models\WarehouseDetail;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Inertia\Inertia;
+
 
 class WarehouseDetailController extends Controller
 {
-
-    public static function routeName()
-    {
+    public static function routeName(){
         return Str::snake("WarehouseDetail");
     }
-
-    public function __construct(Request $request)
+     public function __construct(Request $request)
     {
         parent::__construct($request);
     }
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        return view("dashboard." . $this->routeName() . ".index", [
-            'headers' => $this->getModelInstance()::headers(),
+        
+        return Inertia::render(Str::studly("WarehouseDetail").'/Index', [
+            "headers" => WarehouseDetail::headers(),
+            "items" => WarehouseDetail::search($request)->sort($request)->paginate($this->pagination),
+
         ]);
     }
 
-    public function indexApi(Request $request)
-    {
-        return WarehouseDetailResource::collection(WarehouseDetail::search($request)->sort($request)->paginate((request('per_page') ?? request('itemsPerPage')) ?? 15));
-    }
-
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view("dashboard." . $this->routeName() . ".create", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $this->getModelInstance()
+         return Inertia::render(Str::studly("WarehouseDetail").'/Create', [
+            // 'options' => $regions
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreWarehouseDetailRequest $request)
     {
-        $warehouseDetail = WarehouseDetail::create($request->validated());
-
-        return new WarehouseDetailResource($warehouseDetail);
+        $data = $request->validated();
+        WarehouseDetail::create($data);
+        
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('WarehouseDetail Saved Seccessfully'), 'type' => 'success']);
     }
 
-    public function show(Request $request, WarehouseDetail $warehouseDetail)
-    {
-        return view("dashboard." . $this->routeName() . ".show", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $warehouseDetail
-        ]);
-    }
+    /**
+     * Display the specified resource.
+     */
+    // public function show(WarehouseDetail $warehouseDetail)
+    // {
+        //
+    // }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(WarehouseDetail $warehouseDetail)
     {
-        return view("dashboard." . $this->routeName() . ".edit", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $warehouseDetail
+        return Inertia::render(Str::studly("WarehouseDetail").'/Update', [
+            //'options' => $regions,
+            'warehouseDetail' => $warehouseDetail->toArray()
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(UpdateWarehouseDetailRequest $request, WarehouseDetail $warehouseDetail)
     {
-        $warehouseDetail->update($request->validated());
-
-        return new WarehouseDetailResource($warehouseDetail);
+        $validated = $request->validated();
+        
+        $warehouseDetail->update($validated);
+        return back()->with('res', ['message' => __('WarehouseDetail Updated Seccessfully'), 'type' => 'success']);
     }
 
-    public function destroy(Request $request, WarehouseDetail $warehouseDetail)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(WarehouseDetail $warehouseDetail)
     {
         $warehouseDetail->delete();
-
-        return new WarehouseDetailResource($warehouseDetail);
+        return back()->with('res', ['message' => __('WarehouseDetail Deleted Seccessfully'), 'type' => 'success']);
     }
 }

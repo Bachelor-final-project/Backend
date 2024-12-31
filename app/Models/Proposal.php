@@ -9,20 +9,8 @@ class Proposal extends BaseModel
 {
     use HasFactory;
 
-    protected $appends = ['donor_name', 'donor', 'status_str', 'beneficiaries', 'propsal_details', 'total', 'headers'];
+    protected $appends = ['donor_name', 'donor', 'status_str', 'beneficiaries', 'propsal_details', 'total'];
     public static $controllable = true;
-
-    public function getHeadersAttribute()
-    {
-        return [
-            ['sortable' => true, 'value' => 'name', 'key' => 'name'],
-            ['sortable' => true, 'value' => 'national id', 'key' => 'national_id'],
-            ['sortable' => true, 'value' => 'phone', 'key' => 'phone'],
-            ['sortable' => true, 'value' => 'email', 'key' => 'email'],
-            ['sortable' => true, 'value' => 'father name', 'key' => 'father_name'],
-            ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
-        ];
-    }
 
     public function getDonorNameAttribute()
     {

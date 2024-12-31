@@ -1,69 +1,97 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Resources\RolePermissionResource;
+
 use App\Models\RolePermission;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRolePermissionRequest;
+use App\Http\Requests\UpdateRolePermissionRequest;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Inertia\Inertia;
+
 
 class RolePermissionController extends Controller
 {
-
     public static function routeName(){
         return Str::snake("RolePermission");
     }
-    public function __construct(Request $request)
+     public function __construct(Request $request)
     {
         parent::__construct($request);
     }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        return RolePermissionResource::collection(RolePermission::search($request)->sort($request)->paginate((request('per_page')??request('itemsPerPage'))??15));
-    }
-    public function store(Request $request)
-    {
-        if(!$this->user->is_permitted_to('store',RolePermission::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
+        
+        return Inertia::render(Str::studly("RolePermission").'/Index', [
+            "headers" => RolePermission::headers(),
+            "items" => RolePermission::search($request)->sort($request)->paginate($this->pagination),
 
-        $validator = Validator::make($request->all(),RolePermission::createRules($this->user));
-        if($validator->fails()){
-            return response()->json(['errors'=>$validator->errors()],422);
-        }
-        $rolePermission = RolePermission::create($validator->validated());
-        if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $rolePermission->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
-        return new RolePermissionResource($rolePermission);
+        ]);
     }
-    public function show(Request $request,RolePermission $rolePermission)
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        if(!$this->user->is_permitted_to('view',RolePermission::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
-        return new RolePermissionResource($rolePermission);
+         return Inertia::render(Str::studly("RolePermission").'/Create', [
+            // 'options' => $regions
+        ]);
     }
-    public function update(Request $request, RolePermission $rolePermission)
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreRolePermissionRequest $request)
     {
-        if(!$this->user->is_permitted_to('update',RolePermission::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
-        $validator = Validator::make($request->all(),RolePermission::updateRules($this->user));
-        if($validator->fails()){
-            return response()->json(['errors'=>$validator->errors()],422);
-        }
-        $rolePermission->update($validator->validated());
-          if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $rolePermission->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
-        return new RolePermissionResource($rolePermission);
+        $data = $request->validated();
+        RolePermission::create($data);
+        
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('RolePermission Saved Seccessfully'), 'type' => 'success']);
     }
-    public function destroy(Request $request,RolePermission $rolePermission)
+
+    /**
+     * Display the specified resource.
+     */
+    // public function show(RolePermission $rolePermission)
+    // {
+        //
+    // }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(RolePermission $rolePermission)
     {
-        if(!$this->user->is_permitted_to('delete',RolePermission::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
+        return Inertia::render(Str::studly("RolePermission").'/Update', [
+            //'options' => $regions,
+            'rolePermission' => $rolePermission->toArray()
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateRolePermissionRequest $request, RolePermission $rolePermission)
+    {
+        $validated = $request->validated();
+        
+        $rolePermission->update($validated);
+        return back()->with('res', ['message' => __('RolePermission Updated Seccessfully'), 'type' => 'success']);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(RolePermission $rolePermission)
+    {
         $rolePermission->delete();
-
-        return new RolePermissionResource($rolePermission);
+        return back()->with('res', ['message' => __('RolePermission Deleted Seccessfully'), 'type' => 'success']);
     }
 }

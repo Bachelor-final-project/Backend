@@ -9,39 +9,32 @@ class WarehouseDetail extends BaseModel
 {
     use HasFactory;
 
-    protected $appends = ['unit', 'total', 'unit_name', 'headers'];
+    protected $appends = ['item', 'total', 'item_name', 'unit_name'];
     public static $controllable = true;
 
-    public function getHeadersAttribute()
+    public function getItemAttribute()
     {
-        return [
-            ['sortable' => true, 'value' => 'name', 'key' => 'name'],
-            ['sortable' => true, 'value' => 'national id', 'key' => 'national_id'],
-            ['sortable' => true, 'value' => 'phone', 'key' => 'phone'],
-            ['sortable' => true, 'value' => 'email', 'key' => 'email'],
-            ['sortable' => true, 'value' => 'father name', 'key' => 'father_name'],
-            ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
-        ];
-    }
-
-    public function getUnitAttribute()
-    {
-        return $this->belongsTo(Unit::class, 'unit_id');
+        return $this->belongsTo(Item::class, 'item_id');
     }
 
     public function getTotalAttribute()
     {
-        return $this->amount * $this->unit->estimated_price;
+        return $this->amount * $this->item->estimated_price;
     }
 
     public function getUnitNameAttribute()
     {
-        return $this->unit->name;
+        return $this->item->unit->name;
+    }
+    public function getItemNameAttribute()
+    {
+        return $this->item->name;
     }
 
     public static function headers($user = null)
     {
         return [
+            ['sortable' => true, 'value' => 'item name', 'key' => 'item_name'],
             ['sortable' => true, 'value' => 'unit name', 'key' => 'unit_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],

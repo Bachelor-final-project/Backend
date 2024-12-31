@@ -15,10 +15,11 @@ models = [
     "ProposalDetail",
     "ProposalBeneficiary",
     "Attachment",
-    "Log"
+    "Log",
+    "Item"
 ]
 
 for model in models:
     print('Creating Model for: ',model)
-    system(f'docker exec -t php php artisan make:model {model} -a --api')
+    system(f'php artisan make:model {model} -a')
     print('Done.')
