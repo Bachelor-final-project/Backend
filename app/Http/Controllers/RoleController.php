@@ -1,69 +1,97 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Resources\RoleResource;
+
 use App\Models\Role;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Inertia\Inertia;
+
 
 class RoleController extends Controller
 {
-
     public static function routeName(){
         return Str::snake("Role");
     }
-    public function __construct(Request $request)
+     public function __construct(Request $request)
     {
         parent::__construct($request);
     }
+
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        return RoleResource::collection(Role::search($request)->sort($request)->paginate((request('per_page')??request('itemsPerPage'))??15));
-    }
-    public function store(Request $request)
-    {
-        if(!$this->user->is_permitted_to('store',Role::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
+        
+        return Inertia::render(Str::studly("Role").'/Index', [
+            "headers" => Role::headers(),
+            "items" => Role::search($request)->sort($request)->paginate($this->pagination),
 
-        $validator = Validator::make($request->all(),Role::createRules($this->user));
-        if($validator->fails()){
-            return response()->json(['errors'=>$validator->errors()],422);
-        }
-        $role = Role::create($validator->validated());
-        if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $role->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
-        return new RoleResource($role);
+        ]);
     }
-    public function show(Request $request,Role $role)
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        if(!$this->user->is_permitted_to('view',Role::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
-        return new RoleResource($role);
+         return Inertia::render(Str::studly("Role").'/Create', [
+            // 'options' => $regions
+        ]);
     }
-    public function update(Request $request, Role $role)
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreRoleRequest $request)
     {
-        if(!$this->user->is_permitted_to('update',Role::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
-        $validator = Validator::make($request->all(),Role::updateRules($this->user));
-        if($validator->fails()){
-            return response()->json(['errors'=>$validator->errors()],422);
-        }
-        $role->update($validator->validated());
-          if ($request->translations) {
-            foreach ($request->translations as $translation)
-                $role->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
-        }
-        return new RoleResource($role);
+        $data = $request->validated();
+        Role::create($data);
+        
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('Role Saved Seccessfully'), 'type' => 'success']);
     }
-    public function destroy(Request $request,Role $role)
+
+    /**
+     * Display the specified resource.
+     */
+    // public function show(Role $role)
+    // {
+        //
+    // }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Role $role)
     {
-        if(!$this->user->is_permitted_to('delete',Role::class,$request))
-            return response()->json(['message'=>'not_permitted'],422);
+        return Inertia::render(Str::studly("Role").'/Update', [
+            //'options' => $regions,
+            'role' => $role->toArray()
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateRoleRequest $request, Role $role)
+    {
+        $validated = $request->validated();
+        
+        $role->update($validated);
+        return back()->with('res', ['message' => __('Role Updated Seccessfully'), 'type' => 'success']);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Role $role)
+    {
         $role->delete();
-
-        return new RoleResource($role);
+        return back()->with('res', ['message' => __('Role Deleted Seccessfully'), 'type' => 'success']);
     }
 }

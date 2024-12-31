@@ -2,81 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Warehouse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWarehouseRequest;
 use App\Http\Requests\UpdateWarehouseRequest;
-use App\Http\Resources\WarehouseResource;
-use App\Models\Warehouse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Inertia\Inertia;
+
 
 class WarehouseController extends Controller
 {
-
-    public static function routeName()
-    {
+    public static function routeName(){
         return Str::snake("Warehouse");
     }
-
-    public function __construct(Request $request)
+     public function __construct(Request $request)
     {
         parent::__construct($request);
     }
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        return view("dashboard." . $this->routeName() . ".index", [
-            'headers' => $this->getModelInstance()::headers(),
+        
+        return Inertia::render(Str::studly("Warehouse").'/Index', [
+            "headers" => Warehouse::headers(),
+            "items" => Warehouse::search($request)->sort($request)->paginate($this->pagination),
+
         ]);
     }
 
-    public function indexApi(Request $request)
-    {
-        return WarehouseResource::collection(Warehouse::search($request)->sort($request)->paginate((request('per_page') ?? request('itemsPerPage')) ?? 15));
-    }
-
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view("dashboard." . $this->routeName() . ".create", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $this->getModelInstance()
+         return Inertia::render(Str::studly("Warehouse").'/Create', [
+            // 'options' => $regions
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreWarehouseRequest $request)
     {
-        $warehouse = Warehouse::create($request->validated());
-
-        return new WarehouseResource($warehouse);
+        $data = $request->validated();
+        Warehouse::create($data);
+        
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('Warehouse Saved Seccessfully'), 'type' => 'success']);
     }
 
-    public function show(Request $request, Warehouse $warehouse)
-    {
-        return view("dashboard." . $this->routeName() . ".show", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $warehouse
-        ]);
-    }
+    /**
+     * Display the specified resource.
+     */
+    // public function show(Warehouse $warehouse)
+    // {
+        //
+    // }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(Warehouse $warehouse)
     {
-        return view("dashboard." . $this->routeName() . ".edit", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $warehouse
+        return Inertia::render(Str::studly("Warehouse").'/Update', [
+            //'options' => $regions,
+            'warehouse' => $warehouse->toArray()
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(UpdateWarehouseRequest $request, Warehouse $warehouse)
     {
-        $warehouse->update($request->validated());
-
-        return new WarehouseResource($warehouse);
+        $validated = $request->validated();
+        
+        $warehouse->update($validated);
+        return back()->with('res', ['message' => __('Warehouse Updated Seccessfully'), 'type' => 'success']);
     }
 
-    public function destroy(Request $request, Warehouse $warehouse)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Warehouse $warehouse)
     {
         $warehouse->delete();
-
-        return new WarehouseResource($warehouse);
+        return back()->with('res', ['message' => __('Warehouse Deleted Seccessfully'), 'type' => 'success']);
     }
 }

@@ -2,81 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
-use App\Http\Resources\UnitResource;
-use App\Models\Unit;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Inertia\Inertia;
+
 
 class UnitController extends Controller
 {
-
-    public static function routeName()
-    {
+    public static function routeName(){
         return Str::snake("Unit");
     }
-
-    public function __construct(Request $request)
+     public function __construct(Request $request)
     {
         parent::__construct($request);
     }
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        return view("dashboard." . $this->routeName() . ".index", [
-            'headers' => $this->getModelInstance()::headers(),
+        
+        return Inertia::render(Str::studly("Unit").'/Index', [
+            "headers" => Unit::headers(),
+            "items" => Unit::search($request)->sort($request)->paginate($this->pagination),
+
         ]);
     }
 
-    public function indexApi(Request $request)
-    {
-        return UnitResource::collection(Unit::search($request)->sort($request)->paginate((request('per_page') ?? request('itemsPerPage')) ?? 15));
-    }
-
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view("dashboard." . $this->routeName() . ".create", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $this->getModelInstance()
+         return Inertia::render(Str::studly("Unit").'/Create', [
+            // 'options' => $regions
         ]);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreUnitRequest $request)
     {
-        $unit = Unit::create($request->validated());
-
-        return new UnitResource($unit);
+        $data = $request->validated();
+        Unit::create($data);
+        
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('Unit Saved Seccessfully'), 'type' => 'success']);
     }
 
-    public function show(Request $request, Unit $unit)
-    {
-        return view("dashboard." . $this->routeName() . ".show", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $unit
-        ]);
-    }
+    /**
+     * Display the specified resource.
+     */
+    // public function show(Unit $unit)
+    // {
+        //
+    // }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(Unit $unit)
     {
-        return view("dashboard." . $this->routeName() . ".edit", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $unit
+        return Inertia::render(Str::studly("Unit").'/Update', [
+            //'options' => $regions,
+            'unit' => $unit->toArray()
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(UpdateUnitRequest $request, Unit $unit)
     {
-        $unit->update($request->validated());
-
-        return new UnitResource($unit);
+        $validated = $request->validated();
+        
+        $unit->update($validated);
+        return back()->with('res', ['message' => __('Unit Updated Seccessfully'), 'type' => 'success']);
     }
 
-    public function destroy(Request $request, Unit $unit)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Unit $unit)
     {
         $unit->delete();
-
-        return new UnitResource($unit);
+        return back()->with('res', ['message' => __('Unit Deleted Seccessfully'), 'type' => 'success']);
     }
 }

@@ -5,6 +5,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// Route::get('/', function () {
+//    return 'hi';
+// });
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -13,6 +17,37 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+
+$controllers = [];
+
+
+foreach (glob(app_path('Http/Controllers/*.php')) as $file) {
+    $basename = basename($file, '.php');
+    $class = 'App\\Http\\Controllers\\' . $basename;
+    if (in_array($basename, ['AuthController.php', 'Controller.php'])) {
+        continue;
+    }
+    if (class_exists($class)) {
+        $reflection = new ReflectionClass($class);
+        if (!$reflection->isAbstract() && !$reflection->isInterface() && !$reflection->isTrait()) {
+            $controllers[] = $class;
+        }
+    }
+}
+Route::middleware(['web'])->middleware('auth')->group(function () use ($controllers) {
+    array_map(function ($controller) {
+        if (method_exists($controller, 'routeName')) {
+            // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
+            Route::resource($controller::routeName(), $controller);
+        }
+        if (method_exists($controller, 'indexApi')) {
+            // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
+            Route::get($controller::routeName() . 'Api', [$controller, 'indexApi'])->name(strtolower($controller::routeName() . ".index.api"));
+        }
+    }, $controllers);
+});
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

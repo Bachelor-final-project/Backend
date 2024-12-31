@@ -2,62 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
+use App\Models\ProposalBeneficiary;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProposalBeneficiaryRequest;
+use App\Http\Requests\UpdateProposalBeneficiaryRequest;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
-use Inertia\Response;
+
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): Response
+    public static function routeName(){
+        return Str::snake("ProposalBeneficiary");
+    }
+     public function __construct(Request $request)
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
+        parent::__construct($request);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        
+        return Inertia::render(Str::studly("ProposalBeneficiary").'/Index', [
+            "headers" => ProposalBeneficiary::headers(),
+            "items" => ProposalBeneficiary::search($request)->sort($request)->paginate($this->pagination),
+
         ]);
     }
 
     /**
-     * Update the user's profile information.
+     * Show the form for creating a new resource.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function create()
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
+         return Inertia::render(Str::studly("ProposalBeneficiary").'/Create', [
+            // 'options' => $regions
+        ]);
     }
 
     /**
-     * Delete the user's account.
+     * Store a newly created resource in storage.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function store(StoreProposalBeneficiaryRequest $request)
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
+        $data = $request->validated();
+        ProposalBeneficiary::create($data);
+        
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('ProposalBeneficiary Saved Seccessfully'), 'type' => 'success']);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    // public function show(ProposalBeneficiary $proposalBeneficiary)
+    // {
+        //
+    // }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(ProposalBeneficiary $proposalBeneficiary)
+    {
+        return Inertia::render(Str::studly("ProposalBeneficiary").'/Update', [
+            //'options' => $regions,
+            'proposalBeneficiary' => $proposalBeneficiary->toArray()
         ]);
+    }
 
-        $user = $request->user();
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateProposalBeneficiaryRequest $request, ProposalBeneficiary $proposalBeneficiary)
+    {
+        $validated = $request->validated();
+        
+        $proposalBeneficiary->update($validated);
+        return back()->with('res', ['message' => __('ProposalBeneficiary Updated Seccessfully'), 'type' => 'success']);
+    }
 
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(ProposalBeneficiary $proposalBeneficiary)
+    {
+        $proposalBeneficiary->delete();
+        return back()->with('res', ['message' => __('ProposalBeneficiary Deleted Seccessfully'), 'type' => 'success']);
     }
 }
