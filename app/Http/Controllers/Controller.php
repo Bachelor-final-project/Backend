@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 abstract class Controller
 {
     public $user;
+    protected $pagination = 15;
     public function __construct(Request $request)
     {
         if (auth('web')->user())
