@@ -1,6 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
-
+import SiteLayout from "@/Layouts/SiteLayout.vue";
+defineOptions({ layout: SiteLayout });
 defineProps({
     canLogin: {
         type: Boolean,

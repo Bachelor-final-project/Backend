@@ -1,4 +1,5 @@
 <template>
+  <Head title="Proposals" />
   <div class="dark:text-white">
     <Table
       title="proposal table"
@@ -9,7 +10,7 @@
   </div>
 </template>
 <script>
-import { router } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import Table from "@/Components/Table.vue";
 export default {
   components: { Table },
