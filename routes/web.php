@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -58,5 +59,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/change-language/{locale}', function (string $locale) {
+    if (! in_array($locale, ['en', 'ar'])) {
+        abort(400);
+    }
+ 
+    App::setLocale($locale);
+ 
+    // ...
+})->name('change-language');
 
 require __DIR__.'/auth.php';
