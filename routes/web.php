@@ -64,9 +64,8 @@ Route::get('/change-language/{locale}', function (string $locale) {
         abort(400);
     }
  
-    App::setLocale($locale);
- 
-    // ...
+    session()->put('locale', $locale);
+    return redirect()->back();
 })->name('change-language');
 
 require __DIR__.'/auth.php';
