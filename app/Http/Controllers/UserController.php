@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -26,8 +27,9 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return view("dashboard." . $this->routeName() . ".index", [
-            'headers' => $this->getModelInstance()::headers(),
+        return Inertia::render(Str::studly("User") . '/Index', [
+            "headers" => User::headers(),
+            "items" => User::search($request)->sort($request)->paginate($this->pagination),
 
         ]);
     }
@@ -41,10 +43,8 @@ class UserController extends Controller
 
     public function create()
     {
-        return view("dashboard." . $this->routeName() . ".create", [
-
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $this->getModelInstance()
+        return Inertia::render(Str::studly("User") . '/Create', [
+            // 'options' => $regions
         ]);
     }
 
@@ -67,18 +67,17 @@ class UserController extends Controller
 
     public function show(Request $request, User $user)
     {
-        return view("dashboard." . $this->routeName() . ".show", [
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $user
+        return Inertia::render(Str::studly("User") . '/Show', [
+            //'options' => $regions,
+            'user' => $user->toArray()
         ]);
     }
 
     public function edit(User $user)
     {
-        return view("dashboard." . $this->routeName() . ".edit", [
-
-            'data_to_send' => 'Hello, World!',
-            $this->routeName() => $user
+        return Inertia::render(Str::studly("User") . '/Update', [
+            //'options' => $regions,
+            'user' => $user->toArray()
         ]);
     }
 

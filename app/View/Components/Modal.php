@@ -22,6 +22,6 @@ class Modal extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.modal');
+        // return view('components.modal');
     }
 }

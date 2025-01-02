@@ -21,6 +21,6 @@ class TableCard extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.table-card');
+        // return view('components.table-card');
     }
 }

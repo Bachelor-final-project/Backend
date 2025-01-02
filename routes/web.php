@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\DashboardController;
 
 // Route::get('/', function () {
 //    return 'hi';
@@ -19,44 +21,65 @@ Route::get('/', function () {
 });
 
 
-$controllers = [];
+// $controllers = [];
 
 
-foreach (glob(app_path('Http/Controllers/*.php')) as $file) {
-    $basename = basename($file, '.php');
-    $class = 'App\\Http\\Controllers\\' . $basename;
-    if (in_array($basename, ['AuthController.php', 'Controller.php'])) {
-        continue;
-    }
-    if (class_exists($class)) {
-        $reflection = new ReflectionClass($class);
-        if (!$reflection->isAbstract() && !$reflection->isInterface() && !$reflection->isTrait()) {
-            $controllers[] = $class;
-        }
-    }
-}
-Route::middleware(['web'])->middleware('auth')->group(function () use ($controllers) {
+// foreach (glob(app_path('Http/Controllers/*.php')) as $file) {
+//     $basename = basename($file, '.php');
+//     $class = 'App\\Http\\Controllers\\' . $basename;
+//     if (in_array($basename, ['AuthController.php', 'Controller.php'])) {
+//         continue;
+//     }
+//     if (class_exists($class)) {
+//         $reflection = new ReflectionClass($class);
+//         if (!$reflection->isAbstract() && !$reflection->isInterface() && !$reflection->isTrait()) {
+//             $controllers[] = $class;
+//         }
+//     }
+// }
+// Route::middleware(['web'])->middleware('auth')->group(function () use ($controllers) {
+//     array_map(function ($controller) {
+//         if (method_exists($controller, 'routeName')) {
+//             // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
+//             Route::resource($controller::routeName(), $controller);
+//         }
+//         if (method_exists($controller, 'indexApi')) {
+//             // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
+//             Route::get($controller::routeName() . 'Api', [$controller, 'indexApi'])->name(strtolower($controller::routeName() . ".index.api"));
+//         }
+//     }, $controllers);
+// });
+$controllers = require base_path('vendor/composer/autoload_classmap.php');
+$controllers = array_keys($controllers);
+$controllers = array_filter($controllers, function ($controller) {
+    return strpos($controller, 'App\Http\Controllers') === 0 && strpos($controller, '\Auth') === false && $controller != 'App\Http\Controllers\Controller';
+});
+
+Route::group(['middleware' => 'auth'], function () use ($controllers) {
+    // Route::get('/', fn () => Inertia::render('Dashboard'))->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     array_map(function ($controller) {
-        if (method_exists($controller, 'routeName')) {
-            // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
-            Route::resource($controller::routeName(), $controller);
-        }
-        if (method_exists($controller, 'indexApi')) {
-            // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
-            Route::get($controller::routeName() . 'Api', [$controller, 'indexApi'])->name(strtolower($controller::routeName() . ".index.api"));
-        }
+        Route::resource(Str::snake(substr(substr($controller, 21), 0, -10)), $controller);
     }, $controllers);
 });
+
 
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::get('/change-language/{locale}', [GeneralController::class, 'changeLanguage'])->name('change-language');
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 
 require __DIR__.'/auth.php';
+
+Route::get('/import-grievances', [DashboardController::class, 'importGrievances'])->name('import-grievances');
+Route::get('/import-officers', [DashboardController::class, 'importOfficers'])->name('import-officers');
+Route::get('/import-statistics', [DashboardController::class, 'importStatistics'])->name('import-statistics');
+
