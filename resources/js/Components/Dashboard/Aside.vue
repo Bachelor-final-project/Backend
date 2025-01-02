@@ -1,4 +1,4 @@
-<script setup>
+ <script setup>
 import menus from "../../utils/aside_menu.js";
 import ItemList from "@/Components/ItemList.vue";
 import { usePage } from "@inertiajs/vue3";

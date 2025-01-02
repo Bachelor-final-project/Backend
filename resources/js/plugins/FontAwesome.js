@@ -19,6 +19,7 @@ import {
     faFileImport,
     faFileLines,
     faBookBookmark,
+    faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -39,7 +40,8 @@ library.add(
     faEdit,
     faFileImport,
     faFileLines,
-    faBookBookmark
+    faBookBookmark,
+    faPlus
 );
 
 export default FontAwesomeIcon;

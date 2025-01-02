@@ -27,9 +27,10 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $users = User::search($request)->sort($request)->paginate($this->pagination);
         return Inertia::render(Str::studly("User") . '/Index', [
             "headers" => User::headers(),
-            "items" => User::search($request)->sort($request)->paginate($this->pagination),
+            "items" => $users,
 
         ]);
     }

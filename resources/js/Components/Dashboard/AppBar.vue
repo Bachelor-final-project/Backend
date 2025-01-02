@@ -4,11 +4,14 @@ import ChangeMode from "@/Components/Dashboard/ChangeMode.vue";
 import SearchInput from "@/Components/SearchInput.vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 const page = usePage();
 const user = page.props.auth.user;
 const userRoleName = computed(() => {
   // return user.type == 1 ? "Admin" : "GRM Officer";
-  return user.type == 1 ? $t("Admin") : $t("ESP Officer");
+  return user.type == 1 ? $t("Admin"): '';
 });
 </script>
 <template>
@@ -45,7 +48,7 @@ const userRoleName = computed(() => {
         <div class="flex items-center">
           <div class="flex items-center ms-3 dark:text-white">
             <p class="px-2">
-              {{ user.type == 1 ? $t("Admin") : $t("ESP Officer") }}
+              {{ user.type == 1 ? $t("Admin") : " " }}
             </p>
             <p class="px-2">
               {{ user.name }}

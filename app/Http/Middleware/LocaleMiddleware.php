@@ -31,6 +31,7 @@ class LocaleMiddleware
             } else {
                 app()->setLocale('ar');
                 Cookie::queue('locale', 'ar');
+                Cookie::queue('test', 'Hello,World!');
                 // $user_lang = preg_split('/[,;]/', $request->server('HTTP_ACCEPT_LANGUAGE'));
                 // foreach ($user_lang as $lang) {
                 //     if (array_key_exists($lang, config('locale.languages'))) {

@@ -87,7 +87,7 @@ class User extends Authenticatable
             ['sortable' => true, 'value' => 'type', 'key' => 'type_str'],
             ['sortable' => true, 'value' => 'job title', 'key' => 'job_title'],
             ['sortable' => true, 'value' => 'is active', 'key' => 'is_active'],
-            ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+            // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }
 }

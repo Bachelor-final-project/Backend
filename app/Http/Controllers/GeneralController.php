@@ -14,6 +14,7 @@ class GeneralController extends Controller
         try {
             if (array_key_exists($locale,  config('locale.languages'))) {
                 Cookie::queue('locale', $locale);
+                Cookie::queue('test', 'Hello,World!');
                 App::setLocale($locale);
                 return redirect()->back();
             }
