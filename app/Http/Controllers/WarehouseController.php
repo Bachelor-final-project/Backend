@@ -41,7 +41,7 @@ class WarehouseController extends Controller
     public function create()
     {
          return Inertia::render(Str::studly("Warehouse").'/Create', [
-            // 'options' => $regions
+            'status_options' => Warehouse::statuses()
         ]);
     }
 
@@ -69,8 +69,8 @@ class WarehouseController extends Controller
      */
     public function edit(Warehouse $warehouse)
     {
-        return Inertia::render(Str::studly("Warehouse").'/Update', [
-            //'options' => $regions,
+        return Inertia::render(Str::studly("Warehouse").'/Edit', [
+            'status_options' => Warehouse::statuses(),
             'warehouse' => $warehouse->toArray()
         ]);
     }

@@ -69,7 +69,7 @@ class UnitController extends Controller
      */
     public function edit(Unit $unit)
     {
-        return Inertia::render(Str::studly("Unit").'/Update', [
+        return Inertia::render(Str::studly("Unit").'/Edit', [
             //'options' => $regions,
             'unit' => $unit->toArray()
         ]);

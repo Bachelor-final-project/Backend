@@ -14,7 +14,8 @@ class Unit extends BaseModel
     {
         return [
             ['sortable' => true, 'value' => 'name', 'key' => 'name'],
-            ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+            ['sortable' => true, 'value' => 'description', 'key' => 'description'],
+            // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }
 }

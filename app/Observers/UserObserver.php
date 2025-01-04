@@ -29,9 +29,11 @@ class UserObserver
      * @param  \App\Models\User  $user
      * @return void
      */
-    public function updated(User $user)
+    public function updating(User $user)
     {
-        //
+        if ($user->isDirty('password')) {
+            $user->password = Hash::make($user->password);
+        }
     }
 
     /**

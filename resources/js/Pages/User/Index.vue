@@ -6,7 +6,7 @@
       :actions="actions"
       :items="items"
       :headers="headers"
-      add_item=true
+      add_item_route="user.create"
     />
   </div>
 </template>

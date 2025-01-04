@@ -15,13 +15,14 @@ return new class extends Migration {
         Schema::create('proposal_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('proposal_id');
-            $table->unsignedBigInteger('unit_id');
+            $table->unsignedBigInteger('item_id');
             $table->decimal('value', 10, 2)->default(0);
+            $table->decimal('estimated_price', 10, 2)->default(0);
             $table->text('notes')->nullable();
             $table->timestamps();
 
             $table->foreign('proposal_id')->references('id')->on('proposals');
-            $table->foreign('unit_id')->references('id')->on('units');
+            $table->foreign('item_id')->references('id')->on('items');
         });
     }
 

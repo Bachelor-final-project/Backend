@@ -25,8 +25,8 @@
           <f-icon class="text-blue" icon="file-import"></f-icon>
         </a>
         <a
-          :href="route('user.create')"
-          v-if="add_item"
+          :href="route(add_item_route)"
+          v-if="add_item_route"
           color="green"
           class="absolute left-4 text-center w-4 h-4 text-blue-500 clickable"
           data-tooltip-target="export-statistics-tooltip"
@@ -202,7 +202,7 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  add_item: {
+  add_item_route: {
     type: String,
     default: "",
   },

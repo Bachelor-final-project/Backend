@@ -45,7 +45,7 @@ class UserController extends Controller
     public function create()
     {
         return Inertia::render(Str::studly("User") . '/Create', [
-            // 'options' => $regions
+            'type_options' => User::types()
         ]);
     }
 
@@ -58,12 +58,21 @@ class UserController extends Controller
         // if ($validator->fails()) {
         //     return response()->json(['errors' => $validator->errors()], 422);
         // }
-        $user = User::create($request->validated());
+        $data = $request->validated();
+        $email = $data['email'];
+        $user = User::withTrashed()->where('email', $email)->first();
+        if ($user?->id) {
+            $user->update(array_merge($data, ['deleted_at' => null]));
+        } else {
+            User::create($data);
+        }
+
+        // $user = User::create($request->validated());
         // if ($request->translations) {
         //     foreach ($request->translations as $translation)
         //         $user->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
         // }
-        return new UserResource($user);
+        return to_route('user.index')->with('res', ['message' => __('User Saved Seccessfully'), 'type' => 'success']);
     }
 
     public function show(Request $request, User $user)
@@ -76,9 +85,10 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return Inertia::render(Str::studly("User") . '/Update', [
-            //'options' => $regions,
-            'user' => $user->toArray()
+        return Inertia::render(Str::studly("User") . '/Edit', [
+            'status_options' => User::statuses(),
+            'type_options' => User::types(),
+            'user' => $user->toArray(),
         ]);
     }
 
@@ -90,20 +100,29 @@ class UserController extends Controller
         // if ($validator->fails()) {
         //     return response()->json(['errors' => $validator->errors()], 422);
         // }
-        $user->update($request->validated());
+        $validated = $request->validated();
+    // dd($validated);
+        if (array_key_exists('password', $validated) && empty($validated['password'])) {
+            unset($validated['password']);
+        }
+        // $validated['is_active'] = !($validated['status'] != User::STATUSES['open']);
+        // if($validated['status'] != User::STATUSES['open']) {
+        //     $validated['is_active'] = false;
+        // } else {
+        //     $validated['is_active'] = true;
+        // }
+        $user->update($validated);
         // if ($request->translations) {
         //     foreach ($request->translations as $translation)
         //         $user->setTranslation($translation['field'], $translation['locale'], $translation['value'])->save();
         // }
-        return new UserResource($user);
+        return back()->with('res', ['message' => __('User Updated Seccessfully'), 'type' => 'success']);
     }
 
     public function destroy(Request $request, User $user)
     {
-        if (!$this->user->is_permitted_to('delete', User::class, $request))
-            return response()->json(['message' => 'not_permitted'], 422);
         $user->delete();
 
-        return new UserResource($user);
+        return back()->with('res', ['message' => __('User Deleted Seccessfully'), 'type' => 'success']);
     }
 }

@@ -19,9 +19,11 @@ return new class extends Migration {
             $table->text('body')->nullable();
             $table->integer('status')->default(3); // [1 => 'accepted, 2 => 'unaccepted', 3 => 'pending', 4 => 'preparing', 8 => 'done']
             $table->text('notes')->nullable();
+            $table->unsignedBigInteger('currency_id');
             $table->timestamps();
 
             $table->foreign('donor_id')->references('id')->on('users');
+            $table->foreign('currency_id')->references('id')->on('currencies');
         });
     }
 

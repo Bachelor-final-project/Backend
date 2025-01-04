@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('phone');
             $table->string('email')->nullable();
             $table->date('dob')->nullable();
-            $table->unsignedBigInteger('father_id')->nullable();
+            $table->string('father_national_id')->nullable();
             $table->unsignedBigInteger('warehouse_id');
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
 

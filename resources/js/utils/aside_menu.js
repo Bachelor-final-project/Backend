@@ -15,6 +15,31 @@ const menus = [
             icon: "user",
             to: "user.index",
         },
+        {
+            title: "Beneficiaries",
+            icon: "face-smile",
+            to: "beneficiary.index",
+        },
+        {
+            title: "Warehouses",
+            icon: "warehouse",
+            to: "warehouse.index",
+        },
+        {
+            title: "Items",
+            icon: "basket-shopping",
+            to: "item.index",
+        },
+        {
+            title: "Units",
+            icon: "ruler",
+            to: "unit.index",
+        },
+        {
+            title: "Currencies",
+            icon: "dollar-sign",
+            to: "currency.index",
+        },
     ],
     [
         {

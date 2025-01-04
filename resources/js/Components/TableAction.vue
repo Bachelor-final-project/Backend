@@ -104,6 +104,16 @@ export default {
       delete_dialog: false,
       block_dialog: false,
       edit_dialog: false,
+      statuses: {
+        user: {
+          "open": 1,
+          "blocked": 3,
+        },
+        warehouse: {
+          "open": 1,
+          "blocked": 4
+        }
+      }
     };
   },
   methods: {
@@ -121,7 +131,7 @@ export default {
     },
     confirmBlock() {
       router.put(route(`${this.action.model}.update`, this.item.id), {
-        status: this.item.status == "active" ? "blocked" : "active",
+        status: this.item.status == 1 ? this.statuses[this.action.model].blocked : this.statuses[this.action.model].open
       });
       this.closeBlockModal();
     },

@@ -20,6 +20,12 @@ import {
     faFileLines,
     faBookBookmark,
     faPlus,
+    faFaceSmile,
+    faWarehouse,
+    faRuler,
+    faBasketShopping,
+    faDollarSign
+    
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -41,7 +47,13 @@ library.add(
     faFileImport,
     faFileLines,
     faBookBookmark,
-    faPlus
+    faPlus,
+    faFaceSmile,
+    faWarehouse,
+    faRuler,
+    faBasketShopping,
+    faDollarSign
+    
 );
 
 export default FontAwesomeIcon;

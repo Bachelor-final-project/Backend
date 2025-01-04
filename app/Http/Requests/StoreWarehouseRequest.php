@@ -25,7 +25,7 @@ class StoreWarehouseRequest extends FormRequest
     {
         return [
             'bio' => 'nullable|string',
-            'status' => 'required|integer',
+            'status' => 'required|integer|in:1,2,3,4',
             'location' => 'required|string|max:255',
         ];
     }

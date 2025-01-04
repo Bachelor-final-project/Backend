@@ -10,17 +10,19 @@ import { Link, useForm, usePage } from "@inertiajs/vue3";
 import CenterLayout from "@/Layouts/CenterLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
+import PhoneInput from "@/Components/PhoneInput.vue";
 const props = defineProps({
-  options: Array,
+  status_options: Array,
+  type_options: Array,
 });
 
-const isAdminChecked = ref(false);
+// const isAdminChecked = ref(false);
 
-watch(isAdminChecked, (newValue, oldValue) => {
-  form.type = newValue ? 1 : 2;
-  form.region_id = newValue ? "" : form.region_id;
-  // newValue ? (form.region_id = "") : null;
-});
+// watch(isAdminChecked, (newValue, oldValue) => {
+//   form.type = newValue ? 1 : 2;
+//   form.region_id = newValue ? "" : form.region_id;
+//   // newValue ? (form.region_id = "") : null;
+// });
 
 const form = useForm({
   type: 2,
@@ -29,7 +31,8 @@ const form = useForm({
   phone: "",
   password: "",
   password_confirmation: "",
-  region_id: "",
+  job_title: "",
+  is_active: true
 });
 const submit = () => {
   // form
@@ -55,14 +58,14 @@ const submit = () => {
           {{ $t("add new user") }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        <!-- <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
           {{ $t("New user can review forms depens on his/her region.") }}
-        </p>
+        </p> -->
       </header>
 
       <form @submit.prevent="submit" class="mt-6 space-y-6">
         <div>
-          <div class="flex">
+          <!-- <div class="flex">
             <InputLabel for="is_admin" value="Set Admin" />
             <SwitchInput
               id="is_admin"
@@ -70,7 +73,7 @@ const submit = () => {
               v-model="isAdminChecked"
               class="mx-3"
             />
-          </div>
+          </div> -->
           <InputLabel for="name" value="Name" />
 
           <TextInput
@@ -103,9 +106,9 @@ const submit = () => {
         <div>
           <InputLabel for="phone" value="Phone" />
 
-          <TextInput
+          <PhoneInput
             id="phone"
-            type="number"
+            type="text"
             class="mt-1 block w-full"
             v-model="form.phone"
             required
@@ -113,6 +116,33 @@ const submit = () => {
           />
 
           <InputError class="mt-2" :message="form.errors.phone" />
+        </div>
+        <div>
+          <InputLabel for="job_title" value="job title" />
+
+          <TextInput
+            id="job_title"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.job_title"
+            autocomplete="username"
+          />
+
+          <InputError class="mt-2" :message="form.errors.job_title" />
+        </div>
+
+        <div>
+          <InputLabel for="type" value="Type" />
+          <SelectInput
+            :options="type_options"
+            :item_name="`name_${i18n_locale}`"
+            id="regions"
+            ref="regionInput"
+            v-model="form.type"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+          />
+          <InputError :message="form.errors.type" class="mt-2" />
         </div>
 
         <div>
@@ -147,21 +177,20 @@ const submit = () => {
             :message="form.errors.password_confirmation"
           />
         </div>
-        <div v-if="form.type != 1">
-          <InputLabel for="regions" value="Region" />
+        <!-- <div>
+          <InputLabel for="status" value="Status" />
           <SelectInput
-            :options="options"
+            :options="status_options"
             :item_name="`name_${i18n_locale}`"
-            id="regions"
+            id="status"
             ref="regionInput"
-            v-model="form.region_id"
+            v-model="form.status"
             class="mt-1 block w-full"
             autocomplete="new-password"
-            :disabled="form.type == 1"
           />
-          <InputError :message="form.errors.region_id" class="mt-2" />
-        </div>
-
+          <InputError :message="form.errors.status" class="mt-2" />
+        </div> -->
+        
         <div class="flex items-center gap-4">
           <PrimaryButton :disabled="form.processing">{{
             $t("Save")

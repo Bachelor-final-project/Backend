@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Beneficiary;
+use App\Models\Warehouse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBeneficiaryRequest;
 use App\Http\Requests\UpdateBeneficiaryRequest;
@@ -40,8 +41,9 @@ class BeneficiaryController extends Controller
      */
     public function create()
     {
+        $warehouses = Warehouse::all();
          return Inertia::render(Str::studly("Beneficiary").'/Create', [
-            // 'options' => $regions
+            'warehouses' => $warehouses
         ]);
     }
 
@@ -51,6 +53,14 @@ class BeneficiaryController extends Controller
     public function store(StoreBeneficiaryRequest $request)
     {
         $data = $request->validated();
+        $f_id = $data['father_national_id'];
+        // if($f_id) {
+        //     $b = Beneficiary::where('national_id', '=', $f_id)->first();
+        //     $father_id = $b?->id ?? null;
+        // }
+        // unset($data['father_national_id']);
+        // $data['father_id'] = $father_id;
+        // dd($data);
         Beneficiary::create($data);
         
         return to_route($this->routeName() . '.index')->with('res', ['message' => __('Beneficiary Saved Seccessfully'), 'type' => 'success']);
@@ -69,9 +79,11 @@ class BeneficiaryController extends Controller
      */
     public function edit(Beneficiary $beneficiary)
     {
-        return Inertia::render(Str::studly("Beneficiary").'/Update', [
+        $warehouses = Warehouse::all();
+        return Inertia::render(Str::studly("Beneficiary").'/Edit', [
             //'options' => $regions,
-            'beneficiary' => $beneficiary->toArray()
+            'beneficiary' => $beneficiary->toArray(),
+            'warehouses' => $warehouses
         ]);
     }
 

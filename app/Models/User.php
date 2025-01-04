@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, SoftDeletes;
 
     protected $appends = ['type_str', 'status_str'];
     public static $controllable = true;
@@ -23,6 +24,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_active' => 'boolean',
+    ];
+
+    public const STATUSES = [
+        "open" => 1,
+        "closed" => 2,
+        "blocked" => 3
     ];
 
     protected $guarded = [];
@@ -88,6 +95,21 @@ class User extends Authenticatable
             ['sortable' => true, 'value' => 'job title', 'key' => 'job_title'],
             ['sortable' => true, 'value' => 'is active', 'key' => 'is_active'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
+    public static function types()
+    {
+        return [
+            ['name' => 'individual', 'id' => '1'],
+            ['name' => 'organization', 'id' => '2'],
+        ];
+    }
+    public static function statuses()
+    {
+        return [
+            ['name' => 'open', 'id' => '1'],
+            ['name' => 'closed', 'id' => '2'],
+            ['name' => 'blocked', 'id' => '3'],
         ];
     }
 }
