@@ -6,13 +6,17 @@ import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
+const { t, locale  } = useI18n();
 const page = usePage();
 const user = page.props.auth.user;
 const userRoleName = computed(() => {
   // return user.type == 1 ? "Admin" : "GRM Officer";
   return user.type == 1 ? $t("Admin"): '';
 });
+function changeLanguage(newLocale) {
+  // console.log("Locate: " + locale);
+  // locale.value = newLocale;
+}
 </script>
 <template>
   <nav
@@ -127,8 +131,8 @@ const userRoleName = computed(() => {
                   <ul id="dropdown-language-menu" class="hidden py-2 space-y-2">
                     <li>
                       <a
-                        :href="route('change-language', 'ar')"
-                        @click="test"
+                      :href="route('change-language', 'ar')"
+                        @click="changeLanguage('ar')"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                         >{{ $t("arabic") }}</a
@@ -137,7 +141,7 @@ const userRoleName = computed(() => {
                     <li>
                       <a
                         :href="route('change-language', 'en')"
-                        @click="test"
+                        @click="changeLanguage('en')"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                         >{{ $t("english") }}</a

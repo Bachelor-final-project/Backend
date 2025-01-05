@@ -6,6 +6,7 @@ export default (props) => {
             Link,
         },
         mounted() {
+            this.$i18n.locale = this.getCooki('locale');
             initFlowbite();
         },
         data() {
@@ -64,6 +65,13 @@ export default (props) => {
                 anchor.download = `${filename}.csv`;
                 anchor.click();
             },
+            getCooki(name) {
+                console.log("getCookie Ran");
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                else return "none";
+            }
         },
     };
 };

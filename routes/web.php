@@ -75,14 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/change-language/{locale}', function (string $locale) {
-    if (! in_array($locale, ['en', 'ar'])) {
-        abort(400);
-    }
- 
-    session()->put('locale', $locale);
-    return redirect()->back();
-})->name('change-language');
+Route::get('/change-language/{locale}', [GeneralController::class, 'changeLanguage'])->name('change-language');
 
 require __DIR__.'/auth.php';
 

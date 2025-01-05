@@ -2,6 +2,7 @@
 import { onBeforeUnmount, onMounted } from "vue";
 import { handleDarkMode } from "../../plugins/custom";
 onMounted(() => {
+  // console.log("Dark Feature Working :)");
   let old = document.getElementById("dark_mode_script");
   if (!old) {
     var script = document.createElement("script");
@@ -24,6 +25,7 @@ function change_color_theme() {
         },
       })
     );
+    // console.log("Dark Feature Working :)");
   }, 1);
 }
 </script>

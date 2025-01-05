@@ -6,6 +6,10 @@ use Illuminate\Cookie\Middleware\EncryptCookies as Middleware;
 
 class EncryptCookies extends Middleware
 {
+    // public function __construct() {
+    //     parent::__construct();
+    //     // dd("EncryptCookie");
+    // }
     /**
      * The names of the cookies that should not be encrypted.
      *
@@ -14,6 +18,5 @@ class EncryptCookies extends Middleware
     protected $except = [
         'locale',
         'laravel_session'
-
     ];
 }

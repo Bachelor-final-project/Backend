@@ -1,0 +1,18 @@
+{
+    "form_type": "form type",
+    "created_at": "created at",
+    "in_process": "in process",
+    "date": "date",
+    "client_name": "client name",
+    "gender": "gender",
+    "contact_method": "contact method",
+    "is_anonymous": "is anonymous",
+    "problem_status": "problem status",
+    "problem_status_details": "problem status details",
+    "details": "details",
+    "suggested_solution": "suggested solution",
+    "solution": "solution",
+    "start_processing_date": "start processing date",
+    "end_processing_date": "end processing date",
+    "action_notes": "action notes"
+}

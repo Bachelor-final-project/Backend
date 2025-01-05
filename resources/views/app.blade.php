@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <link rel="manifest" href="/site.webmanifest"> -->
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
@@ -12,10 +13,10 @@
 
         <!-- Scripts -->
         @routes()
-        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+        @vite(["resources/js/app.js", "resources/js/Pages/{$page['component']}.vue", "resources/js/plugins/my.js"])
         @inertiaHead
     </head>
-    <body class="font-sans antialiased">
+    <body class="dark:bg-gray-900 bg-gray-100 min-h-screen " dir="{{ Cookie::get('locale') == 'en' ? 'ltr' : 'rtl' }}">
         @inertia
     </body>
 </html>

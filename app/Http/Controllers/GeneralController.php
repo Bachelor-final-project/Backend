@@ -11,9 +11,11 @@ class GeneralController extends Controller
 {
     public function changeLanguage($locale)
     {
+        // dd($locale);
         try {
+            // dd("fgfg");
             if (array_key_exists($locale,  config('locale.languages'))) {
-                Cookie::queue('locale', $locale);
+                Cookie::queue(Cookie::make('locale', $locale, 52560000, null, null, false, false));
                 Cookie::queue('test', 'Hello,World!');
                 App::setLocale($locale);
                 return redirect()->back();

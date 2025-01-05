@@ -34,7 +34,7 @@ const submit = () => {
   //   ...data,
   //   remember: data.remember ? 'on' : '',
   // }))
-  form.put(route("currency.update"), {
+  form.put(route("currency.update", props.currency), {
     onFinish: () => {
       form.defaults();
     },

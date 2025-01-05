@@ -7,6 +7,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 const page = usePage();
 const menu = computed(() => menus[page.props.auth.user.type - 1]);
 
+
 </script>
 
 <template>

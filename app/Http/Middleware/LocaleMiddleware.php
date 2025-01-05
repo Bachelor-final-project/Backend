@@ -21,6 +21,7 @@ class LocaleMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        // dd(Cookie::get('locale'));
         if (config('locale.status')) {
 
             if (Cookie::get('locale')) {
@@ -28,9 +29,10 @@ class LocaleMiddleware
                     abort(400);
                 }
                 app()->setLocale(request()->cookie('locale'));
+                // dd("Hell");
             } else {
                 app()->setLocale('ar');
-                Cookie::queue('locale', 'ar');
+                Cookie::queue(Cookie::make('locale', 'ar', 52560000, null, null, false, false));
                 Cookie::queue('test', 'Hello,World!');
                 // $user_lang = preg_split('/[,;]/', $request->server('HTTP_ACCEPT_LANGUAGE'));
                 // foreach ($user_lang as $lang) {
