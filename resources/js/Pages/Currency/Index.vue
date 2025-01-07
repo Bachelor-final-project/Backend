@@ -6,7 +6,9 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      model="currency"
       add_item_route="currency.create"
+      import_url="import-currencies"
     />
   </div>
 </template>

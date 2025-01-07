@@ -6,7 +6,9 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      model="user"
       add_item_route="user.create"
+      import_url="import-users"
     />
   </div>
 </template>

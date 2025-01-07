@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Unit;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
@@ -39,9 +40,10 @@ class ItemController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-         return Inertia::render(Str::studly("Item").'/Create', [
-            // 'options' => $regions
+    {  
+        $units = Unit::all();
+        return Inertia::render(Str::studly("Item").'/Create', [
+            'units' => $units
         ]);
     }
 
@@ -69,8 +71,9 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
-        return Inertia::render(Str::studly("Item").'/Update', [
-            //'options' => $regions,
+        $units = Unit::all();
+        return Inertia::render(Str::studly("Item").'/Edit', [
+            'units' => $units,
             'item' => $item->toArray()
         ]);
     }

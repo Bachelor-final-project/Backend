@@ -6,7 +6,9 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      model="beneficiary"
       add_item_route="beneficiary.create"
+      import_url="import-beneficiaries"
     />
   </div>
 </template>

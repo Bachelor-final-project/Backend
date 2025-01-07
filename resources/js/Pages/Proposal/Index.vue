@@ -6,6 +6,7 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      import_url="import-proposals"
     />
   </div>
 </template>

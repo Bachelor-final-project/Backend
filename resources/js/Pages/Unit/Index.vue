@@ -6,7 +6,9 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      model="unit"
       add_item_route="unit.create"
+      import_url="import-units"
     />
   </div>
 </template>

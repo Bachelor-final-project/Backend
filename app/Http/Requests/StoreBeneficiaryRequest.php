@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Beneficiary;
 
 class StoreBeneficiaryRequest extends FormRequest
 {
@@ -29,7 +30,21 @@ class StoreBeneficiaryRequest extends FormRequest
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
             'dob' => 'nullable|date',
-            'father_national_id' => 'nullable|sometimes|string|min:9|max:9',
+            // 'father_national_id' => 'nullable|sometimes|string|min:9|max:9',
+            'father_national_id' => [
+            'nullable',
+            'integer',
+            'digits:9',
+            function ($attribute, $value, $fail) {
+                if ($value) {
+                    $result = Beneficiary::isValidFatherNationalId($value);
+                    dd($result);
+                    if (!$result) {
+                        $fail('The father_national_id creates a circular dependency.');
+                    }
+                }
+            },
+        ],
             'warehouse_id' => 'required|integer|exists:warehouses,id',
         ];
     }

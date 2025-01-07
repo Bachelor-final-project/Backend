@@ -24,7 +24,8 @@ class StoreWarehouseRequest extends FormRequest
     public function rules()
     {
         return [
-            'bio' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'bio' => 'nullable|string|max:512',
             'status' => 'required|integer|in:1,2,3,4',
             'location' => 'required|string|max:255',
         ];

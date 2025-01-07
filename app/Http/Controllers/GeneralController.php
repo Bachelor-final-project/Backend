@@ -6,6 +6,14 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
+use App\Exports\UserExport;
+use App\Exports\WarehousesExport;
+use App\Exports\UnitsExport;
+use App\Exports\ProposalsExport;
+use App\Exports\ItemsExport;
+use App\Exports\CurrenciesExport;
+use App\Exports\BeneficiariesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GeneralController extends Controller
 {
@@ -25,4 +33,41 @@ class GeneralController extends Controller
             return redirect()->back();
         }
     }
+
+    public function importUsers(Request $request)
+    {
+        $usersExport = new UserExport($request);
+        return Excel::download($usersExport, 'Users.xlsx');
+    }
+    public function importWarehouses(Request $request)
+    {
+        $warehousesExport = new WarehousesExport($request);
+        return Excel::download($warehousesExport, 'WarehousesExport.xlsx');
+    }
+    public function importUnits(Request $request)
+    {
+        $unitExport = new UnitsExport($request);
+        return Excel::download($unitExport, 'UnitsExport.xlsx');
+    }
+    public function importProposals(Request $request)
+    {
+        $proposalsExport = new ProposalsExport($request);
+        return Excel::download($proposalsExport, 'ProposalsExport.xlsx');
+    }
+    public function importItems(Request $request)
+    {
+        $itemExport = new ItemsExport($request);
+        return Excel::download($itemExport, 'ItemsExport.xlsx');
+    }
+    public function importCurrencies(Request $request)
+    {
+        $currencyExport = new CurrenciesExport($request);
+        return Excel::download($currencyExport, 'CurrenciesExport.xlsx');
+    }
+    public function importBeneficiaries(Request $request)
+    {
+        $beneficiariesExport = new BeneficiariesExport($request);
+        return Excel::download($beneficiariesExport, 'BeneficiariesExport.xlsx');
+    }
+    
 }

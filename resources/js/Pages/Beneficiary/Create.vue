@@ -50,8 +50,8 @@ const submit = () => {
   } else {
     form.errors.national_id = '';
   }
-  if (!isValidPalestinianID(form.father_national_id)) {
-    form.errors.father_national_id = "Enter Valid National ID";
+  if (form.father_national_id && !isValidPalestinianID(form.father_national_id)) {
+    form.errors.father_national_id = "Enter Valid Father National ID";
     return;
   } else {
     form.errors.father_national_id = '';
@@ -198,7 +198,7 @@ const datePickerFormat = (date) => {
             autocomplete="new-password"
             required
           />
-          <InputError :message="form.errors.region_id" class="mt-2" />
+          <InputError :message="form.errors.warehouse_id" class="mt-2" />
         </div>
 
         <div class="flex col-span-6 md:col-span-2 pe-32 flex-col">

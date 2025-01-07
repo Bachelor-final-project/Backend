@@ -38,7 +38,7 @@ const form = useForm({
   dob:props.beneficiary.dob,
   national_id:props.beneficiary.national_id,
   father_national_id:props.beneficiary.father_national_id,
-  warehouse_id:props.beneficiary.warehouse_id
+  warehouse_id: props.beneficiary.warehouse_id
 });
 
 const submit = () => {
@@ -106,7 +106,7 @@ const datePickerFormat = (date) => {
 </script>
 <template>
   <Head :title="$t('Edit Beneficiary')" />
-  <TopRightLayout>
+  <CenterLayout>
     <section>
       <header>
         <h2
@@ -201,7 +201,7 @@ const datePickerFormat = (date) => {
             autocomplete="new-password"
             required
           />
-          <InputError :message="form.errors.region_id" class="mt-2" />
+          <InputError :message="form.errors.warehouse_id" class="mt-2" />
         </div>
 
         <div class="flex col-span-6 md:col-span-2 pe-32 flex-col">
@@ -240,5 +240,5 @@ const datePickerFormat = (date) => {
         </div>
       </form>
     </section>
-  </TopRightLayout>
+  </CenterLayout>
 </template>
