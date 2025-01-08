@@ -6,6 +6,8 @@ use App\Models\Proposal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
+use App\Models\Currency;
+use App\Models\ProposalDetail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -41,7 +43,9 @@ class ProposalController extends Controller
     public function create()
     {
          return Inertia::render(Str::studly("Proposal").'/Create', [
-            // 'options' => $regions
+            'status_options' => Proposal::statuses(),
+            'currencies' => Currency::all(),
+            "proposal_detail_headers" => ProposalDetail::addItemHeaders(),
         ]);
     }
 
@@ -50,6 +54,7 @@ class ProposalController extends Controller
      */
     public function store(StoreProposalRequest $request)
     {
+        dd('hi');
         $data = $request->validated();
         Proposal::create($data);
         
