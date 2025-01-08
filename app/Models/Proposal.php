@@ -52,4 +52,13 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }
+    public static function statuses() {
+        return [
+            ['name' => 'accepted', 'id' => '1'],
+            ['name' => 'unaccepted', 'id' => '2'],
+            ['name' => 'pending', 'id' => '3'],
+            ['name' => 'preparing', 'id' => '4'],
+            ['name' => 'done', 'id' => '8'],
+        ];
+    }
 }
