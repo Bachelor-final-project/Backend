@@ -6,7 +6,9 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      model="warehouse"
       add_item_route="warehouse.create"
+      import_url="import-warehouses"
     />
   </div>
 </template>

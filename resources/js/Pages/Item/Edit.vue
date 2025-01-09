@@ -13,8 +13,8 @@ import { Head } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import PhoneInput from "@/Components/PhoneInput.vue";
 const props = defineProps({
-  status_options: Array,
-  unit: Array
+  units: Array,
+  item: Array
 });
 
 // const isAdminChecked = ref(false);
@@ -26,8 +26,10 @@ const props = defineProps({
 // });
 
 const form = useForm({
-  name: props.unit.name,
-  description: props.unit.description
+  name: props.item.name,
+  estimated_price: props.item.estimated_price,
+  description: props.item.description,
+  unit_id: props.item.unit_id
 });
 const submit = () => {
   // form
@@ -35,7 +37,7 @@ const submit = () => {
   //   ...data,
   //   remember: data.remember ? 'on' : '',
   // }))
-  form.put(route("unit.update", props.unit), {
+  form.put(route("item.update", props.item), {
     onFinish: () => {
       form.defaults();
     },
@@ -43,14 +45,14 @@ const submit = () => {
 };
 </script>
 <template>
-  <Head :title="$t('Edit Unit')" />
+  <Head :title="$t('Edit Item')" />
   <TopRightLayout>
     <section>
       <header>
         <h2
           class="capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
         >
-          {{ $t("update Unit") }}
+          {{ $t("update unit") }}
         </h2>
 
         <!-- <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -73,6 +75,35 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.name" />
         </div>
+        <div>
+
+        <InputLabel for="estimated_price" value="Estimated Price" />
+        <TextInput
+          id="estimated_price"
+          type="number"
+          class="mt-1 block w-full"
+          v-model="form.estimated_price"
+          required
+          autofocus
+          autocomplete="name"
+        />
+        <InputError class="mt-2" :message="form.errors.estimated_price" />
+        </div>
+
+        <div>
+          <InputLabel for="unit_id" value="Unit" />
+          <SelectInput
+            :options="units"
+            :item_name="`name_${i18n_locale}`"
+            id="unit_id"
+            v-model="form.unit_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+            required
+          />
+          <InputError :message="form.errors.unit_id" class="mt-2" />
+        </div>
+
 
         <div>
 

@@ -24,7 +24,8 @@ class UpdateWarehouseRequest extends FormRequest
     public function rules()
     {
         return [
-            'bio' => 'sometimes|string',
+            'name' => 'sometimes|string|max:255',
+            'bio' => 'sometimes|string|max:512',
             'status' => 'sometimes|integer',
             'location' => 'sometimes|string|max:255',
         ];

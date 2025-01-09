@@ -54,6 +54,10 @@ class BeneficiaryController extends Controller
     {
         $data = $request->validated();
         $f_id = $data['father_national_id'];
+        $isValid = Beneficiary::isValidFatherNationalId($data['national_id'], $data['father_national_id']);
+        if(!isValid) {
+            return response()->json(['errors' => ['father_national_id' => 'This Father National ID Create Circualr Dependency']]);
+        }
         // if($f_id) {
         //     $b = Beneficiary::where('national_id', '=', $f_id)->first();
         //     $father_id = $b?->id ?? null;

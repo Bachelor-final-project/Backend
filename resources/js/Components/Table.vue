@@ -167,7 +167,31 @@ watch(filters, (newValue, old) => {
 });
 
 const rowClass = (item) => {
-  return item["priority"] == 2 ? "red_ths" : "";
+  switch (props.model) {
+    case "user":
+      switch (item['status']) {
+        case 2:
+          return "red_ths";
+        case 3:
+          return "grey_ths";
+        default:
+          return "";
+    
+      }
+    case "warehouse":
+      switch (item['status']) {
+        case 1:
+          return "green_ths";
+        case 2:
+          return "grey_ths";
+        case 3:
+          return "";
+        case 4:
+          return "red_ths";
+        default:
+          return "";
+      }
+  }
 };
 const props = defineProps({
   refresh_only: {
@@ -231,6 +255,8 @@ const haveData = props.items && props.items.data && props.items.data[0];
 
 function handelDbClick(item) {
   if (props.model) {
+    console.log("GFGFGF");
+    console.log(props.model + ".edit, item.id");
     router.get(route(`${props.model}.edit`, item.id));
   }
 }
@@ -335,5 +361,11 @@ const total_grievances_filters = [
 }
 .red_ths th {
   color: red !important;
+}
+.grey_ths th {
+  color: grey !important;
+}
+.green_ths th {
+  color: rgb(47, 242, 47) !important;
 }
 </style>

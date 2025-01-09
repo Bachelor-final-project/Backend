@@ -13,7 +13,7 @@ import { Head } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import PhoneInput from "@/Components/PhoneInput.vue";
 const props = defineProps({
-  status_options: Array,
+  units: Array,
 });
 
 // const isAdminChecked = ref(false);
@@ -27,7 +27,8 @@ const props = defineProps({
 const form = useForm({
   name: "",
   estimated_price: "",
-  description: ""
+  unit_id: "",
+  description: "",
 });
 const submit = () => {
   // form
@@ -35,7 +36,7 @@ const submit = () => {
   //   ...data,
   //   remember: data.remember ? 'on' : '',
   // }))
-  form.post(route("unit.store"), {
+  form.post(route("item.store"), {
     onFinish: () => {
       form.defaults();
     },
@@ -43,14 +44,14 @@ const submit = () => {
 };
 </script>
 <template>
-  <Head :title="$t('Add Unit')" />
+  <Head :title="$t('Add Item')" />
   <TopRightLayout>
     <section>
       <header>
         <h2
           class="capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
         >
-          {{ $t("add new Unit") }}
+          {{ $t("add new item") }}
         </h2>
 
         <!-- <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -89,7 +90,21 @@ const submit = () => {
         </div>
 
         <div>
+          <InputLabel for="unit_id" value="Unit" />
+          <SelectInput
+            :options="units"
+            :item_name="`name_${i18n_locale}`"
+            id="unit_id"
+            v-model="form.unit_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+            required
+          />
+          <InputError :message="form.errors.unit_id" class="mt-2" />
+        </div>
 
+
+        <div>
           <InputLabel for="description" value="Description" />
           <TextInput
             id="description"

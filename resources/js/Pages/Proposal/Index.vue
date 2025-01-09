@@ -6,7 +6,9 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      import_url="import-proposals"
       add_item_route="proposal.create"
+
     />
   </div>
 </template>

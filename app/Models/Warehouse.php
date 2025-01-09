@@ -32,9 +32,10 @@ class Warehouse extends BaseModel
     public static function headers($user = null)
     {
         return [
+            ['sortable' => true, 'value' => 'name', 'key' => 'name'],
             ['sortable' => true, 'value' => 'bio', 'key' => 'bio'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
             ['sortable' => true, 'value' => 'location', 'key' => 'location'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

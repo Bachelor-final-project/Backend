@@ -79,7 +79,11 @@ Route::get('/change-language/{locale}', [GeneralController::class, 'changeLangua
 
 require __DIR__.'/auth.php';
 
-Route::get('/import-grievances', [DashboardController::class, 'importGrievances'])->name('import-grievances');
-Route::get('/import-officers', [DashboardController::class, 'importOfficers'])->name('import-officers');
-Route::get('/import-statistics', [DashboardController::class, 'importStatistics'])->name('import-statistics');
+Route::get('/import-users', [GeneralController::class, 'importUsers'])->name('import-users');
+Route::get('/import-warehouses', [GeneralController::class, 'importWarehouses'])->name('import-warehouses');
+Route::get('/import-items', [GeneralController::class, 'importItems'])->name('import-items');
+Route::get('/import-units', [GeneralController::class, 'importUnits'])->name('import-units');
+Route::get('/import-currencies', [GeneralController::class, 'importCurrencies'])->name('import-currencies');
+Route::get('/import-proposals', [GeneralController::class, 'importWarehouses'])->name('import-proposals');
+Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiaries'])->name('import-beneficiaries');
 

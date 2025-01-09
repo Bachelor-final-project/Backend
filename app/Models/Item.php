@@ -11,9 +11,13 @@ class Item extends BaseModel
     protected $appends = [ 'unit_name'];
     public static $controllable = true;
 
-    public function getUnitAttribute()
+    public function unit()
     {
         return $this->belongsTo(Unit::class, 'unit_id');
+    }
+    public function getUnitNameAttribute()
+    {
+        return $this->unit()->first()->name ?? '';
     }
 
    

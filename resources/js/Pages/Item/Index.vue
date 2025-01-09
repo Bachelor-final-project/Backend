@@ -6,7 +6,9 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      model="item"
       add_item_route="item.create"
+      import_url="import-items"
     />
   </div>
 </template>
