@@ -37,7 +37,7 @@ const main_class = props.underline
   >
     <!-- <option  class="text-center" disabled selected v-if="!hide_choose">{{ $t("Choose one") }}</option> -->
     <option :key="i" v-for="(option, i) in options || []" :value="option.id">
-      {{ option.name || option[`name_${i18n_locale}`] }}
+      {{ option.name || option[item_name] || option[`name_${i18n_locale}`] }}
     </option>
   </select>
 </template>

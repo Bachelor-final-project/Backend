@@ -24,11 +24,21 @@ class UpdateProposalRequest extends FormRequest
     public function rules()
     {
         return [
-            'donor_id' => 'sometimes|exists:users,id',
-            'title' => 'sometimes|string|max:255',
-            'body' => 'sometimes|string',
-            'status' => 'sometimes|integer',
-            'notes' => 'sometimes|string',
+            'title' => 'required|string|max:255',
+            'body' => 'nullable|string',
+            'title' => 'required|string',
+            'body' => 'nullable|string',
+            'notes' => 'nullable|string',
+            'currency_id' => 'required|integer|exists:currencies,id', 
+            'proposal_effects' => 'nullable|string',
+            'cost' => 'required|numeric',
+            'share_cost' => 'required|numeric',
+            'expected_benificiaries_count' => 'required|integer|min:0',
+            'publishing_date' => 'required|date',
+            'execution_date' => 'required|date|after_or_equal:publishing_date',
+            'entity_id' => 'required|integer|exists:entities,id', 
+            'proposal_type_id' => 'required|integer|exists:proposal_types,id', 
+            'area_id' => 'required|integer|exists:areas,id', 
         ];
     }
 }

@@ -24,7 +24,8 @@ import {
     faWarehouse,
     faRuler,
     faBasketShopping,
-    faDollarSign
+    faDollarSign,
+    faLaptopFile,
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -52,7 +53,8 @@ library.add(
     faWarehouse,
     faRuler,
     faBasketShopping,
-    faDollarSign
+    faDollarSign,
+    faLaptopFile,
     
 );
 
