@@ -7,8 +7,13 @@ const menus = [
         },
         {
             title: "Proposals",
-            icon: "users",
+            icon: "laptop-file",
             to: "proposal.index",
+        },
+        {
+            title: "Entity",
+            icon: "users",
+            to: "entity.index",
         },
         {
             title: "Users",
