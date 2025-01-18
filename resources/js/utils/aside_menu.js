@@ -7,6 +7,12 @@ const menus = [
             allowedUserTypes: [1,2,3,4,5],
         },
         {
+            title: "Entity",
+            icon: "users",
+            to: "entity.index",
+            allowedUserTypes: [1,],
+        },
+        {
             title: "Users",
             icon: "user",
             to: "user.index",
@@ -14,7 +20,7 @@ const menus = [
         },
         {
             title: "Proposals",
-            icon: "users",
+            icon: "laptop-file",
             to: "proposal.index",
             allowedUserTypes: [1,2,5],
         },

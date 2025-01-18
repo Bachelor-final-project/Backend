@@ -1,6 +1,7 @@
 <script setup>
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import Textarea from "@/Components/Textaera.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
@@ -18,23 +19,38 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isValidPalestinianID } from '@/utils/validators';
 import AddingItemsTable from "@/Components/AddingItemsTable.vue";
-
+import { useI18n } from "vue-i18n";
+    
+const i18nLocale = useI18n();
+// const i18n_locale = i18nLocale.locale.value
+// console.log(i18n_locale)
 const props = defineProps({
-  status_options: Array,
+  // status_options: Array,
   currencies: Array,
-  proposal_detail_headers: Array,
+  entities: Array,
+  proposal_types: Array,
+  areas: Array,
   
   
 });
 
 
+
 const form = useForm({
   title: "",
   body: "",
-  status: "",
-  notes: "",
-  currency_id: "",
-  proposal_details: [],
+  notes: "", 
+  currency_id: "", 
+  proposal_effects: "",
+  cost: "",
+  share_cost: "",
+  expected_benificiaries_count: "", 
+  execution_date: "",
+  publishing_date: "",
+  entity_id: "",
+  proposal_type_id: "",
+  area_id: "", 
+  
 });
 
 const submit = () => {
@@ -70,9 +86,9 @@ const submit = () => {
       </header>
 
       <form @submit.prevent="submit" class="mt-6 space-y-6">
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-4 gap-4">
         <div>
-          <InputLabel for="title" value="Title" />
+          <InputLabel for="title" value="title" />
           <TextInput
             id="title"
             type="text"
@@ -85,49 +101,169 @@ const submit = () => {
           <InputError class="mt-2" :message="form.errors.title" />
         </div>
         <div>
-          <InputLabel for="body" value="Body" />
-          <TextInput
-            id="body"
-            type="text"
+          <InputLabel for="proposal_type_id" value="proposal type" />
+          <SelectInput
+            :options="proposal_types"
+            :item_name="`type_${i18n_locale}`"
+            id="proposal_type_id"
+            v-model="form.proposal_type_id"
             class="mt-1 block w-full"
-            v-model="form.body"
             required
-            autofocus
-            autocomplete="name"
           />
-          <InputError class="mt-2" :message="form.errors.body" />
+          <InputError :message="form.errors.proposal_type_id" class="mt-2" />
         </div>
         <div>
-          <InputLabel for="status" value="Status" />
+          <InputLabel for="area_id" value="area" />
           <SelectInput
-            :options="status_options"
-            id="status"
-            v-model="form.status"
+            :options="areas"
+            :item_name="`name`"
+            id="area_id"
+            v-model="form.area_id"
             class="mt-1 block w-full"
+            required
           />
-          <InputError :message="form.errors.status" class="mt-2" />
+          <InputError :message="form.errors.area_id" class="mt-2" />
+        </div>
+        <div>
+          <InputLabel for="entity_id" value="entity" />
+          <SelectInput
+            :options="entities"
+            :item_name="`name_${i18n_locale}`"
+            id="entity_id"
+            v-model="form.entity_id"
+            class="no-scrollbar mt-1 block w-full"
+            required
+          />
+          <InputError :message="form.errors.entity_id" class="mt-2" />
+        </div>
+
+        <div>
+          <InputLabel for="cost" value="cost" />
+          <TextInput
+            id="cost"
+            type="number"
+            class="mt-1 block w-full"
+            v-model="form.cost"
+            required
+            autofocus
+            autocomplete="cost"
+          />
+          <InputError :message="form.errors.cost" class="mt-2" />
         </div> 
         <div>
-          <InputLabel for="currency_id" value="Currency" />
+          <InputLabel for="share_cost" value="share cost" />
+          <TextInput
+            id="share_cost"
+            type="number"
+            class="mt-1 block w-full"
+            v-model="form.share_cost"
+            required
+            autofocus
+            autocomplete="share_cost"
+          />
+          <InputError :message="form.errors.share_cost" class="mt-2" />
+        </div> 
+        <div>
+          <InputLabel for="expected_benificiaries_count" value="expected benificiaries count" />
+          <TextInput
+            id="expected_benificiaries_count"
+            type="number"
+            class="mt-1 block w-full"
+            v-model="form.expected_benificiaries_count"
+            required
+            autofocus
+            autocomplete="expected_benificiaries_count"
+          />
+          <InputError :message="form.errors.expected_benificiaries_count" class="mt-2" />
+        </div> 
+        <div>
+          <InputLabel for="currency_id" value="currency" />
           <SelectInput
             :options="currencies"
-            :item_name="`name_${i18n_locale}`"
+            :item_name="`name`"
             id="currency_id"
             v-model="form.currency_id"
             class="mt-1 block w-full"
-            autocomplete="new-password"
             required
           />
           <InputError :message="form.errors.currency_id" class="mt-2" />
         </div>
-
+        <div>
+          <InputLabel for="execution_date" value="execution date" />
+          <TextInput
+            id="execution_date"
+            type="date"
+            class="mt-1 block w-full"
+            v-model="form.execution_date"
+            required
+            autofocus
+            autocomplete="execution_date"
+          />
+          <InputError :message="form.errors.execution_date" class="mt-2" />
+        </div> 
+        <div class="auto-cols-max">
+          <InputLabel for="publishing_date" value="publishing date" />
+          <TextInput
+            id="publishing_date"
+            type="date"
+            class="mt-1 block w-full"
+            v-model="form.publishing_date"
+            required
+            autofocus
+            autocomplete="publishing_date"
+          />
+          <InputError :message="form.errors.publishing_date" class="mt-2" />
+        </div> 
+        <div class="col-span-2">
+          </div>
+        <div class="col-span-2">
+          <InputLabel for="body" value="proposal body" />
+          <Textarea
+            placeholder=""
+            id="body"
+            class="mt-1 block w-full"
+            v-model="form.body"
+            required
+            autofocus
+            autocomplete="body"
+          />
+          <InputError class="mt-2" :message="form.errors.body" />
+        </div>
+        <div class="col-span-2">
+          <InputLabel for="proposal_effects" value="proposal effects" />
+          <Textarea
+            placeholder=""
+            id="proposal_effects"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.proposal_effects"
+            required
+            autofocus
+            autocomplete="proposal_effects"
+          />
+          <InputError class="mt-2" :message="form.errors.proposal_effects" />
+        </div>
+        
+        
+        
+        <div class="col-span-4">
+          <InputLabel for="notes" value="notes" />
+          <Textarea
+            placeholder=""
+            id="notes"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.notes"
+            required
+            autofocus
+            autocomplete="notes"
+          />
+          <InputError class="mt-2" :message="form.errors.notes" />
         </div>
 
 
-        <AddingItemsTable 
-          :headers="proposal_detail_headers"
-          v-model="form.proposal_details"
-        />
+        </div>
+
        
         
         <div class="flex items-center gap-4">

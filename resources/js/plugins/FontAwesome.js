@@ -31,6 +31,7 @@ import {
     faCheck,
     faCartFlatbed,
     faPhotoFilm
+    faLaptopFile,
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -65,6 +66,8 @@ library.add(
     faCheck,
     faCartFlatbed,
     faPhotoFilm
+    faLaptopFile,
+    
 );
 
 export default FontAwesomeIcon;

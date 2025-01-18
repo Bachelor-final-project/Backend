@@ -86,6 +86,6 @@ Route::get('/import-warehouses', [GeneralController::class, 'importWarehouses'])
 Route::get('/import-items', [GeneralController::class, 'importItems'])->name('import-items');
 Route::get('/import-units', [GeneralController::class, 'importUnits'])->name('import-units');
 Route::get('/import-currencies', [GeneralController::class, 'importCurrencies'])->name('import-currencies');
-Route::get('/import-proposals', [GeneralController::class, 'importWarehouses'])->name('import-proposals');
+Route::get('/import-proposals', [GeneralController::class, 'importProposals'])->name('import-proposals');
 Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiaries'])->name('import-beneficiaries');
 

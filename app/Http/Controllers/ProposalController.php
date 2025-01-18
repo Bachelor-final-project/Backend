@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
 use App\Models\Currency;
-use App\Models\ProposalDetail;
+use App\Models\ProposalType;
+use App\Models\Entity;
+use App\Models\Area;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -56,9 +58,11 @@ class ProposalController extends Controller
     public function create()
     {
          return Inertia::render(Str::studly("Proposal").'/Create', [
-            'status_options' => Proposal::statuses(),
+            // 'status_options' => Proposal::statuses(),
             'currencies' => Currency::all(),
-            "proposal_detail_headers" => ProposalDetail::addItemHeaders(),
+            'proposal_types' => ProposalType::all(),
+            'entities' => Entity::all(),
+            'areas' => Area::all(),
         ]);
     }
 
@@ -67,7 +71,6 @@ class ProposalController extends Controller
      */
     public function store(StoreProposalRequest $request)
     {
-        dd('hi');
         $data = $request->validated();
         Proposal::create($data);
         
@@ -87,9 +90,13 @@ class ProposalController extends Controller
      */
     public function edit(Proposal $proposal)
     {
-        return Inertia::render(Str::studly("Proposal").'/Update', [
+        return Inertia::render(Str::studly("Proposal").'/Edit', [
             //'options' => $regions,
-            'proposal' => $proposal->toArray()
+            'proposal' => $proposal->toArray(),
+            'currencies' => Currency::all(),
+            'proposal_types' => ProposalType::all(),
+            'entities' => Entity::all(),
+            'areas' => Area::all(),
         ]);
     }
 

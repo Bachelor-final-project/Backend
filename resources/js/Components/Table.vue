@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div class="relative shadow-md sm:rounded-lg">
     <header>
       <h2
         class="py-2 bg-white dark:bg-gray-800 text-center capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
@@ -57,8 +57,9 @@
         </div>
       </div>
     </header>
-    <table
-      class="w-full text-sm text-start text-gray-500 dark:text-gray-400"
+    <div class="overflow-x-auto">
+      <table
+      class="table-auto w-full text-sm text-start text-gray-500 dark:text-gray-400"
       :key="table_key"
     >
       <thead
@@ -135,6 +136,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
     <Paginator :params="route().params" :links="items.links" />
   </div>
 </template>
