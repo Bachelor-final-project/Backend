@@ -12,6 +12,13 @@ class Proposal extends BaseModel
     protected $appends = ['donor_name', 'donor', 'status_str', 'beneficiaries', 'propsal_details', 'total'];
     public static $controllable = true;
 
+    public const STATUSES = [
+        'donatable' => 1,
+        'darft' => 9,
+        'completed' => 2,
+        'processing' => 8,
+    ];
+
     public function getDonorNameAttribute()
     {
         return $this->donor?->name;
@@ -43,6 +50,18 @@ class Proposal extends BaseModel
     }
 
     public static function headers($user = null)
+    {
+        return [
+            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'title', 'key' => 'title'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
+            ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
+            ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
+
+    // headers for guest proposals table
+    public static function guestHeaders($user = null)
     {
         return [
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],

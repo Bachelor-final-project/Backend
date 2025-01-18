@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreWarehouseDetailRequest extends FormRequest
+class UpdateDonorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreWarehouseDetailRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,9 +24,10 @@ class StoreWarehouseDetailRequest extends FormRequest
     public function rules()
     {
         return [
-            'warehouse_id' => 'required|exists:warehouses,id',
-            'unit_id' => 'required|exists:units,id',
-            'amount' => 'required|integer|min:0',
+            'name' => 'required|string|max:255',
+            'gender' => 'required|integer|between:1,2',
+            'phone' => 'required|string|msx:15|unique:donors,phone,'.$this->donor->id,
+            'country_id' => 'nullable|integer|exists:countries,id'
         ];
     }
 }

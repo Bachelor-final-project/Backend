@@ -12,11 +12,12 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('warehouse_details', function (Blueprint $table) {
+        Schema::create('warehouse_transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('item_id');
             $table->decimal('amount')->default(0);
+            $table->integer('transaction_type')->default(2); // [1 => 'Inbound transaction', 2 => 'Outbound transaction']
             $table->timestamps();
             $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
@@ -31,6 +32,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('warehouse_details');
+        Schema::dropIfExists('warehouse_transactions');
     }
 };

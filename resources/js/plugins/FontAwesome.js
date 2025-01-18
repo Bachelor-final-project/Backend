@@ -24,7 +24,13 @@ import {
     faWarehouse,
     faRuler,
     faBasketShopping,
-    faDollarSign
+    faDollarSign,
+    faHandHoldingDollar,
+    faMinus,
+    faHandshakeSimple,
+    faCheck,
+    faCartFlatbed,
+    faPhotoFilm
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -52,8 +58,13 @@ library.add(
     faWarehouse,
     faRuler,
     faBasketShopping,
-    faDollarSign
-    
+    faDollarSign,
+    faHandHoldingDollar,
+    faMinus,
+    faHandshakeSimple,
+    faCheck,
+    faCartFlatbed,
+    faPhotoFilm
 );
 
 export default FontAwesomeIcon;

@@ -38,7 +38,7 @@ class ProposalDetail extends BaseModel
     public static function addItemHeaders($user = null)
     {
         return [
-            ['sortable' => true, 'value' => 'item name', 'key' => 'item_id', 'type' => 'select', 'options' => Currency::all()],
+            ['sortable' => true, 'value' => 'item name', 'key' => 'item_id', 'type' => 'select', 'options' => Item::all()],
             ['sortable' => true, 'value' => 'value', 'key' => 'value', 'type' => 'number'],
             ['sortable' => true, 'value' => 'estimated_price', 'key' => 'estimated_price', 'type' => 'number'],
             ['sortable' => true, 'value' => 'notes', 'key' => 'notes', 'type' => 'text'],
