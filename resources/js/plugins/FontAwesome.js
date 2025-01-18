@@ -30,7 +30,7 @@ import {
     faHandshakeSimple,
     faCheck,
     faCartFlatbed,
-    faPhotoFilm
+    faPhotoFilm,
     faLaptopFile,
     faCashRegister,
     faCircleCheck,
@@ -67,7 +67,7 @@ library.add(
     faHandshakeSimple,
     faCheck,
     faCartFlatbed,
-    faPhotoFilm
+    faPhotoFilm,
     faLaptopFile,
     faCashRegister,
     faCircleCheck,
