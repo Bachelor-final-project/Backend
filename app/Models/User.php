@@ -32,6 +32,14 @@ class User extends Authenticatable
         "blocked" => 3
     ];
 
+    public const TYPES = [
+        1 => 'proposal_director',
+        2 => 'entity_director',
+        3 => 'donations_director',
+        4 => 'warehouses_director',
+        5 => 'media_director',
+    ];
+
     protected $guarded = [];
 
     public static $datatableHeaders = ['id', 'name', 'type', 'actions'];
@@ -90,26 +98,29 @@ class User extends Authenticatable
             ['sortable' => true, 'value' => 'name', 'key' => 'name'],
             ['sortable' => true, 'value' => 'email', 'key' => 'email'],
             ['sortable' => true, 'value' => 'phone', 'key' => 'phone'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
             ['sortable' => true, 'value' => 'type', 'key' => 'type_str'],
             ['sortable' => true, 'value' => 'job title', 'key' => 'job_title'],
             ['sortable' => true, 'value' => 'active', 'key' => 'is_active'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }
     public static function types()
     {
         return [
-            ['name' => 'individual', 'id' => '1'],
-            ['name' => 'organization', 'id' => '2'],
+            ['name' => __('Proposals Director'), 'id' => '1'],
+            ['name' => __('Entity Director'), 'id' => '2'],
+            ['name' => __('Donations Director'), 'id' => '3'],
+            ['name' => __('Warehouses Director'), 'id' => '4'],
+            ['name' => __('Media Director'), 'id' => '5'],
         ];
     }
     public static function statuses()
     {
         return [
-            ['name' => 'open', 'id' => '1'],
-            ['name' => 'closed', 'id' => '2'],
-            ['name' => 'blocked', 'id' => '3'],
+            ['name' => __('Open'), 'id' => '1'],
+            ['name' => __('Closed'), 'id' => '2'],
+            ['name' => __('Blocked'), 'id' => '3'],
         ];
     }
 }

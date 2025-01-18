@@ -10,7 +10,7 @@ class Warehouse extends BaseModel
     use HasFactory;
 
     // protected $appends = ['status_str'];
-    protected $appends = ['warehouse_details', 'total', 'status_str'];
+    protected $appends = ['status_str'];
     public static $controllable = true;
 
     public function getStatusStrAttribute()
@@ -20,7 +20,7 @@ class Warehouse extends BaseModel
 
     public function getWarehouseDetailsAttribute()
     {
-        return $this->hasMany(WarehouseDetail::class, 'warehouse_id');
+        return $this->hasMany(WarehouseTransaction::class, 'warehouse_id');
     }
 
     public function getTotalAttribute()
@@ -35,7 +35,7 @@ class Warehouse extends BaseModel
             ['sortable' => true, 'value' => 'name', 'key' => 'name'],
             ['sortable' => true, 'value' => 'bio', 'key' => 'bio'],
             ['sortable' => true, 'value' => 'location', 'key' => 'location'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

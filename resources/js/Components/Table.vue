@@ -113,7 +113,7 @@
             <div
               :class="
                 head.has_class
-                  ? `_${item[head.class_value_name]}_${head.title}`
+                  ? `_${item[head.class_value_name]}_${model}_${head.value.replace(' ', '_')}`
                   : ''
               "
             >
@@ -153,11 +153,7 @@ const { t } = useI18n();
 const table_key = ref(0);
 
 const filters = reactive({
-  region_id: 0,
-  form_type: 0,
-  time_period: "all_years",
-  status: 0,
-  priority: 0,
+  warehouse_id: 0,
 });
 
 watch(filters, (newValue, old) => {
@@ -314,13 +310,13 @@ const total_grievances_filters = [
 */
 </script>
 <style>
-._1_status {
+._2_user_status {
   background: rgb(250, 66, 66);
   color: white;
   text-align: center;
   position: relative;
 }
-._1_status::after {
+/*._2_user_status::after {
   content: "";
   width: 17px;
   height: 17px;
@@ -331,35 +327,93 @@ const total_grievances_filters = [
   background-color: red;
   border: solid 2px white;
   outline: red solid 1px;
-}
-._2_status {
+}*/
+._1_user_status {
   padding: 4px 12px;
   background: rgb(200, 254, 200);
   color: rgb(46, 179, 46);
 }
-._3_status {
-  background: rgb(255, 243, 221);
-  color: rgb(255, 166, 0);
-}
-._4_status {
+._3_user_status {
   background: rgb(228, 228, 228);
   color: rgb(110, 110, 110);
 }
-._5_status {
+/*._4_user_status {
+  background: rgb(255, 243, 221);
+  color: rgb(255, 166, 0);
+}
+._5_user_status {
   background: rgb(255, 216, 216);
   color: red;
+}*/
+
+._0_donation_status {
+  background: rgb(255, 243, 221);
+  color: rgb(255, 166, 0);
+}
+._2_donation_status {
+  padding: 4px 12px;
+  background: rgb(200, 254, 200);
+  color: rgb(46, 179, 46);
+}
+._3_donation_status {
+  background: rgb(250, 66, 66);
+  color: white;
+  text-align: center;
+  position: relative;
 }
 
-._1_status,
-._2_status,
-._3_status,
-._4_status,
-._5_status {
+._1_warehouse_status {
+  padding: 4px 12px;
+  background: rgb(200, 254, 200);
+  color: rgb(46, 179, 46);
+}
+._2_warehouse_status {
+  background: rgb(255, 243, 221);
+  color: rgb(255, 166, 0);
+}
+._3_warehouse_status {
+  background: rgb(228, 228, 228);
+  color: rgb(110, 110, 110);
+}
+._4_warehouse_status {
+  background: rgb(250, 66, 66);
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
+._1_warehouse_transaction_transaction_type {
+  padding: 4px 12px;
+  background: rgb(200, 254, 200);
+  color: rgb(46, 179, 46);
+}
+._2_warehouse_transaction_transaction_type {
+  background: rgb(250, 66, 66);
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
+._1_warehouse_transaction_transaction_type,
+._2_warehouse_transaction_transaction_type,
+._1_warehouse_status,
+._2_warehouse_status,
+._3_warehouse_status,
+._4_warehouse_status,
+._0_donation_status,
+._2_donation_status,
+._3_donation_status,
+._1_user_status,
+._2_user_status,
+._3_user_status,
+._4_user_status,
+._5_user_status {
   padding: 4px 12px;
   border-radius: 15px;
   font-size: 15px;
   text-transform: capitalize;
   text-align: center;
+  max-width: 200px;
 }
 .red_ths th {
   color: red !important;

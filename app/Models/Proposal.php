@@ -14,6 +14,12 @@ class Proposal extends BaseModel
     protected $with = ['entity', 'area', 'proposalType', 'currency'];
     public static $controllable = true;
 
+    public const STATUSES = [
+        'donatable' => 1,
+        'darft' => 9,
+        'completed' => 2,
+        'processing' => 8,
+    ];
 
     // public function getDonorNameAttribute()
     // {
@@ -93,6 +99,18 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'area name', 'key' => 'area_name'],
             ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
+
+    // headers for guest proposals table
+    public static function guestHeaders($user = null)
+    {
+        return [
+            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'title', 'key' => 'title'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
+            ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
+            ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }
     public static function statuses() {

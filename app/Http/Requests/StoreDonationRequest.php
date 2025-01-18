@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWarehouseDetailRequest extends FormRequest
+class StoreDonationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,11 @@ class UpdateWarehouseDetailRequest extends FormRequest
     public function rules()
     {
         return [
-            'warehouse_id' => 'sometimes|exists:warehouses,id',
-            'unit_id' => 'sometimes|exists:units,id',
-            'amount' => 'sometimes|integer|min:0',
+            'phone' => 'required|exists:donors,phone',
+            'project_id' => 'required|exists:proposals,id',
+            'currency_id' => 'required|exists:currencies,id',
+            'amount' => 'required|numberic|min:0',
+            'status' => 'required|integer|between:0,3',
         ];
     }
 }

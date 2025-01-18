@@ -9,6 +9,7 @@ class Item extends BaseModel
 {
     use HasFactory;
     protected $appends = [ 'unit_name'];
+    protected $with = ['unit'];
     public static $controllable = true;
 
     public function unit()
@@ -17,7 +18,7 @@ class Item extends BaseModel
     }
     public function getUnitNameAttribute()
     {
-        return $this->unit()->first()->name ?? '';
+        return $this->unit->name ?? '';
     }
 
    

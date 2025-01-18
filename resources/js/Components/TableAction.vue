@@ -211,6 +211,16 @@ export default {
       router.get(route(`${this.action.model}.edit`, this.item.id));
       this.closeBlockModal();
     },
+    approveDonation() {
+      router.put(route(`${this.action.model}.update`, this.item.id), {
+        status: this.item.status = 2, // approved status value 2
+      });
+    },
+    rejectDonation() {
+      router.put(route(`${this.action.model}.update`, this.item.id), {
+        status: this.item.status = 3, // rejected status value 3
+      });
+    },
     confirmCompleteDonatingStatusModal() {
       router.put(route(`${this.action.model}.update`, this.item.id), {
         status: 2,

@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Donation;
 use App\Models\User;
-use App\Models\WarehouseDetail;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class WarehouseDetailPolicy
+class DonationPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class WarehouseDetailPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\WarehouseDetail  $warehouseDetail
+     * @param  \App\Models\Donation  $donation
      * @return mixed
      */
-    public function view(User $user, WarehouseDetail $warehouseDetail)
+    public function view(User $user, Donation $donation)
     {
         //
     }
@@ -48,10 +48,10 @@ class WarehouseDetailPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\WarehouseDetail  $warehouseDetail
+     * @param  \App\Models\Donation  $donation
      * @return mixed
      */
-    public function update(User $user, WarehouseDetail $warehouseDetail)
+    public function update(User $user, Donation $donation)
     {
         //
     }
@@ -60,10 +60,10 @@ class WarehouseDetailPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\WarehouseDetail  $warehouseDetail
+     * @param  \App\Models\Donation  $donation
      * @return mixed
      */
-    public function delete(User $user, WarehouseDetail $warehouseDetail)
+    public function delete(User $user, Donation $donation)
     {
         //
     }
@@ -72,10 +72,10 @@ class WarehouseDetailPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\WarehouseDetail  $warehouseDetail
+     * @param  \App\Models\Donation  $donation
      * @return mixed
      */
-    public function restore(User $user, WarehouseDetail $warehouseDetail)
+    public function restore(User $user, Donation $donation)
     {
         //
     }
@@ -84,10 +84,10 @@ class WarehouseDetailPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\WarehouseDetail  $warehouseDetail
+     * @param  \App\Models\Donation  $donation
      * @return mixed
      */
-    public function forceDelete(User $user, WarehouseDetail $warehouseDetail)
+    public function forceDelete(User $user, Donation $donation)
     {
         //
     }

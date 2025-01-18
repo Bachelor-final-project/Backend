@@ -30,7 +30,7 @@ class UserFactory extends Factory
             // 'email_verified_at' =>  now(),
             'status' => $this->faker->randomElement([1,2,3]),
             'password' => '123456', // password
-            'type' => 2,
+            'type' => $this->faker->randomElement([1,2,3,4,5]),
             'job_title' => 'farmer',
             'is_active' => true
         ];

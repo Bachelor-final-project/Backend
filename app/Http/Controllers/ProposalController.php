@@ -41,6 +41,19 @@ class ProposalController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     */
+    public function guestIndex(Request $request)
+    {
+        
+        return Inertia::render(Str::studly("Proposal").'/GuestIndex', [
+            "headers" => Proposal::guestHeaders(),
+            "items" => Proposal::where('status', '=', Proposal::STATUSES['donatable'])->search($request)->sort($request)->paginate($this->pagination),
+
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

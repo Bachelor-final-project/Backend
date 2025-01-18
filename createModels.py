@@ -9,7 +9,7 @@ models = [
     "RolePermission",
     "Unit",
     "Warehouse",
-    "WarehouseDetail",
+    "WarehouseTransaction",
     "Beneficiary",
     "Proposal",
     "ProposalDetail",
