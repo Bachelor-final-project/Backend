@@ -32,6 +32,8 @@ import {
     faCartFlatbed,
     faPhotoFilm
     faLaptopFile,
+    faCashRegister,
+    faCircleCheck,
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -67,6 +69,8 @@ library.add(
     faCartFlatbed,
     faPhotoFilm
     faLaptopFile,
+    faCashRegister,
+    faCircleCheck,
     
 );
 
