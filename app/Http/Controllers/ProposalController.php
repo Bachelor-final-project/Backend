@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProposalDonatingStatusApprovedWithDonatedAmount;
 use App\Models\Proposal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProposalRequest;
@@ -94,7 +95,16 @@ class ProposalController extends Controller
     {
         $validated = $request->validated();
         
+        
+        // check if there is a donatingAmount and a new donation record is needed to be added 
+        if(!empty($request->donatingAmount) && $request->status == 2 && $proposal->status != $request->status){
+            //create new donation;
+            // dd($request->donatingAmount);
+            ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount);
+        }
+        
         $proposal->update($validated);
+
         return back()->with('res', ['message' => __('Proposal Updated Seccessfully'), 'type' => 'success']);
     }
 

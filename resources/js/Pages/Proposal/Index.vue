@@ -21,7 +21,7 @@ const actions = [
   {
     type: "btn",
     icon: "trash",
-    icon_color: "#656565",
+    icon_color: "red",
     funcName: "deleting",
     model: "proposal",
     tooltip: "delete proposal",
@@ -33,6 +33,14 @@ const actions = [
     funcName: "editing",
     model: "proposal",
     tooltip: "edit proposal",
+  },
+  {
+    type: "btn",
+    icon: "circle-check",
+    icon_color: "green",
+    funcName: "completingDonatingStatus",
+    model: "proposal",
+    tooltip: "complete donating status proposal",
   },
 ];
 

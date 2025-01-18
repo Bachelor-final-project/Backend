@@ -9,8 +9,8 @@ use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 class Proposal extends BaseModel
 {
     use HasFactory;
-
-    protected $appends = ['status_str', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name'];
+    protected $guarded = ['donated_amount'];
+    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name'];
     protected $with = ['entity', 'area', 'proposalType', 'currency'];
     public static $controllable = true;
 
@@ -27,7 +27,11 @@ class Proposal extends BaseModel
 
     public function getStatusStrAttribute()
     {
-        return [1 => 'accepted', 2 => 'unaccepted', 3 => 'pending', 4 => 'preparing', 8 => 'done'][$this->status] ?? '';
+        return [1 => 'donating_status', 2 => 'execution_status', 3 => 'read_to_archive_status', 8 => 'done_status'][$this->status] ?? '';
+    }
+    public function getStatusStrArAttribute()
+    {
+        return [1 => 'مرحلة جمع التبرعات', 2 => 'مرحلة التنفيذ والتوثيق', 3 => 'بحاجة للأرشفة', 8 => 'مكتمل'][$this->status] ?? '';
     }
 
     public function getBeneficiariesAttribute()
@@ -87,6 +91,7 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'entity name', 'key' => 'entity_name'],
             ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
             ['sortable' => true, 'value' => 'area name', 'key' => 'area_name'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

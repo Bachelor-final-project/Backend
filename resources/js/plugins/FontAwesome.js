@@ -26,6 +26,8 @@ import {
     faBasketShopping,
     faDollarSign,
     faLaptopFile,
+    faCashRegister,
+    faCircleCheck,
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -55,6 +57,8 @@ library.add(
     faBasketShopping,
     faDollarSign,
     faLaptopFile,
+    faCashRegister,
+    faCircleCheck,
     
 );
 
