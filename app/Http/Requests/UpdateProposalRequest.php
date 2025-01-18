@@ -24,21 +24,23 @@ class UpdateProposalRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'sometimes|string|max:255',
             'body' => 'nullable|string',
-            'title' => 'required|string',
+            'title' => 'sometimes|string',
             'body' => 'nullable|string',
             'notes' => 'nullable|string',
-            'currency_id' => 'required|integer|exists:currencies,id', 
+            'currency_id' => 'sometimes|integer|exists:currencies,id', 
             'proposal_effects' => 'nullable|string',
-            'cost' => 'required|numeric',
-            'share_cost' => 'required|numeric',
-            'expected_benificiaries_count' => 'required|integer|min:0',
-            'publishing_date' => 'required|date',
-            'execution_date' => 'required|date|after_or_equal:publishing_date',
-            'entity_id' => 'required|integer|exists:entities,id', 
-            'proposal_type_id' => 'required|integer|exists:proposal_types,id', 
-            'area_id' => 'required|integer|exists:areas,id', 
+            'cost' => 'sometimes|numeric',
+            'share_cost' => 'sometimes|numeric',
+            'expected_benificiaries_count' => 'sometimes|integer|min:0',
+            'publishing_date' => 'sometimes|date',
+            'execution_date' => 'sometimes|date|after_or_equal:publishing_date',
+            'entity_id' => 'sometimes|integer|exists:entities,id', 
+            'proposal_type_id' => 'sometimes|integer|exists:proposal_types,id', 
+            'area_id' => 'sometimes|integer|exists:areas,id', 
+            'donated_amount' => 'sometimes|numeric', 
+            'status' => 'sometimes|integer', 
         ];
     }
 }
