@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () use ($controllers) {
 
 Route::get('/guest_index', [ProposalController::class, 'guestIndex'])->name('guest-index');
 Route::get('/donating-form/{donating_form_path}', [EntityController::class, 'donatingForm'])->name('donating-form');
+Route::post('/donating-form/', [EntityController::class, 'storeDonatingForm'])->name('store-donating-form');
 
 
 // Route::get('/dashboard', function () {
