@@ -1,5 +1,36 @@
 <template>
-  <div class="relative shadow-md sm:rounded-lg">
+  <Modal :show="showFileUploadModal" @close="closeModal">
+    <div class="p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+        {{ $t("File Upload") }}
+      </h2>
+
+      <FileInput 
+        :trigger="fileuploadInputTrigger"
+        :item_id="form.attachable_id"
+        :model="model"
+        attachment_type="1"
+        @success-uploading="closeModal"
+        @finish-uploading="isFileInputLoading = false"
+        @start-uploading="isFileInputLoading = true"
+      />
+
+      <div class="mt-6 flex justify-end">
+        <SecondaryButton @click="closeModal">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+        <PrimaryButton class="ml-3" @click="triggerFileInput">
+         
+          <span v-if="isFileInputLoading"> {{ $t("Uploading") }}...</span>
+          <span v-else> {{ $t("Upload") }} </span>
+        </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    
+
     <header>
       <h2
         class="py-2 bg-white dark:bg-gray-800 text-center capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
@@ -91,6 +122,9 @@
               ></a>
             </div>
           </th>
+          <th v-if="add_file_input" scope="col" class="px-6 py-3">
+            {{ $t("upload documents") }}
+          </th>
           <th v-if="actions" scope="col" class="px-6 py-3">
             {{ $t("actions") }}
           </th>
@@ -128,6 +162,19 @@
               {{ head.translate ? $t(item[head.key]) : item[head.key] }}
             </div>
           </th>
+          <td v-if="add_file_input" class="px-6 py-4">
+            <span class="p-1">
+              <button
+                v-on:click="fileuploadInputIconClick(item.id)"
+                type="button"
+                class="text-white"
+              >
+                <f-icon
+                  icon="upload"
+                ></f-icon>
+              </button>
+            </span>
+          </td>
           <td v-if="actions" class="px-6 py-4">
             <template v-for="(action, i) in actions">
               <TableAction
@@ -156,12 +203,69 @@
 import Paginator from "@/Components/Paginator.vue";
 import TableAction from "@/Components/TableAction.vue";
 import SelectInput from "@/Components/SelectInput.vue";
-import { router } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { reactive, watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import FileInput from "@/Components/FileInput.vue";
+import SecondaryButton from "./SecondaryButton.vue";
+import Modal from "@/Components/Modal.vue";
 const { t } = useI18n();
 
+const props = defineProps({
+  refresh_only: {
+    type: String,
+    default: "",
+  },
+  table_filters: {
+    type: Object,
+    default: {},
+  },
+  model: {
+    type: String,
+    default: "",
+  },
+  headers: {
+    type: [Array],
+    default: [],
+  },
+  items: {
+    type: [Array],
+    default: null,
+  },
+  actions: {
+    type: [Array],
+    default: null,
+  },
+  title: {
+    type: String,
+    default: "",
+  },
+  import_url: {
+    type: String,
+    default: "",
+  },
+  add_item_route: {
+    type: String,
+    default: "",
+  },
+  add_file_input: {
+    type: String,
+    default: "",
+  },
+});
+
 const table_key = ref(0);
+const showFileUploadModal = ref(true);
+const fileuploadInputTrigger = ref(0);
+const isFileInputLoading = ref(false);
+
+const form = useForm({
+  files: [],
+  attachable_id: "",
+  attachment_type: "",
+  attachable_type: props.model,
+});
 
 const filters = reactive({
   warehouse_id: 0,
@@ -215,44 +319,6 @@ const rowClass = (item) => {
       }
   }
 };
-const props = defineProps({
-  refresh_only: {
-    type: String,
-    default: "",
-  },
-  table_filters: {
-    type: Object,
-    default: {},
-  },
-  model: {
-    type: String,
-    default: "",
-  },
-  headers: {
-    type: [Array],
-    default: [],
-  },
-  items: {
-    type: [Array],
-    default: null,
-  },
-  actions: {
-    type: [Array],
-    default: null,
-  },
-  title: {
-    type: String,
-    default: "",
-  },
-  import_url: {
-    type: String,
-    default: "",
-  },
-  add_item_route: {
-    type: String,
-    default: "",
-  },
-});
 let sortBy = [];
 let sortDesc = [];
 const handleSort = (head) => {
@@ -275,6 +341,10 @@ const handleSort = (head) => {
 
 const haveData = props.items && props.items.data && props.items.data[0];
 
+function fileuploadInputIconClick(id) {
+  form.attachable_id = id; 
+  showFileUploadModal.value = !showFileUploadModal.value
+}
 function handelDbClick(item) {
   if (props.model) {
     console.log("GFGFGF");
@@ -282,7 +352,13 @@ function handelDbClick(item) {
     router.get(route(`${props.model}.edit`, item.id));
   }
 }
+function closeModal() {
+  showFileUploadModal.value = false;
+}
 
+function triggerFileInput() {
+  fileuploadInputTrigger.value = !fileuploadInputTrigger.value;
+}
 function urlParams() {
   return "?" + new URLSearchParams(filters).toString();
 }

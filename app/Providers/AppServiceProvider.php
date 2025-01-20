@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Models\Proposal;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\UserObserver;
@@ -31,5 +31,10 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         // Proposal::observe(ProposalObserver::class);
         Vite::prefetch(concurrency: 3);
+
+        Relation::morphMap([
+            'document' => 'App\Models\Document',
+            'proposal' => 'App\Models\Proposal',
+        ]);
     }
 }
