@@ -13,6 +13,7 @@ class StoreAttachmentRequest extends FormRequest
      */
     public function authorize()
     {
+        // dd(request());
         return true;
     }
 
@@ -24,9 +25,10 @@ class StoreAttachmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'entity_id' => 'required|integer',
-            'record_id' => 'required|integer',
-            'filename' => 'required|string|max:255',
+        'attachable_type' => 'required|string|max:255', // Validate allowed model names
+        'attachment_type' => 'required|integer', 
+        // 'attachable_id' => 'required|integer', // Validate record ID format
+        'files' => 'required', // Validate file type and size        
         ];
     }
 }

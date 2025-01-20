@@ -10,4 +10,9 @@ class Attachment extends BaseModel
     use HasFactory;
 
     public static $controllable = true;
+
+    public function attachable()
+    {
+        return $this->morphTo();
+    }
 }

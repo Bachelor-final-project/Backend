@@ -172,7 +172,7 @@ const datePickerFormat = (date) => {
             class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1"
             v-model="form.expected_date"
             auto-apply
-            :max-date="new Date()"
+            :min-date="new Date()"
             :year-range="getDatePcikerYearsRange()"
             :enable-time-picker="false"
             :format="datePickerFormat"

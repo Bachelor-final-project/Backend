@@ -28,6 +28,6 @@ class BaseModel extends Model
 
     public function files()
     {
-        return $this->morphMany(Attachment::class, 'entity_id')->where('user_id', '=', auth('web')->user()->id);
+        return $this->morphMany(Attachment::class, 'attachable');
     }
 }
