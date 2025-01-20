@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EntityController;
 use App\Http\Controllers\ProposalController;
 
 // Route::get('/', function () {
@@ -66,6 +67,7 @@ Route::group(['middleware' => 'auth'], function () use ($controllers) {
 });
 
 Route::get('/guest_index', [ProposalController::class, 'guestIndex'])->name('guest-index');
+Route::get('/donating-form/{donating_form_path}', [EntityController::class, 'donatingForm'])->name('donating-form');
 
 
 // Route::get('/dashboard', function () {

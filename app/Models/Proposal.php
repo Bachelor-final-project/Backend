@@ -97,7 +97,7 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'entity name', 'key' => 'entity_name'],
             ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
             ['sortable' => true, 'value' => 'area name', 'key' => 'area_name'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

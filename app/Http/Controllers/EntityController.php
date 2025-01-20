@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use App\Models\Proposal;
+
+use App\Models\Currency;
+
+use App\Models\Donor;
+
+use App\Models\Country;
 
 
 class EntityController extends Controller
@@ -32,6 +39,18 @@ class EntityController extends Controller
             "headers" => Entity::headers(),
             "items" => Entity::search($request)->sort($request)->paginate($this->pagination),
 
+        ]);
+    }
+    public function donatingForm(Request $request, string $donating_form_path)
+    {
+        // dd('hi');
+        $entity = Entity::where('donating_form_path', $donating_form_path)->firstOrFail();
+        return Inertia::render(Str::studly("Entity").'/DonatingForm', [
+            "headers" => Proposal::guestHeaders(),
+            "entity" => $entity,
+            "proposals" => Proposal::where('entity_id', $entity->id)->get(),
+            'countries' => Country::select('id', 'name')->get(),
+            'genders' => Donor::genders(),
         ]);
     }
 

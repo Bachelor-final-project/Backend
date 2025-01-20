@@ -110,7 +110,15 @@
             scope="row"
             class="px-6 py-2 font-semibold text-black whitespace-nowrap dark:text-white"
           >
+          <a 
+          v-if="head.type && head.type == 'link'"
+          :href="item[head.key]"
+          target="_blank"
+          >
+          {{ item[head.key] }}
+          </a>
             <div
+              v-else
               :class="
                 head.has_class
                   ? `_${item[head.class_value_name]}_${model}_${head.value.replace(' ', '_')}`
@@ -121,12 +129,15 @@
             </div>
           </th>
           <td v-if="actions" class="px-6 py-4">
-            <TableAction
+            <template v-for="(action, i) in actions">
+              <TableAction
               :item="item"
               :action="action"
               :key="i"
-              v-for="(action, i) in actions"
+              v-if="action.showFunc? action.showFunc(item): true"
             />
+            </template>
+            
           </td>
         </tr>
       </tbody>
@@ -186,6 +197,19 @@ const rowClass = (item) => {
           return "";
         case 4:
           return "red_ths";
+        default:
+          return "";
+      }
+    case "proposal":
+      switch (item['status']) {
+        case 1:
+          return "grey_ths";
+        case 2:
+          return "red_ths";
+        case 3:
+          return "green_ths";
+        case 4:
+          return "";
         default:
           return "";
       }
@@ -394,12 +418,37 @@ const total_grievances_filters = [
   position: relative;
 }
 
+._1_proposal_status {
+  background: rgb(228, 228, 228);
+  color: rgb(110, 110, 110);
+
+}
+._2_proposal_status {
+  background: rgb(255, 243, 221);
+  color: rgb(255, 166, 0);
+}
+._3_proposal_status {
+  padding: 4px 12px;
+  background: rgb(200, 254, 200);
+  color: rgb(46, 179, 46);
+}
+._4_proposal_status {
+  background: rgb(127, 99, 238);
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
 ._1_warehouse_transaction_transaction_type,
 ._2_warehouse_transaction_transaction_type,
 ._1_warehouse_status,
 ._2_warehouse_status,
 ._3_warehouse_status,
 ._4_warehouse_status,
+._1_proposal_status,
+._2_proposal_status,
+._3_proposal_status,
+._4_proposal_status,
 ._0_donation_status,
 ._2_donation_status,
 ._3_donation_status,

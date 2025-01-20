@@ -23,6 +23,13 @@ class StoreDonationRecord
     public function handle(ProposalDonatingStatusApprovedWithDonatedAmount $event): void
     {
         // create donation
+        $donatino = new Donation();
+        $donatino->proposal_id = $event->proposal->id;
+        $donatino->currency_id = $event->proposal->currency_id;
+        $donatino->amount = $event->donatingAmount;
+        $donatino->status = 2; //approved
+
+        $donatino->save();
         
     }
 }
