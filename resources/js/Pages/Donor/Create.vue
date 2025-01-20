@@ -80,11 +80,10 @@ const submit = () => {
           <InputLabel for="phone" value="Phone" />
           <PhoneInput
             id="phone"
-            type="text"
+            type="tel"
             class="mt-1 block w-full"
             v-model="form.phone"
             required
-            autofocus
             autocomplete="phone"
           />
           <InputError class="mt-2" :message="form.errors.phone" />
@@ -98,7 +97,6 @@ const submit = () => {
             id="currency_id"
             v-model="form.gender"
             class="mt-1 block w-full"
-            autocomplete="new-password"
             required
           />
           <InputError :message="form.errors.gender" class="mt-2" />
@@ -111,7 +109,6 @@ const submit = () => {
             id="currency_id"
             v-model="form.country_id"
             class="mt-1 block w-full"
-            autocomplete="new-password"
             required
           />
           <InputError :message="form.errors.country_id" class="mt-2" />

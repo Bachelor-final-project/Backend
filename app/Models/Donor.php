@@ -12,6 +12,9 @@ class Donor extends BaseModel
     protected $guarded = ['donations'];
     protected $with = ['country'];
     public static $controllable = true;
+    protected $casts = [
+        // 'phone' => 'encrypted',
+    ];
 
     public const STATUSES = [
         'pending' => 0,
@@ -39,6 +42,13 @@ class Donor extends BaseModel
 
 
 
+    
+    public function getPhoneAttribute($phone)
+    {
+        if(in_array(auth()->user()->type, [1,2]))
+             return ($phone);
+        return str_repeat("●", 15);
+    }
     public function getCountryNameAttribute()
     {
         return $this->country->name ?? null;

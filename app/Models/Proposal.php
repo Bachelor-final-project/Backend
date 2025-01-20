@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
@@ -79,6 +80,10 @@ class Proposal extends BaseModel
     }
     public function proposalType(){
         return $this->belongsTo(ProposalType::class, 'proposal_type_id');
+    }
+
+    public function scopePublic($query){
+        $query->where('status', 1)->where('publishing_date', '<=', Carbon::now()->format('Y-m-d'));
     }
 
     public static function headers($user = null)

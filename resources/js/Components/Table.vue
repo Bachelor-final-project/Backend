@@ -70,7 +70,7 @@
             :key="index"
             v-for="(head, index) in headers"
             scope="col"
-            class="px-6 py-3"
+            class="px-6 py-3 max-w-80"
           >
             <div class="flex items-center">
               {{ $t(head.value) }}
@@ -108,7 +108,7 @@
             :key="index"
             v-for="(head, index) in headers"
             scope="row"
-            class="px-6 py-2 font-semibold text-black whitespace-nowrap dark:text-white"
+            class="px-6 py-2 max-w-80 text-pretty font-semibold text-black whitespace-nowrap dark:text-white"
           >
           <a 
           v-if="head.type && head.type == 'link'"
@@ -128,7 +128,7 @@
               {{ head.translate ? $t(item[head.key]) : item[head.key] }}
             </div>
           </th>
-          <td v-if="actions" class="px-6 py-4">
+          <td v-if="actions" class="px-6 py-4 min-w-40">
             <template v-for="(action, i) in actions">
               <TableAction
               :item="item"
