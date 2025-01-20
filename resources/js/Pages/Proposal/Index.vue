@@ -3,6 +3,7 @@
   <div class="dark:text-white">
     <Table
       title="Proposal"
+      model="proposal"
       :actions="actions"
       :items="items"
       :headers="headers"
@@ -13,19 +14,14 @@
   </div>
 </template>
 <script setup>
-import { router } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
-import { useForm } from "@inertiajs/vue3";
-import Card from "@/Components/Card.vue";
 import Table from "@/Components/Table.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 const actions = [
   {
     type: "btn",
     icon: "trash",
-    icon_color: "#656565",
+    icon_color: "red",
     funcName: "deleting",
     model: "proposal",
     tooltip: "delete proposal",
@@ -38,13 +34,17 @@ const actions = [
     model: "proposal",
     tooltip: "edit proposal",
   },
-  // {
-  //   type: "btn",
-  //   icon: "ban",
-  //   icon_color: "#f5425a",
-  //   funcName: _this.blocking,
-  //   tooltip: "block user",
-  // },
+  {
+    type: "btn",
+    icon: "circle-check",
+    icon_color: "green",
+    funcName: "completingDonatingStatus",
+    model: "proposal",
+    tooltip: "complete donating status proposal",
+    showFunc: function(item){
+        return item.status == 1;
+    }
+  },
 ];
 
 const props = defineProps({
@@ -53,17 +53,17 @@ const props = defineProps({
   name: String,
 });
 
-const user = useForm({
-  name: "",
-  email: "",
-  password: "",
-  type: "",
-  status: "",
-  job_title: "",
-  is_active: "",
-});
+// const user = useForm({
+//   name: "",
+//   email: "",
+//   password: "",
+//   type: "",
+//   status: "",
+//   job_title: "",
+//   is_active: "",
+// });
 
-function save() {
-  console.log(user);
-}
+// function save() {
+//   console.log(user);
+// }
 </script>

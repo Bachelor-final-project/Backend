@@ -28,7 +28,7 @@ const actions = [
     icon_color: "#656565",
     funcName: "deleting",
     model: "user",
-    tooltip: "delete user",
+    tooltip: "delete user"
   },
   {
     type: "btn",
@@ -36,7 +36,7 @@ const actions = [
     icon_color: "#f5425a",
     funcName: "blocking",
     model: "user",
-    tooltip: "block user",
+    tooltip: "block user"
   },
   {
     type: "btn",
@@ -44,15 +44,8 @@ const actions = [
     icon_color: "grey",
     funcName: "editing",
     model: "user",
-    tooltip: "edit user",
+    tooltip: "edit user"
   },
-  // {
-  //   type: "btn",
-  //   icon: "ban",
-  //   icon_color: "#f5425a",
-  //   funcName: _this.blocking,
-  //   tooltip: "block user",
-  // },
 ];
 
 const props = defineProps({

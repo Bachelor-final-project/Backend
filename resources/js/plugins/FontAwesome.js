@@ -31,8 +31,10 @@ import {
     faCheck,
     faCartFlatbed,
     faPhotoFilm,
-    faUpload
-    
+    faUpload,
+    faLaptopFile,
+    faCashRegister,
+    faCircleCheck
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -66,7 +68,10 @@ library.add(
     faCheck,
     faCartFlatbed,
     faPhotoFilm,
-    faUpload
+    faUpload,
+    faLaptopFile,
+    faCashRegister,
+    faCircleCheck
 );
 
 export default FontAwesomeIcon;

@@ -24,11 +24,23 @@ class StoreProposalRequest extends FormRequest
     public function rules()
     {
         return [
-            'donor_id' => 'required|exists:users,id',
+            // 'donor_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
-            'body' => 'sometimes|string',
-            'status' => 'required|integer',
+            'body' => 'nullable|string',
+            'title' => 'required|string',
+            'body' => 'nullable|string',
+            // 'status' => '', //
             'notes' => 'nullable|string',
+            'currency_id' => 'required|integer|exists:currencies,id', 
+            'proposal_effects' => 'nullable|string',
+            'cost' => 'required|numeric',
+            'share_cost' => 'required|numeric',
+            'expected_benificiaries_count' => 'required|integer|min:0',
+            'publishing_date' => 'required|date',
+            'execution_date' => 'required|date|after_or_equal:publishing_date',
+            'entity_id' => 'required|integer|exists:entities,id', 
+            'proposal_type_id' => 'required|integer|exists:proposal_types,id', 
+            'area_id' => 'required|integer|exists:areas,id', 
         ];
     }
 }

@@ -14,10 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-        $this->call(CountriesSeeder::class);
+        User::factory(10)->create();
+
         User::factory()->create([
             'email' => 'a@a.com',
+            'status' => 1,
             'type' => 1
         ]);
         User::factory()->create([
@@ -35,6 +36,12 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'email' => 'f@f.com',
             'type' => 5
+        ]);
+
+        $this->call([
+            ProposalTypeSeeder::class,
+            AreaSeeder::class,
+            EntitySeeder::class,
         ]);
     }
 }

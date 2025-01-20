@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Donation extends BaseModel
 {
     use HasFactory;
-    protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone'];
+    protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'proposal_title'];
     public static $controllable = true;
 
     public const STATUSES = [
@@ -20,7 +20,9 @@ class Donation extends BaseModel
         3 => ('Rejected'),
 
     ];
-
+    public function proposal(){
+        return $this->belongsTo(Proposal::class, 'proposal_id');
+    }
     public function donor() {
         return $this->belongsTo(Donor::class, 'donor_id');
     }
@@ -38,9 +40,12 @@ class Donation extends BaseModel
     }
 
     public function getStatusStrAttribute() {
-        return self::$statuses[$this->status] ?? '';
+        return self::STATUSES[$this->status] ?? '';
     }
-
+    public function getProposalTitleAttribute()
+    {
+        return $this->proposal->title ?? null;
+    }
     public static function statuses() {
         return [
             ['id' => 0, 'name' => __('Pending')],
@@ -52,6 +57,7 @@ class Donation extends BaseModel
     public static function headers($user = null)
     {
         return [
+            ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
             ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],

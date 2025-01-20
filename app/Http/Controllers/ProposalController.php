@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProposalDonatingStatusApprovedWithDonatedAmount;
 use App\Models\Proposal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
 use App\Models\Currency;
-use App\Models\ProposalDetail;
+use App\Models\ProposalType;
+use App\Models\Entity;
+use App\Models\Area;
+use App\Models\Donor;
+use App\Models\Country;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -45,7 +50,9 @@ class ProposalController extends Controller
         
         return Inertia::render(Str::studly("Proposal").'/GuestIndex', [
             "headers" => Proposal::guestHeaders(),
-            "items" => Proposal::where('status', '=', Proposal::STATUSES['donatable'])->search($request)->sort($request)->paginate($this->pagination),
+            "proposals" => Proposal::get(),
+            'countries' => Country::select('id', 'name')->get(),
+            'genders' => Donor::genders(),
 
         ]);
     }
@@ -56,9 +63,11 @@ class ProposalController extends Controller
     public function create()
     {
          return Inertia::render(Str::studly("Proposal").'/Create', [
-            'status_options' => Proposal::statuses(),
+            // 'status_options' => Proposal::statuses(),
             'currencies' => Currency::all(),
-            "proposal_detail_headers" => ProposalDetail::addItemHeaders(),
+            'proposal_types' => ProposalType::all(),
+            'entities' => Entity::all(),
+            'areas' => Area::all(),
         ]);
     }
 
@@ -67,7 +76,6 @@ class ProposalController extends Controller
      */
     public function store(StoreProposalRequest $request)
     {
-        dd('hi');
         $data = $request->validated();
         Proposal::create($data);
         
@@ -87,9 +95,13 @@ class ProposalController extends Controller
      */
     public function edit(Proposal $proposal)
     {
-        return Inertia::render(Str::studly("Proposal").'/Update', [
+        return Inertia::render(Str::studly("Proposal").'/Edit', [
             //'options' => $regions,
-            'proposal' => $proposal->toArray()
+            'proposal' => $proposal->toArray(),
+            'currencies' => Currency::all(),
+            'proposal_types' => ProposalType::all(),
+            'entities' => Entity::all(),
+            'areas' => Area::all(),
         ]);
     }
 
@@ -100,7 +112,16 @@ class ProposalController extends Controller
     {
         $validated = $request->validated();
         
+        
+        // check if there is a donatingAmount and a new donation record is needed to be added 
+        if(!empty($request->donatingAmount) && $request->status == 2 && $proposal->status != $request->status){
+            //create new donation;
+            // dd($request->donatingAmount);
+            ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount);
+        }
+        
         $proposal->update($validated);
+
         return back()->with('res', ['message' => __('Proposal Updated Seccessfully'), 'type' => 'success']);
     }
 

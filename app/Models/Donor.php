@@ -9,6 +9,7 @@ class Donor extends BaseModel
 {
     use HasFactory;
     protected $appends = ['gender_str', 'country_name'];
+    protected $guarded = ['donations'];
     protected $with = ['country'];
     public static $controllable = true;
 
@@ -29,10 +30,14 @@ class Donor extends BaseModel
         ];
     }
 
+   
+
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_id', 'id');
     }
+
+
 
     public function getCountryNameAttribute()
     {
