@@ -11,6 +11,8 @@ use App\Models\Currency;
 use App\Models\ProposalType;
 use App\Models\Entity;
 use App\Models\Area;
+use App\Models\Donor;
+use App\Models\Country;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -48,7 +50,9 @@ class ProposalController extends Controller
         
         return Inertia::render(Str::studly("Proposal").'/GuestIndex', [
             "headers" => Proposal::guestHeaders(),
-            "items" => Proposal::where('status', '=', Proposal::STATUSES['donatable'])->search($request)->sort($request)->paginate($this->pagination),
+            "proposals" => Proposal::get(),
+            'countries' => Country::select('id', 'name')->get(),
+            'genders' => Donor::genders(),
 
         ]);
     }

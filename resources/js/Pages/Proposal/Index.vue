@@ -41,6 +41,9 @@ const actions = [
     funcName: "completingDonatingStatus",
     model: "proposal",
     tooltip: "complete donating status proposal",
+    showFunc: function(item){
+        return item.status == 1;
+    }
   },
 ];
 

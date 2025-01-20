@@ -22,20 +22,16 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 const actions = [
-  {
-    type: "btn",
-    icon: "check",
-    icon_color: "#4720047",
-    funcName: "approveDonation",
-    model: "donation",
-    tooltip: "approve donation",
-  },
+ 
   {
     type: "btn",
     icon: "edit",
     icon_color: "grey",
     funcName: "edit",
     tooltip: "edit donation",
+    showFunc: function(item){
+        return item.status == 0;
+    }
   },
   {
     type: "btn",
@@ -44,6 +40,20 @@ const actions = [
     funcName: "rejectDonation",
     model: "donation",
     tooltip: "reject donation",
+    showFunc: function(item){
+        return item.status == 0;
+    }
+  },
+  {
+    type: "btn",
+    icon: "check",
+    icon_color: "#4720047",
+    funcName: "approveDonation",
+    model: "donation",
+    tooltip: "approve donation",
+    showFunc: function(item){
+        return item.status == 0;
+    }
   },
 ];
 
