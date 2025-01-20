@@ -8,6 +8,7 @@
       :headers="headers"
       model="document"
       add_item_route="document.create"
+      add_file_input="add"
     />
   </div>
 </template>

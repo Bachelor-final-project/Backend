@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Cookie\Middleware\EncryptCookies;
-
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\UserObserver;
@@ -28,5 +28,10 @@ class AppServiceProvider extends ServiceProvider
         EncryptCookies::except('laravel_session');
         User::observe(UserObserver::class);
         Vite::prefetch(concurrency: 3);
+
+        Relation::morphMap([
+            'document' => 'App\Models\Document',
+            'proposal' => 'App\Models\Proposal',
+        ]);
     }
 }

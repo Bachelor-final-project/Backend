@@ -30,7 +30,8 @@ import {
     faHandshakeSimple,
     faCheck,
     faCartFlatbed,
-    faPhotoFilm
+    faPhotoFilm,
+    faUpload
     
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -64,7 +65,8 @@ library.add(
     faHandshakeSimple,
     faCheck,
     faCartFlatbed,
-    faPhotoFilm
+    faPhotoFilm,
+    faUpload
 );
 
 export default FontAwesomeIcon;
