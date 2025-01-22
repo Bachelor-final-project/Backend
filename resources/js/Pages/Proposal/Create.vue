@@ -228,8 +228,21 @@ const submit = () => {
           />
           <InputError :message="form.errors.execution_date" class="mt-2" />
         </div> 
-        <div class="col-span-1">
-          </div>
+        <div>
+          <InputLabel for="image" value="proposal image" />
+          <TextInput
+            id="image"
+            type="file"
+            class="mt-1 block w-full"
+            v-model="form.image"
+            required
+            autofocus
+            autocomplete="image"
+          />
+          <InputError :message="form.errors.image" class="mt-2" />
+        </div> 
+        <!-- <div class="col-span-1">
+          </div> -->
         <div class="col-span-2">
           <InputLabel for="body" value="proposal body" />
           <Textarea

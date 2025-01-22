@@ -34,7 +34,7 @@ class UpdateProposalRequest extends FormRequest
             'cost' => 'sometimes|numeric',
             'share_cost' => 'sometimes|numeric',
             'expected_benificiaries_count' => 'sometimes|integer|min:0',
-            'min_documenting_amount' => 'required|integer|min:0',
+            'min_documenting_amount' => 'sometimes|integer|min:0',
             'publishing_date' => 'sometimes|date',
             'execution_date' => 'sometimes|date|after_or_equal:publishing_date',
             'entity_id' => 'sometimes|integer|exists:entities,id', 

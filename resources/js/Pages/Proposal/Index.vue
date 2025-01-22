@@ -42,7 +42,18 @@ const actions = [
     model: "proposal",
     tooltip: "complete donating status proposal",
     showFunc: function(item){
-        return item.status == 1;
+        return item.can_complete_donating_status;
+    }
+  },
+  {
+    type: "btn",
+    icon: "circle-check",
+    icon_color: "red",
+    funcName: "completingExecutionStatus",
+    model: "proposal",
+    tooltip: "complete execution status proposal",
+    showFunc: function(item){
+        return item.can_complete_execution_status;
     }
   },
 ];

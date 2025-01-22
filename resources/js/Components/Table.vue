@@ -28,7 +28,7 @@
       </div>
     </div>
   </Modal>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div class="relative shadow-md sm:rounded-lg">
     
 
     <header>
@@ -168,7 +168,7 @@
               <button
                 v-on:click="fileuploadInputIconClick(item.id)"
                 type="button"
-                class="text-white"
+                class="text-gray-700 dark:text-white"
               >
                 <f-icon
                   icon="upload"
@@ -177,8 +177,9 @@
             </span>
           </td>
           <td v-if="actions" class="px-6 py-4">
-            <template v-for="(action, i) in actions">
+            <template v-for="(action, i) in actions" >
               <TableAction
+              
               :item="item"
               :action="action"
               :key="i"
@@ -310,11 +311,11 @@ const rowClass = (item) => {
         case 1:
           return "grey_ths";
         case 2:
-          return "red_ths";
-        case 3:
           return "green_ths";
+        case 3:
+          return "red_ths";
         case 4:
-          return "";
+          return "blue_ths";
         default:
           return "";
       }

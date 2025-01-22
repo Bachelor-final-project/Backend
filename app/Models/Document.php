@@ -9,7 +9,7 @@ class Document extends BaseModel
 {
     use HasFactory;
     protected $appends = ['proposal_name', 'donor_name', 'currency_name'];
-    protected $with = ['proposal', 'donor', 'currency'];
+    protected $with = ['proposal', 'donor', 'currency', 'attachments'];
     public static $controllable = true;
 
     public function proposal()
@@ -39,7 +39,10 @@ class Document extends BaseModel
     {
         return $this->currency?->name;
     }
-    
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 
     public static function headers($user = null)
     {

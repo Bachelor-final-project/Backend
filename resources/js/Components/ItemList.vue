@@ -40,12 +40,12 @@
       </svg>
     </button>
     <ul :id="`dropdown-${item.title}`" class="hidden py-2 space-y-2">
-      <template v-for="(sub_item, index) in item.items">
-        <li :key="index" v-if="sub_item.allowedUserTypes.includes(user.type)" >
+      <template v-for="(sub_item, index) in item.items" :key="index" >
+        <li v-if="sub_item.allowedUserTypes.includes(user.type)" >
           <Link
             :href="route(sub_item.to)"
             class="acrive flex items-center w-full p-2 text-white transition duration-75 rounded-lg ps-11 group hover:bg-gray-600 dark:hover:bg-gray-70 dark:text-white dark:hover:bg-gray-700"
-            >{{ $t(sub_item.title) }}</Link
+            >{{ $t(sub_item.title) }} </Link
           >
         </li>
       </template>
@@ -54,8 +54,19 @@
 </template>
 
 <script>
+
+import { usePage } from '@inertiajs/vue3';
+
 export default {
+
   props: ["item"],
+  computed: {
+    user(){
+      // console.log('usePage()');
+      // console.log(usePage().props.auth.user);
+      return usePage().props.auth.user;
+    }
+  },
   methods: {
     handleActive(event) {
       let elements = document.querySelectorAll(".item-link");

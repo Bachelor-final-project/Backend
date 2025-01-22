@@ -5,13 +5,14 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 
 class Proposal extends BaseModel
 {
     use HasFactory;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name'];
+    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status'];
     protected $with = ['entity', 'area', 'proposalType', 'currency'];
     public static $controllable = true;
 
@@ -58,15 +59,21 @@ class Proposal extends BaseModel
         return $this->currency->name;   
     }
 
+    public function getCanCompleteDonatingStatusAttribute(){
+        return Gate::allows('completeDonatingStatus', $this);   
+    }
+    public function getCanCompleteExecutionStatusAttribute(){
+        return Gate::allows('completeExecutionStatus', $this);   
+    }
+    // public function getCanCompleteExecutionStatusAttribute(){
+    //     return $this->currency->name;   
+    // }
+
     // public function getPropsalDetailsAttribute()
     // {
     //     return $this->hasMany(ProposalDetail::class, 'proposal_id');
     // }
 
-    // public function getTotalAttribute()
-    // {
-    //     return $this->propsal_details->sum('total');
-    // }
 
     // relations
     public function entity(){
@@ -81,6 +88,18 @@ class Proposal extends BaseModel
     public function proposalType(){
         return $this->belongsTo(ProposalType::class, 'proposal_type_id');
     }
+    public function donations(){
+        return $this->hasMany(Donation::class, 'proposal_id');
+    }
+    public function documents(){
+        return $this->hasMany(Document::class, 'proposal_id');
+    }
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    // Scopes
 
     public function scopePublic($query){
         $query->where('status', 1)->where('publishing_date', '<=', Carbon::now()->format('Y-m-d'));
