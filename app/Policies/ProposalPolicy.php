@@ -5,6 +5,8 @@ namespace App\Policies;
 use App\Models\Proposal;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 
 class ProposalPolicy
 {
@@ -51,9 +53,56 @@ class ProposalPolicy
      * @param  \App\Models\Proposal  $proposal
      * @return mixed
      */
-    public function update(User $user, Proposal $proposal)
+    public function update(User $user, Proposal $proposal, $newStatus = null)
     {
-        //
+        
+        // if($newStatus != null && $newStatus != $proposal->status){
+        //     return $this->completeDonatingStatus($user, $proposal) || $this->completeExecutionStatus($user, $proposal);
+        // }
+        if(!in_array($user->type, [1, 2, 3, 5])) return false;
+        if($newStatus === 2) return $this->completeDonatingStatus($user, $proposal);
+        if($newStatus === 3) return $this->completeExecutionStatus($user, $proposal);
+
+        return true;
+
+
+    }
+    public function completeDonatingStatus(User $user, Proposal $proposal)
+    {
+        if(!in_array($user->type, [1, 2, 3])) return false;
+        if($proposal->status !== 1) return false;
+
+        // make sure that all donations are approved
+        $pendingDonations = $proposal->donations()
+        ->where('status', 0)
+        ->exists();
+
+        return !$pendingDonations;
+
+    }
+    public function completeExecutionStatus(User $user, Proposal $proposal)
+    {
+        // return true;
+        if(!in_array($user->type, [1, 5])) return false;
+        if($proposal->status != 2 ) return false;
+
+        // Check if the proposal has at least one attachable of type 2
+        $proposalAttachableOfType2 = $proposal->attachments()
+        ->where('attachment_type', 2)
+        ->exists();
+        if(!$proposalAttachableOfType2) return false;
+
+        // Check if all related documents have at least one attachable record
+        $documentsWithoutAttachable = $proposal->documents()
+            ->whereDoesntHave('attachments') // Check for documents without attachments
+            ->exists();
+
+        if ($documentsWithoutAttachable) {
+            return false;
+        }
+
+        return true;
+
     }
 
     /**

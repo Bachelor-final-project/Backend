@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,9 +13,6 @@ class Donor extends BaseModel
     protected $guarded = ['donations'];
     protected $with = ['country'];
     public static $controllable = true;
-    protected $casts = [
-        // 'phone' => 'encrypted',
-    ];
 
     public const STATUSES = [
         'pending' => 0,
@@ -25,8 +23,13 @@ class Donor extends BaseModel
         3 => ('Rejected'),
 
     ];
+    public const PHONE_ALLOWED_USER_TYPES = [
+       1
+
+    ];
 
     public static function genders() {
+        
         return [
             ['id' => 1, 'name' => __('Male')],
             ['id' => 2, 'name' => __('Female')],
@@ -40,15 +43,25 @@ class Donor extends BaseModel
         return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 
-
+    protected function phone(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => deterministicEncrypt($value),
+            get: function (string $value) {
+                if(in_array(auth()->user()->type, self::PHONE_ALLOWED_USER_TYPES))
+                    return deterministicDecrypt($value);
+                return str_repeat("●", 15);
+            },
+        );
+    }
 
     
-    public function getPhoneAttribute($phone)
-    {
-        if(in_array(auth()->user()->type, [1,2]))
-             return ($phone);
-        return str_repeat("●", 15);
-    }
+    // public function getPhoneAttribute($phone)
+    // {
+    //     if(in_array(auth()->user()->type, self::PHONE_ALLOWED_USER_TYPES))
+    //          return decrypt($phone, false);
+    //     return str_repeat("●", 15);
+    // }
     public function getCountryNameAttribute()
     {
         return $this->country->name ?? null;
