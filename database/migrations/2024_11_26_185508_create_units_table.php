@@ -15,7 +15,7 @@ return new class extends Migration {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description', 512);
+            $table->string('description', 512)->nullable();
             
             $table->timestamps();
         });

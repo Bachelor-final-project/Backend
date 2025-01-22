@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
 use App\Models\Currency;
+use App\Models\Attachment;
 use App\Models\ProposalType;
 use App\Models\Entity;
 use App\Models\Area;
@@ -77,8 +78,13 @@ class ProposalController extends Controller
     public function store(StoreProposalRequest $request)
     {
         $data = $request->validated();
-        Proposal::create($data);
-        
+        $file = $data['files'][0];
+        // dd($file);
+        unset($data['files']);
+        $proposal = Proposal::create($data);
+        if($file) {
+            Attachment::storeAttachment($file, $proposal->id, 'proposal', 1);
+        }
         return to_route($this->routeName() . '.index')->with('res', ['message' => __('Proposal Saved Seccessfully'), 'type' => 'success']);
     }
 

@@ -40,7 +40,8 @@ class StoreProposalRequest extends FormRequest
             'execution_date' => 'required|date|after_or_equal:publishing_date',
             'entity_id' => 'required|integer|exists:entities,id', 
             'proposal_type_id' => 'required|integer|exists:proposal_types,id', 
-            'area_id' => 'required|integer|exists:areas,id', 
+            'area_id' => 'required|integer|exists:areas,id',
+            'files' => 'sometimes',
         ];
     }
 }

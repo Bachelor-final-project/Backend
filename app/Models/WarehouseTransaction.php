@@ -59,7 +59,7 @@ class WarehouseTransaction extends BaseModel
     {
         $query->when($request->warehouse_id, function ($q, $warehouse_id) {
             if($warehouse_id == 0) return;
-            $q->whereIn('id', $id);
+            $q->where('warehouse_id', $warehouse_id);
         });
     }
 

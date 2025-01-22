@@ -27,7 +27,7 @@ const props = defineProps({
 const form = useForm({
   name: "",
   bio: "",
-  status: "",
+  status: 1,
   location: ""
 });
 const submit = () => {

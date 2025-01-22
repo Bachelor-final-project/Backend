@@ -4,8 +4,11 @@
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
         {{ $t("File Upload") }}
       </h2>
-
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">
+        {{ $t("Upload documentation files here") }}:
+      </label>
       <FileInput 
+        id="multiple_files"
         :trigger="fileuploadInputTrigger"
         :item_id="form.attachable_id"
         :model="model"
@@ -21,16 +24,13 @@
         </SecondaryButton>
 
         <PrimaryButton class="ml-3" @click="triggerFileInput">
-         
           <span v-if="isFileInputLoading"> {{ $t("Uploading") }}...</span>
           <span v-else> {{ $t("Upload") }} </span>
         </PrimaryButton>
       </div>
     </div>
   </Modal>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    
-
+  <div class="relative shadow-md sm:rounded-lg">
     <header>
       <h2
         class="py-2 bg-white dark:bg-gray-800 text-center capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
@@ -79,6 +79,7 @@
       <div class="flex flex-row justify-start mx-2" dir="ltr">
         <div v-for="e in table_filters" :key="e" class="relative w-1/4">
           <SelectInput
+            :dir="this.$i18n.locale == 'ar' ? 'rtl' : 'ltr'"
             classes="text-xs text-gray-400"
             underline="true"
             id="select"

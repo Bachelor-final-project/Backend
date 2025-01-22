@@ -5,6 +5,7 @@ import Textarea from "@/Components/Textaera.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
+import FileInput from "@/Components/FileInput.vue";
 // import CheckBox from "@/Components/Checkbox.vue";
 import SwitchInput from "@/Components/SwitchInput.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
@@ -20,7 +21,9 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { isValidPalestinianID } from '@/utils/validators';
 import AddingItemsTable from "@/Components/AddingItemsTable.vue";
 import { useI18n } from "vue-i18n";
-    
+
+const isFileInputLoading = ref(false);
+
 const i18nLocale = useI18n();
 // const i18n_locale = i18nLocale.locale.value
 // console.log(i18n_locale)
@@ -50,14 +53,10 @@ const form = useForm({
   entity_id: "",
   proposal_type_id: "",
   area_id: "", 
-  
+  files: "",
 });
 
 const submit = () => {
-
-
-  
-
   form.post(route("proposal.store"), {
     onFinish: () => {
       form.defaults();
@@ -65,7 +64,9 @@ const submit = () => {
   });
 };
 
-
+function fileinputChanged(files) {
+  form.files = files;
+}
 
 
 </script>
@@ -214,8 +215,21 @@ const submit = () => {
           />
           <InputError :message="form.errors.publishing_date" class="mt-2" />
         </div> 
-        <div class="col-span-2">
-          </div>
+        <div class="auto-cols-max">
+          <InputLabel for="proposal_file" value="cover photo" />
+          <FileInput 
+            id="proposal_file"
+            model="proposal"
+            v-model="form.files"
+            attachment_type="1"
+            :show_files_details="false"
+            @fileinput-change="fileinputChanged"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
+
+          />
+          <InputError :message="form.errors.proposal_file" class="mt-2" />
+        </div> 
         <div class="col-span-2">
           <InputLabel for="body" value="proposal body" />
           <Textarea
@@ -267,9 +281,10 @@ const submit = () => {
        
         
         <div class="flex items-center gap-4">
-          <PrimaryButton :disabled="form.processing">{{
-            $t("Save")
-          }}</PrimaryButton>
+          <PrimaryButton :disabled="form.processing">
+            <span v-if="isFileInputLoading"> {{ $t("Saving") }}...</span>
+            <span v-else> {{ $t("Save") }} </span>
+          </PrimaryButton>
 
           <Transition
             enter-from-class="opacity-0"

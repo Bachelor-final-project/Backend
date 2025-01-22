@@ -2,13 +2,11 @@
   <Head :title="$t('Users')" />
   <div class="dark:text-white">
     <Table
-      title="Warehouses"
-      :actions="actions"
+      title="Warehouses Items"
       :items="items"
       :headers="headers"
       model="warehouse"
-      add_item_route="warehouse.create"
-      import_url="import-warehouses"
+      :table_filters="warehouse_transactions_table_filters"
     />
   </div>
 </template>
@@ -48,16 +46,13 @@ const actions = [
   },
   {
     type: "href",
-    icon: "basket-shopping",
+    icon: "items",
     icon_color: "green",
-    funcName: () => { },
+    funcName: () => {},
     model: "warehouse",
     tooltip: "show warehouse items",
-    route: "warehouse.items",  // Define the route here
-    queryParams: {            // Define the query parameters here
-      warehouse_id: 'id',
-    },
-  }
+    route: route('warehouse.items')
+  },
   // {
   //   type: "btn",
   //   icon: "ban",
@@ -67,11 +62,22 @@ const actions = [
   // },
 ];
 
+
+
 const props = defineProps({
   items: Array,
   headers: Array,
   name: String,
+  warehouses: Array
 });
+
+const warehouse_transactions_table_filters = [
+  {
+    name: "All Warehouses",
+    model: "warehouse_id",
+    options: [...props.warehouses],
+  },
+];
 
 const user = useForm({
   name: "",
