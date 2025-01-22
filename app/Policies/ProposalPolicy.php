@@ -87,10 +87,10 @@ class ProposalPolicy
         if($proposal->status != 2 ) return false;
 
         // Check if the proposal has at least one attachable of type 2
-        $proposalAttachableOfType2 = $proposal->attachments()
-        ->where('attachment_type', 2)
-        ->exists();
-        if(!$proposalAttachableOfType2) return false;
+        // $proposalAttachableOfType2 = $proposal->attachments()
+        // ->where('attachment_type', 2)
+        // ->exists();
+        // if(!$proposalAttachableOfType2) return false;
 
         // Check if all related documents have at least one attachable record
         $documentsWithoutAttachable = $proposal->documents()
@@ -101,6 +101,14 @@ class ProposalPolicy
             return false;
         }
 
+        return true;
+
+    }
+    public function completeArchivingStatus(User $user, Proposal $proposal)
+    {
+        // return true;
+        if(!in_array($user->type, [1])) return false;
+        if($proposal->status != 3 ) return false;
         return true;
 
     }

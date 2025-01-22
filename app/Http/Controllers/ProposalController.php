@@ -118,18 +118,35 @@ class ProposalController extends Controller
      */
     public function update(UpdateProposalRequest $request, Proposal $proposal)
     {
+        
+        // dd($request);
         // Log::debug($proposal);
         $validated = $request->validated();
         // update the propsal with the new values without storing it, so that we can check the new and the original values in the ProposalPolicy class
         // $proposal->fill($validated); 
         
-        Gate::authorize('update', [$proposal, $request['status']]);
+        // Gate::authorize('update', [$proposal, $request['status']]);
         
         // check if there is a donatingAmount and a new donation record is needed to be added 
         if(!empty($request->donatingAmount) && $request->status == 2 && $proposal->status != $request->status){
             //create new donation;
             // dd($request->donatingAmount);
             ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount);
+        }
+        if($request->arabicVideoFile){
+            $file = $validated['arabicVideoFile'][0];
+            unset($validated['arabicVideoFile']);
+            Attachment::storeAttachment($file, $proposal->id, 'proposal', 2);
+        }
+        if($request->englishVideoFile){
+            $file = $validated['englishVideoFile'][0];
+            unset($validated['englishVideoFile']);
+            Attachment::storeAttachment($file, $proposal->id, 'proposal', 3);
+        }
+        if($request->beneficiariesFile){
+            $file = $validated['beneficiariesFile'][0];
+            unset($validated['beneficiariesFile']);
+            Attachment::storeAttachment($file, $proposal->id, 'proposal', 4);
         }
         
         $proposal->update($validated);
