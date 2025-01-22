@@ -40,6 +40,15 @@ class Warehouse extends BaseModel
         ];
     }
 
+    public static function availableItemsHeaders() {
+        return [
+            ['value' => 'warehouse name', 'key' => 'warehouse_name'],
+            ['value' => 'item name', 'key' => 'item_name'],
+            ['value' => 'unit name', 'key' => 'unit_name'],
+            ['value' => 'quantity', 'key' => 'item_quantity'],
+        ];
+    }
+
     public static function statuses() {
         return [
             ['name' => 'Open', 'id' => '1'],

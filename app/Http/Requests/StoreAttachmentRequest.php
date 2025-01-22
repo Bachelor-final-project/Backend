@@ -27,7 +27,7 @@ class StoreAttachmentRequest extends FormRequest
         return [
         'attachable_type' => 'required|string|max:255', // Validate allowed model names
         'attachment_type' => 'required|integer', 
-        // 'attachable_id' => 'required|integer', // Validate record ID format
+        'attachable_id' => 'required|integer', // Validate record ID format
         'files' => 'required', // Validate file type and size        
         ];
     }

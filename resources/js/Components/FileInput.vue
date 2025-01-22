@@ -1,13 +1,10 @@
 <template>
-    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">
-        {{ $t("Upload documentation files here") }}:
-      </label>
       <input
         accept="image/*,video/*" 
         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
         id="multiple_files"
         type="file"
-        multiple
+        :multiple="multiple"
         ref="fileuploadInput"
         @change="handleFileChange"
       />
@@ -15,7 +12,7 @@
         MP4, PNG, JPG, or GIF (MAX. 5 MB).
       </p>
       <InputError v-for="error in form.errors" class="mt-2" :message="error" />
-      <div v-if="form.files.length > 0" class="mt-3">
+      <div v-if="show_files_details && form.files.length > 0" class="mt-3">
         <h3 class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ $t("Selected Files") }}</h3>
         <ul>
           <li
@@ -34,24 +31,33 @@ import { watch, ref, defineProps, defineEmits } from 'vue';
 import { useForm } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
-const emit = defineEmits(['finishUploading', 'startUploading', 'successUploading']);
+const emit = defineEmits(['finishUploading', 'startUploading', 'successUploading', 'fileinputChange']);
 const props = defineProps({
-    trigger: {
-        type: String,
-        default: "",
-    },
-    item_id: {
-        type: String,
-        default: ""
-    },
-    model: {
-        type: String,
-        default: ""
-    },
-    attachment_type: {
-        type: String,
-        default: "",
-    }
+  trigger: {
+    type: String,
+    default: "",
+  },
+  item_id: {
+    type: String,
+    default: ""
+  },
+  model: {
+    type: String,
+    default: ""
+  },
+  attachment_type: {
+    type: String,
+    default: "",
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+  show_files_details: {
+    type: Boolean,
+    default:true
+  }
+    
 });
 
 watch(() => props.trigger, (newValue, old) => {
@@ -69,6 +75,7 @@ const form = useForm({
 
 const handleFileChange = () => {
   form.files = Array.from(fileuploadInput.value.files);
+  emit('fileinputChange', form.files);
 };
 
 function uploadFiles() {

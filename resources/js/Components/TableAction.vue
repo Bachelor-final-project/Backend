@@ -110,6 +110,7 @@
     </div>
   </Modal>
   <span class="p-1">
+   
     <button
       v-on:click="
         typeof action.funcName == 'string'
@@ -127,6 +128,20 @@
         class="text-xl"
       ></f-icon>
     </button>
+
+    <a
+      :href="generateUrl(action.route, action.queryParams)"
+      class="text-white px-1 py-1 hover:bg-gray-100"
+      :title="action.tooltip"
+      v-else-if="action.type == 'href'"
+    >
+      <f-icon
+        v-if="action.icon"
+        :color="action.icon_color || ''"
+        :icon="action.icon"
+        class="text-xl"
+      ></f-icon>
+    </a>
   </span>
 </template>
 
@@ -139,6 +154,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import SwitchInput from "@/Components/SwitchInput.vue";
 import Modal from "@/Components/Modal.vue";
 import { router } from "@inertiajs/vue3";
+import { useI18n } from "vue-i18n";
 
 export default {
   components: {
@@ -154,6 +170,7 @@ export default {
   data: () => {
  
     return {
+      t: useI18n(),
       delete_dialog: false,
       block_dialog: false,
       edit_dialog: false,
@@ -238,6 +255,27 @@ export default {
     },
     completingDonatingStatus() {
       this.complete_donating_status = true;
+    },
+    generateUrl(routeName, queryParams = {}) {
+      // Generate the base URL using the Ziggy `route` function
+      console.log("generatedURL");
+      console.log(this.t.locale);
+      let url = route(routeName);
+      console.log(url);
+      const queryParamObj = new URLSearchParams()
+
+      for (const [key, value] of Object.entries(queryParams)) {
+        console.log("dynamic value: ");
+        console.log(value);
+        let dynamicValue = this.item[value] || value;
+        console.log("fdgf" + dynamicValue);
+        queryParamObj.append(key, dynamicValue);
+      }
+      if (queryParamObj.toString()) {
+        url += `?${queryParamObj.toString()}`;
+      }
+      console.log(url);
+      return url;
     },
   },
 };

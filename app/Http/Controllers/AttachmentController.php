@@ -54,8 +54,8 @@ class AttachmentController extends Controller
         $data = $request->validated();
         if (isset($data['files']) && count($data['files']) > 0) {
             $attachableType = $data['attachable_type'];
-            // $attachableId = $data['attachable_id'];
-            $attachableId = 1;
+            $attachableId = $data['attachable_id'];
+            // $attachableId = 1;
             $attachamentType = $data['attachment_type'];
 
             Attachment::where('attachable_type', $attachableType)

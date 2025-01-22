@@ -41,7 +41,8 @@ class UpdateProposalRequest extends FormRequest
             'proposal_type_id' => 'sometimes|integer|exists:proposal_types,id', 
             'area_id' => 'sometimes|integer|exists:areas,id', 
             'donated_amount' => 'sometimes|numeric', 
-            'status' => 'sometimes|integer', 
+            'status' => 'sometimes|integer',
+            'files' => 'sometimes',
         ];
     }
 }

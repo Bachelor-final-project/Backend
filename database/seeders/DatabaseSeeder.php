@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             ProposalTypeSeeder::class,
             AreaSeeder::class,
             EntitySeeder::class,
+            CountriesSeeder::class,
         ]);
     }
 }

@@ -116,7 +116,7 @@ const datePickerFormat = (date) => {
           <InputLabel for="donor_id" value="Donor" />
           <SelectInput
             :options="donors"
-            :item_name="'name'"
+            :item_name="`name_${i18n_locale}`"
             id="donor_id"
             v-model="form.donor_id"
             class="mt-1 block w-full"
@@ -142,7 +142,7 @@ const datePickerFormat = (date) => {
           <InputLabel for="currency_id" value="Currency" />
           <SelectInput
             :options="currencies"
-            :item_name="`name`"
+            :item_name="`name_${i18n_locale}`"
             id="currency_id"
             v-model="form.currency_id"
             class="mt-1 block w-full"

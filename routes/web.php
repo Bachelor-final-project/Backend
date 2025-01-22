@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\ProposalController;
 
@@ -61,6 +62,7 @@ $controllers = array_filter($controllers, function ($controller) {
 Route::group(['middleware' => 'auth'], function () use ($controllers) {
     // Route::get('/', fn () => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/warehouse_items', [WarehouseController::class, 'warehouse_items'])->name('warehouse.items');
     array_map(function ($controller) {
         Route::resource(Str::snake(substr(substr($controller, 21), 0, -10)), $controller);
     }, $controllers);
