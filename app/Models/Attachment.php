@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Attachment extends BaseModel
 {
     use HasFactory;
 
     public static $controllable = true;
-
+    protected $appends = ['url'];
     public function attachable()
     {
         return $this->morphTo();
@@ -45,5 +46,9 @@ class Attachment extends BaseModel
             'file_extension' => $fileExtension,
             'filesize' => $fileSize,
         ]);
+    }
+    public function getUrlAttribute()
+    {
+        return env('APP_URL') . Storage::url($this->path);
     }
 }

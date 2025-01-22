@@ -43,6 +43,9 @@ class UpdateProposalRequest extends FormRequest
             'donated_amount' => 'sometimes|numeric', 
             'status' => 'sometimes|integer',
             'files' => 'sometimes',
+            'englishVideoFile' => 'sometimes',
+            'arabicVideoFile' => 'required_if:status,3',
+            'beneficiariesFile' => 'required_if:status,8',
         ];
     }
 }

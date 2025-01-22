@@ -56,6 +56,17 @@ const actions = [
         return item.can_complete_execution_status;
     }
   },
+  {
+    type: "btn",
+    icon: "circle-check",
+    icon_color: "#3b82f6",
+    funcName: "completingArchivingStatus",
+    model: "proposal",
+    tooltip: "complete archiving status proposal",
+    showFunc: function(item){
+        return item.can_complete_archiving_status;
+    }
+  },
 ];
 
 const props = defineProps({

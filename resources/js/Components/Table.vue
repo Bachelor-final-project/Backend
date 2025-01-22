@@ -315,7 +315,7 @@ const rowClass = (item) => {
           return "green_ths";
         case 3:
           return "red_ths";
-        case 4:
+        case 8:
           return "blue_ths";
         default:
           return "";
@@ -503,19 +503,18 @@ const total_grievances_filters = [
 
 }
 ._2_proposal_status {
-  background: rgb(255, 243, 221);
-  color: rgb(255, 166, 0);
+  background: rgb(47, 242, 47);
+  color: white;
 }
 ._3_proposal_status {
   padding: 4px 12px;
-  background: rgb(200, 254, 200);
-  color: rgb(46, 179, 46);
+  background: rgb(250, 66, 66);
+  color: white;
 }
-._4_proposal_status {
+._8_proposal_status {
   background: rgb(127, 99, 238);
   color: white;
-  text-align: center;
-  position: relative;
+  padding: 4px 12px;
 }
 
 ._1_warehouse_transaction_transaction_type,
@@ -527,7 +526,7 @@ const total_grievances_filters = [
 ._1_proposal_status,
 ._2_proposal_status,
 ._3_proposal_status,
-._4_proposal_status,
+._8_proposal_status,
 ._0_donation_status,
 ._2_donation_status,
 ._3_donation_status,
@@ -551,5 +550,8 @@ const total_grievances_filters = [
 }
 .green_ths th {
   color: rgb(47, 242, 47) !important;
+}
+.blue_ths th {
+  color: #3b82f6 !important;
 }
 </style>
