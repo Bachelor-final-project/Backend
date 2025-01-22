@@ -12,7 +12,7 @@ class Proposal extends BaseModel
 {
     use HasFactory;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status'];
+    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'status_details'];
     protected $with = ['entity', 'area', 'proposalType', 'currency'];
     public static $controllable = true;
 
@@ -40,6 +40,9 @@ class Proposal extends BaseModel
     public function getStatusStrArAttribute()
     {
         return [1 => 'مرحلة جمع التبرعات', 2 => 'مرحلة التنفيذ والتوثيق', 3 => 'بحاجة للأرشفة', 8 => 'مكتمل'][$this->status] ?? '';
+    }
+    public function getStatusDetailsAttribute(){
+        return 'hi how are you';
     }
 
     public function getBeneficiariesAttribute()
@@ -121,7 +124,7 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'entity name', 'key' => 'entity_name'],
             ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
             ['sortable' => true, 'value' => 'area name', 'key' => 'area_name'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true, 'details_key' => 'status_details'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

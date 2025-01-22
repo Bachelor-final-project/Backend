@@ -42,6 +42,7 @@ const form = useForm({
   proposal_effects: props.proposal.proposal_effects,
   cost: props.proposal.cost,
   share_cost: props.proposal.share_cost,
+  min_documenting_amount: props.proposal.min_documenting_amount,
   expected_benificiaries_count: props.proposal.expected_benificiaries_count, 
   execution_date: props.proposal.execution_date,
   publishing_date: props.proposal.publishing_date,
@@ -220,8 +221,7 @@ const submit = () => {
           />
           <InputError :message="form.errors.publishing_date" class="mt-2" />
         </div> 
-        <div class="col-span-2">
-          </div>
+        
         <div class="col-span-2">
           <InputLabel for="body" value="proposal body" />
           <Textarea
