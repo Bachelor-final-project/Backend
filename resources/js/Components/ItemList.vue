@@ -1,4 +1,4 @@
-<template>
+<template v-if="item.allowedUserTypes.includes(user.type)">
   <Link
     @click="handleActive"
     v-if="!item.items"
@@ -15,7 +15,7 @@
   <div v-else>
     <button
       type="button"
-      class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+      class="z-50 item-link flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-gray-600 dark:hover:bg-gray-70 w-full"
       :aria-controls="`dropdown-${item.title}`"
       :data-collapse-toggle="`dropdown-${item.title}`"
     >
@@ -40,20 +40,33 @@
       </svg>
     </button>
     <ul :id="`dropdown-${item.title}`" class="hidden py-2 space-y-2">
-      <li :key="index" v-for="(sub_item, index) in item.items">
-        <Link
-          :href="route(sub_item.to)"
-          class="acrive flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg ps-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-          >{{ sub_item.title }}</Link
-        >
-      </li>
+      <template v-for="(sub_item, index) in item.items" :key="index" >
+        <li v-if="sub_item.allowedUserTypes.includes(user.type)" >
+          <Link
+            :href="route(sub_item.to)"
+            class="acrive flex items-center w-full p-2 text-white transition duration-75 rounded-lg ps-11 group hover:bg-gray-600 dark:hover:bg-gray-70 dark:text-white dark:hover:bg-gray-700"
+            >{{ $t(sub_item.title) }} </Link
+          >
+        </li>
+      </template>
     </ul>
   </div>
 </template>
 
 <script>
+
+import { usePage } from '@inertiajs/vue3';
+
 export default {
+
   props: ["item"],
+  computed: {
+    user(){
+      // console.log('usePage()');
+      // console.log(usePage().props.auth.user);
+      return usePage().props.auth.user;
+    }
+  },
   methods: {
     handleActive(event) {
       let elements = document.querySelectorAll(".item-link");

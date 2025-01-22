@@ -77,7 +77,7 @@ const submit = () => {
           <InputLabel for="proposal_id" value="Project" />
           <SelectInput
             :options="proposals"
-            :item_name="`title`"
+            :item_name="'title'"
             id="currency_id"
             v-model="form.proposal_id"
             class="mt-1 block w-full"
@@ -91,7 +91,7 @@ const submit = () => {
           <InputLabel for="currency_id" value="Currency" />
           <SelectInput
             :options="currencies"
-            :item_name="`name_${i18n_locale}`"
+            :item_name="'name'"
             id="currency_id"
             v-model="form.currency_id"
             class="mt-1 block w-full"

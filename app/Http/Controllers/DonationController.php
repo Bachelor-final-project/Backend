@@ -6,6 +6,7 @@ use App\Http\Requests\StoreDonationRequest;
 use App\Http\Requests\UpdateDonationRequest;
 use App\Models\Donation;
 use App\Models\Currency;
+use App\Models\Donor;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,7 +33,6 @@ class DonationController extends Controller
         return Inertia::render(Str::studly("Donation").'/Index', [
             "headers" => Donation::headers(),
             "items" => Donation::search($request)->sort($request)->paginate($this->pagination),
-
         ]);
     }
 

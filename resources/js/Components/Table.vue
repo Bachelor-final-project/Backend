@@ -102,7 +102,7 @@
             :key="index"
             v-for="(head, index) in headers"
             scope="col"
-            class="px-6 py-3"
+            class="px-6 py-3 max-w-80"
           >
             <div class="flex items-center">
               {{ $t(head.value) }}
@@ -143,7 +143,7 @@
             :key="index"
             v-for="(head, index) in headers"
             scope="row"
-            class="px-6 py-2 font-semibold text-black whitespace-nowrap dark:text-white"
+            class="px-6 py-2 max-w-80 text-pretty font-semibold text-black whitespace-nowrap dark:text-white"
           >
           <a 
           v-if="head.type && head.type == 'link'"
@@ -163,12 +163,13 @@
               {{ head.translate ? $t(item[head.key]) : item[head.key] }}
             </div>
           </th>
-          <td v-if="add_file_input" class="px-6 py-4">
+
+          <td v-if="add_file_input" class="px-6 py-4 min-w-40">
             <span class="p-1">
               <button
                 v-on:click="fileuploadInputIconClick(item.id)"
                 type="button"
-                class="text-white"
+                class="text-gray-700 dark:text-white"
               >
                 <f-icon
                   icon="upload"
@@ -177,8 +178,9 @@
             </span>
           </td>
           <td v-if="actions" class="px-6 py-4">
-            <template v-for="(action, i) in actions">
+            <template v-for="(action, i) in actions" >
               <TableAction
+              
               :item="item"
               :action="action"
               :key="i"
@@ -310,11 +312,11 @@ const rowClass = (item) => {
         case 1:
           return "grey_ths";
         case 2:
-          return "red_ths";
-        case 3:
           return "green_ths";
+        case 3:
+          return "red_ths";
         case 4:
-          return "";
+          return "blue_ths";
         default:
           return "";
       }

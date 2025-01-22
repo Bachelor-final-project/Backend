@@ -16,6 +16,8 @@ use App\Models\Donor;
 use App\Models\Country;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -116,8 +118,12 @@ class ProposalController extends Controller
      */
     public function update(UpdateProposalRequest $request, Proposal $proposal)
     {
+        // Log::debug($proposal);
         $validated = $request->validated();
+        // update the propsal with the new values without storing it, so that we can check the new and the original values in the ProposalPolicy class
+        // $proposal->fill($validated); 
         
+        Gate::authorize('update', [$proposal, $request['status']]);
         
         // check if there is a donatingAmount and a new donation record is needed to be added 
         if(!empty($request->donatingAmount) && $request->status == 2 && $proposal->status != $request->status){

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateDonorRequest;
 use App\Models\Donor;
 use App\Models\Country;
 use App\Models\Donation;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -23,12 +24,13 @@ class DonorController extends Controller
         parent::__construct($request);
     }
 
+
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        
         return Inertia::render(Str::studly("Donor").'/Index', [
             "headers" => Donor::headers(),
             "items" => Donor::search($request)->sort($request)->paginate($this->pagination),

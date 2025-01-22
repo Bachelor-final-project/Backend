@@ -36,6 +36,7 @@ class StoreProposalRequest extends FormRequest
             'cost' => 'required|numeric',
             'share_cost' => 'required|numeric',
             'expected_benificiaries_count' => 'required|integer|min:0',
+            'min_documenting_amount' => 'required|integer|min:0',
             'publishing_date' => 'required|date',
             'execution_date' => 'required|date|after_or_equal:publishing_date',
             'entity_id' => 'required|integer|exists:entities,id', 

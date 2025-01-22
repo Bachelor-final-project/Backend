@@ -48,6 +48,7 @@ const form = useForm({
   cost: "",
   share_cost: "",
   expected_benificiaries_count: "", 
+  min_documenting_amount: "", 
   execution_date: "",
   publishing_date: "",
   entity_id: "",
@@ -165,18 +166,18 @@ function fileinputChanged(files) {
           <InputError :message="form.errors.share_cost" class="mt-2" />
         </div> 
         <div>
-          <InputLabel for="expected_benificiaries_count" value="expected benificiaries count" />
+          <InputLabel for="min_documenting_amount" value="min documenting amount" />
           <TextInput
-            id="expected_benificiaries_count"
+            id="min_documenting_amount"
             type="number"
             class="mt-1 block w-full"
-            v-model="form.expected_benificiaries_count"
+            v-model="form.min_documenting_amount"
             required
             autofocus
-            autocomplete="expected_benificiaries_count"
+            autocomplete="min_documenting_amount"
           />
-          <InputError :message="form.errors.expected_benificiaries_count" class="mt-2" />
-        </div> 
+          <InputError :message="form.errors.min_documenting_amount" class="mt-2" />
+        </div>  
         <div>
           <InputLabel for="currency_id" value="currency" />
           <SelectInput
@@ -190,17 +191,17 @@ function fileinputChanged(files) {
           <InputError :message="form.errors.currency_id" class="mt-2" />
         </div>
         <div>
-          <InputLabel for="execution_date" value="execution date" />
+          <InputLabel for="expected_benificiaries_count" value="expected benificiaries count" />
           <TextInput
-            id="execution_date"
-            type="date"
+            id="expected_benificiaries_count"
+            type="number"
             class="mt-1 block w-full"
-            v-model="form.execution_date"
+            v-model="form.expected_benificiaries_count"
             required
             autofocus
-            autocomplete="execution_date"
+            autocomplete="expected_benificiaries_count"
           />
-          <InputError :message="form.errors.execution_date" class="mt-2" />
+          <InputError :message="form.errors.expected_benificiaries_count" class="mt-2" />
         </div> 
         <div class="auto-cols-max">
           <InputLabel for="publishing_date" value="publishing date" />
@@ -214,6 +215,20 @@ function fileinputChanged(files) {
             autocomplete="publishing_date"
           />
           <InputError :message="form.errors.publishing_date" class="mt-2" />
+        </div> 
+
+        <div>
+          <InputLabel for="execution_date" value="execution date" />
+          <TextInput
+            id="execution_date"
+            type="date"
+            class="mt-1 block w-full"
+            v-model="form.execution_date"
+            required
+            autofocus
+            autocomplete="execution_date"
+          />
+          <InputError :message="form.errors.execution_date" class="mt-2" />
         </div> 
         <div class="auto-cols-max">
           <InputLabel for="proposal_file" value="cover photo" />

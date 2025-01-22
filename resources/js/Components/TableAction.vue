@@ -1,7 +1,7 @@
 <template>
   <Modal :show="delete_dialog" @close="closeModal">
     <div class="p-6">
-      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
         {{ $t("Are you sure you want to delete ?") }}
       </h2>
 
@@ -65,8 +65,8 @@
     </div>
   </Modal>
   <Modal :show="complete_donating_status" @close="closeCompleteDonatingStatusModal">
-    <div class="p-6">
-      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+    <div class="p-6 dark:bg-gray-800">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
         {{ $t("titleForCompleteDonatingStatusModal") }}
       </h2>
 
@@ -108,7 +108,6 @@
         </PrimaryButton>
       </div>
     </div>
-
   </Modal>
   <span class="p-1">
    
