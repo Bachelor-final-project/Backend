@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Beneficiary extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
 
     protected $appends = ['father_name', 'warehouse', 'warehouse_name'];
     public static $controllable = true;

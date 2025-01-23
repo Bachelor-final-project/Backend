@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Warehouse extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
 
     // protected $appends = ['status_str'];
     protected $appends = ['status_str'];

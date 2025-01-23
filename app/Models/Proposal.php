@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Proposal extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $guarded = ['donated_amount'];
     protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name'];
     protected $with = ['entity', 'area', 'proposalType', 'currency'];

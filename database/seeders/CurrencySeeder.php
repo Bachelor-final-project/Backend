@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CurrencySeeder extends Seeder
 {
@@ -13,6 +14,9 @@ class CurrencySeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('currencies')->insert([
+            ['name' => "USD", 'tenant_id' => 1],
+            ['name' => "NIS", 'tenant_id' => 1],
+        ]);
     }
 }

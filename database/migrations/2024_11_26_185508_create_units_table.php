@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('description', 512)->nullable();
-            
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });
     }

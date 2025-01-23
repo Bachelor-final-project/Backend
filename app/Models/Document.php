@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Document extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = ['proposal_name', 'donor_name', 'currency_name'];
     protected $with = ['proposal', 'donor', 'currency'];
     public static $controllable = true;

@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('father_national_id')->nullable();
             $table->unsignedBigInteger('warehouse_id');
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
-
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
 
 

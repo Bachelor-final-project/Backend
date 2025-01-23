@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('supervisor_id');
             $table->string('donating_form_path');
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
 
             $table->foreign('supervisor_id')->references('id')->on('users');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDonationRequest;
 use App\Http\Requests\UpdateDonationRequest;
 use App\Models\Donation;
+use App\Models\Donor;
 use App\Models\Currency;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
@@ -56,6 +57,7 @@ class DonationController extends Controller
         $data = $request->validated();
         $donorPhone = $data['phone'];
         unset($data['phone']);
+        // dd($donorPhone);
         $data['donor_id'] = Donor::where('phone', '=', $donorPhone)->first()->id;
         Donation::create($data);
         

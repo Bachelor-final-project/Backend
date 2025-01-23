@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('main_area_id')->nullable();
-
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });
         Schema::table('areas',function (Blueprint $table){

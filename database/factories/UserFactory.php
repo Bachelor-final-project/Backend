@@ -32,6 +32,7 @@ class UserFactory extends Factory
             'password' => '123456', // password
             'type' => $this->faker->randomElement([1,2,3,4,5]),
             'job_title' => 'farmer',
+            'tenant_id' => 1,
             'is_active' => true
         ];
     }

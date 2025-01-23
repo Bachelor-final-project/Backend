@@ -15,8 +15,8 @@ class EntitySeeder extends Seeder
     public function run()
     {
         DB::table('entities')->insert([
-            ['name' => "إغاثة غزة", "supervisor_id" => 2, "donating_form_path" => "help-gaza"],
-            ['name' => "مبادرة إعمار غزة", "supervisor_id" => 3, "donating_form_path" => "rebuild-gaza"],
+            ['name' => "إغاثة غزة", "supervisor_id" => 2, "donating_form_path" => "help-gaza", 'tenant_id' => 1],
+            ['name' => "مبادرة إعمار غزة", "supervisor_id" => 3, "donating_form_path" => "rebuild-gaza", 'tenant_id' => 1],
         ]);
 
     }

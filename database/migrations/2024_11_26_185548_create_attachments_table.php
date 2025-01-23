@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('path');
             $table->string('file_extension', 10);
             $table->integer('filesize');
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

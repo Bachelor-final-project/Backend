@@ -8,10 +8,12 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, SoftDeletes;
+    use HasApiTokens, HasFactory, SoftDeletes, TenantAttributeTrait;
 
     protected $appends = ['type_str', 'status_str'];
     public static $controllable = true;

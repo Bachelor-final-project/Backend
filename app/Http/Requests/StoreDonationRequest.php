@@ -25,9 +25,9 @@ class StoreDonationRequest extends FormRequest
     {
         return [
             'phone' => 'required|exists:donors,phone',
-            'project_id' => 'required|exists:proposals,id',
+            'proposal_id' => 'required|exists:proposals,id',
             'currency_id' => 'required|exists:currencies,id',
-            'amount' => 'required|numberic|min:0',
+            'amount' => 'required|numeric|min:0',
             'status' => 'required|integer|between:0,3',
         ];
     }
