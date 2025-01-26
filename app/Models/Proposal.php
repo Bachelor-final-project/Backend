@@ -22,6 +22,10 @@ class Proposal extends BaseModel
         'darft' => 9,
         'completed' => 2,
         'processing' => 8,
+        1 => 'donating_status',
+        2 => 'execution_status',
+        3 => 'ready_to_archive_status',
+        8 => 'done_status'
     ];
 
     // public function getDonorNameAttribute()
@@ -33,10 +37,77 @@ class Proposal extends BaseModel
     // {
     //     return $this->belongsTo(User::class, 'donor_id');
     // }
+    public static function getDonatingStatusProposalsStackedGroup(){
+        $proposals = Proposal::selectRaw('proposals.id, proposals.title as title, sum(donations.amount) as paid, ROUND(cost - sum(donations.amount), 2) as remaining')
+        ->where('proposals.status', 1)
+        ->join('donations', 'proposals.id', '=', 'donations.proposal_id')
+        ->where('donations.status', 2)
+        ->groupByRaw('proposals.id, proposals.title')
+        ->get();
+        $data = [
+            [
+                'name' => __('paid amount'),
+                'data' => $proposals->pluck('paid')->toArray(),
+            ],
+            [
+                'name' => __('remaining amount'),
+                'data' => $proposals->pluck('remaining')->toArray(),
+            ],
+        ];
+        
+        return [
+            "data" => $data,
+            "categories" => $proposals->pluck('title')->toArray()
+        ];
+    }
+    public static function getCompletedProposalsLast30DaysChartData(){
+        $proposals = Proposal::selectRaw('status, COUNT(*) as count, date(created_at) as date')
+        ->where('created_at', '>', now()->subDays(30)->endOfDay())
+        ->where('status', 8)
+        ->groupByRaw('status, date(created_at)')
+        ->get();
 
+            $result = [
+                "data" => $proposals->pluck('count')->toArray()
+            ];
+
+        return $result;
+    }
+    public static function getProposalsByStatusChartData(){
+        $proposals = Proposal::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+            $statusMapping = [
+                1 => __('donating_status'),
+                2 => __('execution_status'),
+                3 => __('ready_to_archive_status'),
+                8 => __('done_status'),
+            ];
+            $result = [
+                "categories" => array_values($statusMapping),
+                "data" => array_map(function ($statusId) use ($proposals) {
+                    return $proposals[$statusId]->count ?? 0; // Default to 0 if status is missing
+                }, array_keys($statusMapping))
+            ];
+
+        return $result;
+    }
+    public static function getProposalsByTypesChartData(){
+        $proposals = Proposal::selectRaw('proposal_types.type_ar as type, COUNT(*) as count')
+            ->join('proposal_types', 'proposals.proposal_type_id', '=', 'proposal_types.id')
+            ->groupBy('proposal_type_id')
+            ->get();
+            $result = [
+                "categories" => $proposals->pluck('type')->toArray(),
+                "data" => $proposals->pluck('count')->toArray(),
+            ];
+
+        return $result;
+    }
     public function getStatusStrAttribute()
     {
-        return [1 => 'donating_status', 2 => 'execution_status', 3 => 'read_to_archive_status', 8 => 'done_status'][$this->status] ?? '';
+        return [1 => 'donating_status', 2 => 'execution_status', 3 => 'ready_to_archive_status', 8 => 'done_status'][$this->status] ?? '';
     }
     public function getStatusStrArAttribute()
     {

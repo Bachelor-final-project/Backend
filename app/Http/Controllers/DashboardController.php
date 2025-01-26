@@ -12,6 +12,11 @@ namespace App\Http\Controllers;
 // use App\Models\Region;
 // use App\Models\User;
 // use App\Models\UserWithStatus;
+
+use App\Models\Document;
+use App\Models\Donation;
+use App\Models\Proposal;
+use App\Models\ProposalBeneficiary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -32,8 +37,52 @@ class DashboardController extends Controller
             // $total_grievrance = Form::search($request)->count();
             // $forms = Form::search($request)->sort($request)->paginate($this->pagination, ['*'], 'forms_page');
             // $users = User::where('type', 2)->search($request)->sort($request)->paginate($this->pagination, ['*'], 'users_page');
-
+            
             return Inertia::render('Dashboard', [
+                "froms_headers"          => [],
+                "all_froms"              => [],
+                "user_headers"           => [],
+                "all_users"              => [],
+                "total_grievrance"       => [],
+                "all_types"              => [],
+                "all_regions"            => [],
+                "stacked_group_chart"    => [
+                    [
+                        "name" => "Q1 Budget",
+                        "group" => "budget",
+                        "data" => [44000, 55000, 41000, 67000, 22000]
+                    ],
+                    [
+                        "name" => "Q1 Actual",
+                        "group" => "actual",
+                        "data" => [48000, 50000, 40000, 65000, 25000]
+                    ],
+                    [
+                        "name" => "Q2 Budget",
+                        "group" => "budget",
+                        "data" => [13000, 36000, 20000, 8000, 13000]
+                    ],
+                    [
+                        "name" => "Q2 Actual",
+                        "group" => "actual",
+                        "data" => [20000, 40000, 25000, 10000, 12000]
+                    ]
+                ],
+                "group_chart"            => [],
+                "pointed_chart"          => [],
+                "global_statistics"      => [],
+                "agents_count"           => 0,
+                "gender_total_chart"     => [],
+                "proposalsByStatus"     => Proposal::getProposalsByStatusChartData(),
+                "proposalsByTypes"     => Proposal::getProposalsByTypesChartData(),
+                "donationsByStatues"     => Donation::getDonationsByStatuesChartData(),
+                "documentsByStatues"     => Document::getDocumentsByStatuesChartData(),
+                "approvedDonationLast30Days"     => Donation::getApprovedDonationLast30DaysChartData(),
+                "completedProposalsLast30Days"     => Proposal::getCompletedProposalsLast30DaysChartData(),
+                "benefitsLast30Days"     => ProposalBeneficiary::getBenefitsLast30DaysChartData(),
+                "donatingStatusProposalsStackedGroup"     => Proposal::getDonatingStatusProposalsStackedGroup(),
+            ]);
+            // return Inertia::render('Dashboard', [
                 // "froms_headers" => Form::headers(),
                 // "all_froms" => $forms,
                 // "user_headers" => User::agents_headers(),
@@ -47,7 +96,7 @@ class DashboardController extends Controller
                 // "global_statistics" => Form::getStatistics($request),
                 // "agents_count" => Form::getAgentsCounts(),
                 // "gender_total_chart" => Form::getGenderTotal($request),
-            ]);
+            // ]);
         } else {
             // $total_grievrance = Form::search($request)->where('region_id', auth()->user()->region_id)->count();
             // $forms = Form::search($request)->sort($request)->where('region_id', auth()->user()->region_id)->paginate($this->pagination);

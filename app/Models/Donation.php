@@ -20,6 +20,38 @@ class Donation extends BaseModel
         3 => ('Rejected'),
 
     ];
+    public static function getDonationsByStatuesChartData(){
+        $donations = Donation::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+            $statusMapping = [
+                0 => __('Pending'),
+                2 => __('Approved'),
+                3 => __('Rejected'),
+            ];
+            $result = [
+                "categories" => array_values($statusMapping),
+                "data" => array_map(function ($statusId) use ($donations) {
+                    return $donations[$statusId]->count ?? 0; // Default to 0 if status is missing
+                }, array_keys($statusMapping))
+            ];
+
+        return $result;
+    }
+    public static function getApprovedDonationLast30DaysChartData(){
+        $donations = Donation::selectRaw('status, COUNT(*) as count, date(created_at) as date')
+        ->where('created_at', '>', now()->subDays(30)->endOfDay())
+        ->where('status', 2)
+        ->groupByRaw('status, date(created_at)')
+        ->get();
+
+            $result = [
+                "data" => $donations->pluck('count')->toArray()
+            ];
+
+        return $result;
+    }
     public function proposal(){
         return $this->belongsTo(Proposal::class, 'proposal_id');
     }

@@ -1,6 +1,15 @@
 export default {
     "ar": {
+        "Total Proposals by Status": "إحصاءات المشاريع حسب الحالة",
+        "Total Proposals by Types": "إحصاءات المشاريع حسب طبيعة المشروع",
+        "Total Donations by Statues": "إحصاءات عمليات التبرع حسب الحالة",
+        "Total Documents by Statues": "إحصاءات التوثيقات حسب الحالة",
+        "Donations last 30 days": "عملية تبرع آخر 30 يوما",
+        "Completed proposals last 30 days": "مشروع مكتمل آخر 30 يوما",
+        "Total Benefits last 30 days": "مساعدة آخر 30 يوما",
         "entity": "الجهة",
+        "Donating Status Proposals": "المشاريع المفتوحة",
+        
         "min documenting amount": "الحد الأدنى للتوثيق",
         "Donating form is saved successfully": "تم حفظ التبرع الخاص بكم بنجاح، سيتم التواصل معكم في أسرع وقت ممكن إن شاء الله",
         "new proposal": "إنشاء مشروع جديد",

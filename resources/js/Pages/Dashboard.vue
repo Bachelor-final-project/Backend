@@ -1,28 +1,25 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
-import { onBeforeUnmount, onMounted, ref, reactive, watch } from "vue";
-import DashboardLayout from "@/Layouts/DashboardLayout.vue";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import Table from "@/Components/Table.vue";
-import Test from "@/Components/Test.vue";
-// import { Head } from "@inertiajs/vue3";
-import OldContent from "@/Components/Dashboard/OldContent.vue";
-import ColumnChart from "@/Components/Dashboard/Charts/Column.vue";
-import StackedGroup from "@/Components/Dashboard/Charts/StackedGroup.vue";
-import Pointed from "@/Components/Dashboard/Charts/Pointed.vue";
+import { onMounted, ref } from "vue";
+import { Head } from "@inertiajs/vue3";
 import BasicColumn from "@/Components/Dashboard/Charts/BasicColumn.vue";
-import Group from "@/Components/Dashboard/Charts/Group.vue";
+import BasicStackedBars from "@/Components/Dashboard/Charts/BasicStackedBars.vue";
+import BasicSparkLines from "@/Components/Dashboard/Charts/BasicSparkLines.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import AgentLayout from "@/Layouts/AgentLayout.vue";
-import Edit from "./Profile/Edit.vue";
-import { Link } from "@inertiajs/vue3";
-import Card from "@/Components/Card.vue";
-import AgentsCard from "@/Components/AgentsCard.vue";
-import { router } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 
-const { t, locale } = useI18n();
-let render_counter = ref(0);
+const { t } = useI18n();
+
+const props = defineProps({
+  proposalsByStatus: Array,
+  proposalsByTypes: Array,
+  donationsByStatues: Array,
+  documentsByStatues: Array,
+  approvedDonationLast30Days: Array,
+  completedProposalsLast30Days: Array,
+  benefitsLast30Days: Array,
+  donatingStatusProposalsStackedGroup: Array,
+});
+
 let color_theme = ref(localStorage.getItem("color-theme"));
 
 onMounted(() => {
@@ -40,30 +37,76 @@ onMounted(() => {
   });
 });
 
+
 </script>
 
 <template>
-    <Head title="Dashboard" />
+  <Head :title="$t('Dashboard')" />
+  <div>
+    <AdminLayout>
+      <div>
+        <div class="grid grid-cols-3 gap-10">
+          <BasicSparkLines
+            :data="approvedDonationLast30Days"
+            :color_theme="color_theme"
+            :show_filter="true"
+            chart_title="Total Proposals by Status"
+            :subtitle="$t('Donations last 30 days')"
+          />
+          <BasicSparkLines
+            :data="completedProposalsLast30Days"
+            :color_theme="color_theme"
+            :show_filter="true"
+            chart_title="Total Proposals by Status"
+            
+            :subtitle="$t('Completed proposals last 30 days')"
+          />
+          <BasicSparkLines
+            :data="benefitsLast30Days"
+            :color_theme="color_theme"
+            :show_filter="true"
+            :subtitle="$t('Total Benefits last 30 days')"
+          />
 
-   
-        <template>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
-                Dashboard hi
-            </h2>
-        </template>
-
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
-                    <div class="p-6 text-gray-900">
-                        You're logged in! 
-                    </div>
-                </div>
-            </div>
         </div>
-   
+        <BasicStackedBars
+          :data="donatingStatusProposalsStackedGroup"
+          :color_theme="color_theme"
+          chart_prop_name="stacked_group_chart"
+          :chart_title="$t('Donating Status Proposals')"
+        />
+        <BasicColumn
+          :data="proposalsByStatus"
+          :color_theme="color_theme"
+          chart_title="Total Proposals by Status"
+          :colors="['grey', '#2ff22f','red',   '#3b82f6']"
+        />
+        <BasicColumn
+          :data="proposalsByTypes"
+          :color_theme="color_theme"
+          chart_title="Total Proposals by Types"
+        />
+        <BasicColumn
+          :data="donationsByStatues"
+          :color_theme="color_theme"
+          chart_title="Total Donations by Statues"
+        />
+        <BasicColumn
+          :data="documentsByStatues"
+          :color_theme="color_theme"
+          chart_title="Total Documents by Statues"
+        />
+        
+
+
+       
+
+        
+      </div>
+    </AdminLayout>
+    
+  </div>
 </template>
+
+<style>
+</style>

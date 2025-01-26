@@ -44,7 +44,7 @@ class DonorController extends Controller
     public function create()
     {
          return Inertia::render(Str::studly("Donor").'/Create', [
-            'countries' => Country::select('id', 'name')->get(),
+            'countries' => Country::select('id', 'name')->orderBy('name')->get(),
             'genders' => Donor::genders(),
         ]);
     }

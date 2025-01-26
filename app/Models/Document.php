@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Document extends BaseModel
 {
@@ -12,6 +13,18 @@ class Document extends BaseModel
     protected $with = ['proposal', 'donor', 'currency', 'attachments'];
     public static $controllable = true;
 
+    public static function getDocumentsByStatuesChartData(){
+        // Query to calculate the status of each document based on the morph relation
+        $completed_documents_count = Attachment::where('attachable_type', 'document')->count(DB::raw('DISTINCT attachable_id'));
+        $not_completed_documents_count = Document::doesntHave('files')->count();
+        // Prepare the result
+        $result = [
+        "categories" => [__('completed'), __('not_completed')], // Extract the statuses
+        "data" => [$completed_documents_count, $not_completed_documents_count]       // Extract the counts
+        ];
+
+        return $result;
+    }
     public function proposal()
     {
         return $this->belongsTo(Proposal::class, 'proposal_id');
