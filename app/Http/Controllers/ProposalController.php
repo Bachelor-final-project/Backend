@@ -80,10 +80,13 @@ class ProposalController extends Controller
     public function store(StoreProposalRequest $request)
     {
         $data = $request->validated();
-        $file = $data['files'][0];
-        // dd($file);
+        $file = $data['files']? $data['files'][0]: null;
         unset($data['files']);
+        // if($data['files']){
+        //     $file = $data['files'][0];
+        // }
         $proposal = Proposal::create($data);
+
         if($file) {
             Attachment::storeAttachment($file, $proposal->id, 'proposal', 1);
         }

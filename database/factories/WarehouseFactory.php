@@ -22,7 +22,12 @@ class WarehouseFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->company,
+            'bio' => $this->faker->text,
+            'status' => $this->faker->randomElement([1, 2, 3, 4]),
+            'location' => $this->faker->address,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

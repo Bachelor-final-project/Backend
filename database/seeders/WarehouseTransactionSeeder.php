@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\WarehouseTransaction;
 use Illuminate\Database\Seeder;
 
 class WarehouseTransactionSeeder extends Seeder
@@ -13,6 +14,6 @@ class WarehouseTransactionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        WarehouseTransaction::factory(300)->create();
     }
 }

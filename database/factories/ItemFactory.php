@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Item;
+use App\Models\Unit;
 
 class ItemFactory extends Factory
 {
@@ -22,7 +23,12 @@ class ItemFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->word,
+            'unit_id' => $this->faker->randomElement(Unit::pluck('id')->toArray()), // Generates a Unit model and links it
+            'description' => $this->faker->sentence,
+            'estimated_price' => $this->faker->randomFloat(2, 1, 100), // Random price between 1 and 100
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

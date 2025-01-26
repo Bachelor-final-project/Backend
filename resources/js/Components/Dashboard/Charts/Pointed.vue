@@ -122,7 +122,16 @@ const tegs_value = ref([]);
 // let v = new MultiSelectTag("countries");
 const stack_group_chart_year = ref(new Date().getFullYear());
 const datepicker = ref(null);
-
+const props = defineProps({
+  color_theme: {
+    type: String,
+  },
+  data: Array,
+  all_regions: {
+    type: Array,
+    default: ['dd', 'ff']
+  },
+});
 function allYear() {
   // console.log("Hello, Close");
   // console.log(this.$refs.datepicker);
@@ -165,13 +174,7 @@ watch(tegs_value, (newValue) => {
   render_count.value++;
 });
 
-const props = defineProps({
-  color_theme: {
-    type: String,
-  },
-  data: Array,
-  all_regions: Array,
-});
+
 
 function select_region(region) {
   selected_region.value = region;
