@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Entity extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = [ 'supervisor_name', 'donating_form_link'];
     protected $with = [ 'supervisor'];
     public static $controllable = true;

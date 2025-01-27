@@ -13,16 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('entities', function (Blueprint $table) {
+        Schema::create('tenants', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedBigInteger('supervisor_id');
-            $table->string('donating_form_path');
-            $table->unsignedBigInteger('tenant_id')->nullable();
+            $table->string('name', 255);
+            $table->integer('status')->default(1); // [1 => open, 2 => closed, etc...]
             $table->timestamps();
-
-            $table->foreign('supervisor_id')->references('id')->on('users');
-
         });
     }
 
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entities');
+        Schema::dropIfExists('tenants');
     }
 };

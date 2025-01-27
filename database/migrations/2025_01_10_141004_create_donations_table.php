@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('proposal_id');
             $table->float('amount');
             $table->integer('status')->default(0); // [0 => 'hold/pending', 2 => approved, 3 => 'denied']
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('gender')->default(1); // [1 => 'male', 2 => 'female']
             $table->unsignedBigInteger('country_id')->nullable();
             $table->string('phone')->unique()->nullable();
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });
     }

@@ -16,8 +16,8 @@ class AreaSeeder extends Seeder
     public function run()
     {
         DB::table('areas')->insert([
-            ['name' => "شمال القطاع"],
-            ['name' => "جنوب القطاع"],
+            ['name' => "شمال القطاع", 'tenant_id' => 1],
+            ['name' => "جنوب القطاع", 'tenant_id' => 1],
         ]);
     }
 }

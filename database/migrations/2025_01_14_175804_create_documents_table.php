@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('currency_id')->nullable();
             $table->string('note', 1024)->nullable();
             $table->datetime('expected_date')->nullable();
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });
     }

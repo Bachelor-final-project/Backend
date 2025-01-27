@@ -7,6 +7,7 @@ use App\Models\Currency;
 use App\Models\Proposal;
 use App\Models\User;
 use App\Models\Warehouse;
+use App\Models\Tenant;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Bhuvidya\Countries\CountriesSeeder;
@@ -18,6 +19,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Tenant::factory(1)->create([
+            'name' => 'Dar_AlQuran'
+        ]);
         User::factory(10)->create();
 
         User::factory()->create([

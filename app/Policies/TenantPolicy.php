@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Entity;
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EntityPolicy
+class TenantPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class EntityPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Entity  $entity
+     * @param  \App\Models\Tenant  $tenant
      * @return mixed
      */
-    public function view(User $user, Entity $entity)
+    public function view(User $user, Tenant $tenant)
     {
         //
     }
@@ -48,10 +48,10 @@ class EntityPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Entity  $entity
+     * @param  \App\Models\Tenant  $tenant
      * @return mixed
      */
-    public function update(User $user, Entity $entity)
+    public function update(User $user, Tenant $tenant)
     {
         //
     }
@@ -60,10 +60,10 @@ class EntityPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Entity  $entity
+     * @param  \App\Models\Tenant  $tenant
      * @return mixed
      */
-    public function delete(User $user, Entity $entity)
+    public function delete(User $user, Tenant $tenant)
     {
         //
     }
@@ -72,10 +72,10 @@ class EntityPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Entity  $entity
+     * @param  \App\Models\Tenant  $tenant
      * @return mixed
      */
-    public function restore(User $user, Entity $entity)
+    public function restore(User $user, Tenant $tenant)
     {
         //
     }
@@ -84,10 +84,10 @@ class EntityPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Entity  $entity
+     * @param  \App\Models\Tenant  $tenant
      * @return mixed
      */
-    public function forceDelete(User $user, Entity $entity)
+    public function forceDelete(User $user, Tenant $tenant)
     {
         //
     }

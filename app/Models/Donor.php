@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Donor extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = ['gender_str', 'country_name'];
     protected $guarded = ['donations'];
     protected $with = ['country'];

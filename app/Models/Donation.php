@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Donation extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'proposal_title'];
     public static $controllable = true;
 

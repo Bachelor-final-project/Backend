@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\ProposalType;
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProposalTypeFactory extends Factory
+class TenantFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ProposalType::class;
+    protected $model = Tenant::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +22,7 @@ class ProposalTypeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' =>  fake()->name(),
         ];
     }
 }

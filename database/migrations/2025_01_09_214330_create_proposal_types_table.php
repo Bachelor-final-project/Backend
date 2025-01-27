@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('type_ar');
             $table->string('type_en');
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });
     }

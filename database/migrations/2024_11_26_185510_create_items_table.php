@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('unit_id')->references('id')->on('units');
             $table->text('description')->nullable();
             $table->decimal('estimated_price', 10, 2)->default(0);
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->decimal('value', 10, 2)->default(0);
             $table->decimal('estimated_price', 10, 2)->default(0);
             $table->text('notes')->nullable();
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
 
             $table->foreign('proposal_id')->references('id')->on('proposals');

@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('password');
             $table->boolean('is_active')->default(true);
             $table->string('job_title')->nullable();
+            $table->unsignedBigInteger('tenant_id')->nullable();
             $table->rememberToken();
 
             $table->timestamps();

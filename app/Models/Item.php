@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Item extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = [ 'unit_name'];
     protected $with = ['unit'];
     public static $controllable = true;

@@ -5,18 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\TenantAttributeTrait;
+use App\Traits\TenantScoped;
 
 class Attachment extends BaseModel
 {
-    use HasFactory;
-
+    use HasFactory, TenantAttributeTrait, TenantScoped;
+    protected $appends = ['url'];
     public static $controllable = true;
     protected $appends = ['url'];
     public function attachable()
     {
         return $this->morphTo();
     }
-
+    public function getUrlAttribute()
+    {
+        return env('APP_URL') . Storage::url($this->path);
+    }
     public static function storeAttachment($file, $attachableId, $attachableType, $attachamentType = 1) {
         Attachment::where('attachable_type', $attachableType)
         ->where('attachable_id', $attachableId)
