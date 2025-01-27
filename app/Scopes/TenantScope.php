@@ -11,7 +11,7 @@ class TenantScope implements Scope
         // dd(auth()->guard('web')->user());
         // dd(auth()->user());
         if(auth()->user()){
-            $builder->where('tenant_id', auth()->user()->tenant_id);
+            $builder->where($model->getTable() . '.tenant_id', auth()->user()->tenant_id);
         }
     }
 }
