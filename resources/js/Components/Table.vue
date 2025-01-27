@@ -102,7 +102,7 @@
             :key="index"
             v-for="(head, index) in headers"
             scope="col"
-            class="px-6 py-3"
+            class="px-6 py-3 max-w-80"
           >
             <div class="flex items-center">
               {{ $t(head.value) }}
@@ -143,7 +143,7 @@
             :key="index"
             v-for="(head, index) in headers"
             scope="row"
-            class="px-6 py-2 font-semibold text-black whitespace-nowrap dark:text-white"
+            class="px-6 py-2 max-w-80 text-pretty font-semibold text-black whitespace-nowrap dark:text-white"
           >
           <a 
           v-if="head.type && head.type == 'link'"
@@ -163,12 +163,13 @@
               {{ head.translate ? $t(item[head.key] + "") : item[head.key] }}
             </div>
           </th>
-          <td v-if="add_file_input" class="px-6 py-4">
+
+          <td v-if="add_file_input" class="px-6 py-4 min-w-40">
             <span class="p-1">
               <button
                 v-on:click="fileuploadInputIconClick(item.id)"
                 type="button"
-                class="text-white"
+                class="text-gray-700 dark:text-white"
               >
                 <f-icon
                   icon="upload"
@@ -177,8 +178,9 @@
             </span>
           </td>
           <td v-if="actions" class="px-6 py-4">
-            <template v-for="(action, i) in actions">
+            <template v-for="(action, i) in actions" >
               <TableAction
+              
               :item="item"
               :action="action"
               :key="i"
@@ -310,11 +312,11 @@ const rowClass = (item) => {
         case 1:
           return "grey_ths";
         case 2:
-          return "red_ths";
-        case 3:
           return "green_ths";
-        case 4:
-          return "";
+        case 3:
+          return "red_ths";
+        case 8:
+          return "blue_ths";
         default:
           return "";
       }
@@ -501,19 +503,18 @@ const total_grievances_filters = [
 
 }
 ._2_proposal_status {
-  background: rgb(255, 243, 221);
-  color: rgb(255, 166, 0);
+  background: rgb(47, 242, 47);
+  color: white;
 }
 ._3_proposal_status {
   padding: 4px 12px;
-  background: rgb(200, 254, 200);
-  color: rgb(46, 179, 46);
+  background: rgb(250, 66, 66);
+  color: white;
 }
-._4_proposal_status {
+._8_proposal_status {
   background: rgb(127, 99, 238);
   color: white;
-  text-align: center;
-  position: relative;
+  padding: 4px 12px;
 }
 
 ._1_warehouse_transaction_transaction_type,
@@ -525,7 +526,7 @@ const total_grievances_filters = [
 ._1_proposal_status,
 ._2_proposal_status,
 ._3_proposal_status,
-._4_proposal_status,
+._8_proposal_status,
 ._0_donation_status,
 ._2_donation_status,
 ._3_donation_status,
@@ -549,5 +550,8 @@ const total_grievances_filters = [
 }
 .green_ths th {
   color: rgb(47, 242, 47) !important;
+}
+.blue_ths th {
+  color: #3b82f6 !important;
 }
 </style>

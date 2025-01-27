@@ -1,17 +1,31 @@
 const menus = [
-    [
-        {
-            title: "Dashboard",
-            icon: "dashboard",
-            to: "dashboard",
-            allowedUserTypes: [1,2,3,4,5],
-        },
-        {
-            title: "Entity",
-            icon: "users",
-            to: "entity.index",
-            allowedUserTypes: [1,],
-        },
+    [{
+        title: "Dashboard",
+        icon: "dashboard",
+        to: "dashboard",
+        allowedUserTypes: [1,2,3,4,5],
+    },
+     {
+        title: "general settings",
+        icon: "gear",
+        allowedUserTypes: [1,4],
+        items: [
+            {
+                title: "Entities",
+                icon: "users",
+                to: "entity.index",
+                allowedUserTypes: [1,],
+            },
+            {
+                title: "Currencies",
+                icon: "dollar-sign",
+                to: "currency.index",
+                allowedUserTypes: [1,4],
+            },
+        ]
+    },
+        
+        
         {
             title: "Users",
             icon: "user",
@@ -23,6 +37,20 @@ const menus = [
             icon: "laptop-file",
             to: "proposal.index",
             allowedUserTypes: [1,2,5],
+            items: [
+                {
+                    title: "Proposals",
+                    icon: "laptop-file",
+                    to: "proposal.index",
+                    allowedUserTypes: [1,2,5],
+                },
+                {
+                    title: "new proposal",
+                    icon: "laptop-file",
+                    to: "proposal.create",
+                    allowedUserTypes: [1,2,5],
+                },
+            ]
         },
         {
             title: "Donations",
@@ -41,6 +69,12 @@ const menus = [
             icon: "hand-holding-dollar",
             to: "donation.create",
             allowedUserTypes: [3,],
+        },        
+        {
+            title: "Documentations",
+            icon: "photo-film",
+            to: "document.index",
+            allowedUserTypes: [1,4],
         },
 
         // {
@@ -58,39 +92,38 @@ const menus = [
         {
             title: "Warehouses",
             icon: "warehouse",
-            to: "warehouse.index",
             allowedUserTypes: [1,4],
+            items: [
+                {
+                    title: "Warehouses",
+                    icon: "warehouse",
+                    to: "warehouse.index",
+                    allowedUserTypes: [1,4],
+                },
+                {
+                    title: "Warehouse Transactions",
+                    icon: "cart-flatbed",
+                    to: "warehouse_transaction.index",
+                    allowedUserTypes: [1,4],
+                },
+                {
+                    title: "Items",
+                    icon: "basket-shopping",
+                    to: "item.index",
+                    allowedUserTypes: [1,4],
+                },
+                {
+                    title: "Units",
+                    icon: "ruler",
+                    to: "unit.index",
+                    allowedUserTypes: [1,4],
+                },
+            ]
         },
-        {
-            title: "Warehouse Transactions",
-            icon: "cart-flatbed",
-            to: "warehouse_transaction.index",
-            allowedUserTypes: [1,4],
-        },
-        {
-            title: "Documentation",
-            icon: "photo-film",
-            to: "document.index",
-            allowedUserTypes: [1,4],
-        },
-        {
-            title: "Items",
-            icon: "basket-shopping",
-            to: "item.index",
-            allowedUserTypes: [1,4],
-        },
-        {
-            title: "Units",
-            icon: "ruler",
-            to: "unit.index",
-            allowedUserTypes: [1,4],
-        },
-        {
-            title: "Currencies",
-            icon: "dollar-sign",
-            to: "currency.index",
-            allowedUserTypes: [1,4],
-        },
+
+        
+        
+       
         
     ],
     [

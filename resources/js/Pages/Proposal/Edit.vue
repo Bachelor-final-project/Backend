@@ -43,6 +43,7 @@ const form = useForm({
   proposal_effects: props.proposal.proposal_effects,
   cost: props.proposal.cost,
   share_cost: props.proposal.share_cost,
+  min_documenting_amount: props.proposal.min_documenting_amount,
   expected_benificiaries_count: props.proposal.expected_benificiaries_count, 
   execution_date: props.proposal.execution_date,
   publishing_date: props.proposal.publishing_date,
@@ -159,17 +160,17 @@ const submit = () => {
           <InputError :message="form.errors.share_cost" class="mt-2" />
         </div> 
         <div>
-          <InputLabel for="expected_benificiaries_count" value="expected benificiaries count" />
+          <InputLabel for="min_documenting_amount" value="min documenting amount" />
           <TextInput
-            id="expected_benificiaries_count"
+            id="min_documenting_amount"
             type="number"
             class="mt-1 block w-full"
-            v-model="form.expected_benificiaries_count"
+            v-model="form.min_documenting_amount"
             required
             autofocus
-            autocomplete="expected_benificiaries_count"
+            autocomplete="min_documenting_amount"
           />
-          <InputError :message="form.errors.expected_benificiaries_count" class="mt-2" />
+          <InputError :message="form.errors.min_documenting_amount" class="mt-2" />
         </div> 
         <div>
           <InputLabel for="currency_id" value="currency" />
@@ -183,6 +184,19 @@ const submit = () => {
           />
           <InputError :message="form.errors.currency_id" class="mt-2" />
         </div>
+        <div>
+          <InputLabel for="expected_benificiaries_count" value="expected benificiaries count" />
+          <TextInput
+            id="expected_benificiaries_count"
+            type="number"
+            class="mt-1 block w-full"
+            v-model="form.expected_benificiaries_count"
+            required
+            autofocus
+            autocomplete="expected_benificiaries_count"
+          />
+          <InputError :message="form.errors.expected_benificiaries_count" class="mt-2" />
+        </div> 
         <div>
           <InputLabel for="execution_date" value="execution date" />
           <TextInput
@@ -220,6 +234,7 @@ const submit = () => {
             />
           </div>
         </div> 
+
         <div class="col-span-2">
           <InputLabel for="body" value="proposal body" />
           <Textarea

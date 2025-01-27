@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code', 10);
+
+            $table->string('name_en');  // English name
+            $table->string('name_ar');  // Arabic name
+            $table->string('code');     // Currency code (e.g., USD, QAR)
+            $table->string('symbol');   // Currency symbol (e.g., $, ر.ق)
             $table->unsignedBigInteger('tenant_id')->nullable();
-            $table->timestamps();
+            $table->timestamps();      // created_at and updated_at columns
         });
     }
 

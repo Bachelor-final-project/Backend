@@ -1,7 +1,7 @@
 <template>
   <Modal :show="delete_dialog" @close="closeModal">
     <div class="p-6">
-      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
         {{ $t("Are you sure you want to delete ?") }}
       </h2>
 
@@ -65,8 +65,8 @@
     </div>
   </Modal>
   <Modal :show="complete_donating_status" @close="closeCompleteDonatingStatusModal">
-    <div class="p-6">
-      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+    <div class="p-6 dark:bg-gray-800">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
         {{ $t("titleForCompleteDonatingStatusModal") }}
       </h2>
 
@@ -108,7 +108,95 @@
         </PrimaryButton>
       </div>
     </div>
+  </Modal>
+  <Modal :show="complete_execution_status" @close="closeCompleteExecutionStatusModal">
+    <div class="p-6 dark:bg-gray-800">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
+        {{ $t("titleForCompleteDonatingStatusModal") }}
+      </h2>
 
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t("bodyForCompleteDonatingStatusModal") }}.
+      </p>
+      <div class="grid grid-cols-3 gap-4 mt-5">
+        <div class="auto-cols-max">
+          <InputLabel for="arabicVideoFile" value="arabicVideoFile" />
+          <FileInput
+            id="arabicVideoFile"
+            model="proposal"
+            v-model="arabicVideoFile"
+            attachment_type="2"
+            :show_files_details="false"
+            @fileinput-change="arabicFileinputChanged"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
+          />
+      </div> 
+      <div class="auto-cols-max">
+          <InputLabel for="englishVideoFile" value="englishVideoFile" />
+          <FileInput
+            id="englishVideoFile"
+            model="proposal"
+            v-model="englishVideoFile"
+            attachment_type="3"
+            :show_files_details="false"
+            @fileinput-change="englishFileinputChanged"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
+          />
+      </div> 
+      </div> 
+
+      <div class="mt-6 flex justify-end">
+        
+        <SecondaryButton @click="closeCompleteExecutionStatusModal">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+
+        <PrimaryButton class="ml-3" @click="confirmCompleteExecutionStatusModal">
+          {{ $t("approve") }}
+        </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
+  <Modal :show="complete_archiving_status" @close="closeCompleteArchivingStatusModal">
+    <div class="p-6 dark:bg-gray-800">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
+        {{ $t("titleForCompleteDonatingStatusModal") }}
+      </h2>
+
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t("bodyForCompleteDonatingStatusModal") }}.
+      </p>
+      
+      <div class="auto-cols-max">
+          <InputLabel for="beneficiariesFile" value="beneficiariesFile" />
+          <FileInput
+            id="beneficiariesFile"
+            model="proposal"
+            v-model="beneficiariesFile"
+            attachment_type="2"
+            :show_files_details="false"
+            @fileinput-change="beneficiariesFileinputChanged"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
+          />
+      </div> 
+      
+
+      <div class="mt-6 flex justify-end">
+        
+        <SecondaryButton @click="closeCompleteArchivingStatusModal">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+
+        <PrimaryButton class="ml-3" @click="confirmCompleteArchivingStatusModal">
+          {{ $t("approve") }}
+        </PrimaryButton>
+      </div>
+    </div>
   </Modal>
   <span class="p-1">
    
@@ -156,6 +244,7 @@ import SwitchInput from "@/Components/SwitchInput.vue";
 import Modal from "@/Components/Modal.vue";
 import { router } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
+import FileInput from "@/Components/FileInput.vue";
 
 export default {
   components: {
@@ -166,6 +255,7 @@ export default {
     InputLabel,
     SwitchInput,
     Modal,
+    FileInput,
   },
   props: ["action", "item"],
   data: () => {
@@ -176,8 +266,13 @@ export default {
       block_dialog: false,
       edit_dialog: false,
       complete_donating_status: false,
+      complete_execution_status: false,
+      complete_archiving_status: false,
       hasDonatingAmount: false,
       donatingAmount: 0,
+      arabicVideoFile: null,
+      englishVideoFile: null,
+      beneficiariesFile: null,
       statuses: {
         user: {
           "open": 1,
@@ -215,6 +310,12 @@ export default {
     closeCompleteDonatingStatusModal() {
       this.complete_donating_status = false;
     },
+    closeCompleteExecutionStatusModal() {
+      this.complete_execution_status = false;
+    },
+    closeCompleteArchivingStatusModal() {
+      this.complete_archiving_status = false;
+    },
     confirmDelete() {
       router.delete(route(`${this.action.model}.destroy`, this.item.id));
     },
@@ -245,6 +346,25 @@ export default {
       });
       this.closeCompleteDonatingStatusModal();
     },
+    confirmCompleteExecutionStatusModal() {
+      if(!this.arabicVideoFile) return false;
+      router.post(route(`${this.action.model}.update`, this.item.id), {
+        _method: 'put',
+        status: 3,
+        arabicVideoFile: this.arabicVideoFile,
+        englishVideoFile: this.englishVideoFile,
+      },{forceFormData: true});
+      this.closeCompleteExecutionStatusModal();
+    },
+    confirmCompleteArchivingStatusModal() {
+      if(!this.beneficiariesFile) return false;
+      router.post(route(`${this.action.model}.update`, this.item.id), {
+        _method: 'put',
+        status: 8,
+        beneficiariesFile: this.beneficiariesFile,
+      });
+      this.closeCompleteArchivingStatusModal();
+    },
     blocking() {
       this.block_dialog = true;
     },
@@ -256,6 +376,12 @@ export default {
     },
     completingDonatingStatus() {
       this.complete_donating_status = true;
+    },
+    completingExecutionStatus() {
+      this.complete_execution_status = true;
+    },
+    completingArchivingStatus() {
+      this.complete_archiving_status = true;
     },
     generateUrl(routeName, queryParams = {}) {
       // Generate the base URL using the Ziggy `route` function
@@ -278,6 +404,15 @@ export default {
       console.log(url);
       return url;
     },
+    arabicFileinputChanged(files) {
+      this.arabicVideoFile = files;
+    },
+    englishFileinputChanged(files) {
+      this.englishVideoFile = files;
+    },
+    beneficiariesFileinputChanged(files) {
+      this.beneficiariesFile = files;
+    }
   },
 };
 </script>

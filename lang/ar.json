@@ -1,4 +1,13 @@
 {
+    "completed": "مكتمل",
+    "Approved": "معتمدة",
+    "paid amount": "المبلغ المدفوع",
+    "remaining amount": "المبلغ المتبقي",
+    "not_completed": "غير مكتمل",
+    "donating_status": "مرحلة جمع التبرعات",
+    "execution_status": "مرحلة التنفيذ والتوثيق",
+    "ready_to_archive_status": "بحاجة للأرشفة",
+    "done_status": "مكتمل",
     "Settings Saved Seccessfully": "تم حفظ الاعدادات بنجاح",
     "Form Type Updated Seccessfully": "تم تعديل النوع بنجاح",
     "Type Saved Successfully": "تم حفظ النوع بنجاح",

@@ -1,5 +1,6 @@
 <template>
-  <div class="p-4 rounded-lg dark:border-gray-700 mt-14">
+  <Head :title="$t(entity.name)" />
+  <div v-if="proposals.length > 0" class="p-4 rounded-lg dark:border-gray-700 mt-14">
     <div class="container mx-auto px-4">
       <h1 class="text-4xl font-bold text-center text-gray-800 mb-10 text-gray-900 dark:text-gray-100">{{ $t(entity.name) }}</h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -32,9 +33,11 @@
               id="phone"
               type="tel"
               v-model="form.phone"
+              maxlength="15"
               placeholder="Enter your phone number"
               class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
               required
+              @input="clearPhoneInput"
             />
             <InputError :message="form.errors.phone" class="mt-2" />
           </div>
@@ -48,6 +51,7 @@
             v-model="form.gender"
             class="mt-1 block w-full"
             autocomplete="new-password"
+            
             required
           />
           <InputError :message="form.errors.gender" class="mt-2" />
@@ -92,6 +96,12 @@
       </div>
     </div>
   </div>
+  <div v-else class="p-4 rounded-lg dark:border-gray-700 mt-14">
+    <div class="container m-auto px-4 h-full">
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-10 text-gray-900 dark:text-gray-100">{{ $t('sorry, there is no any available projects to donate for at the moment') }}</h1>
+      
+  </div>
+  </div>
 </template>
   <script setup>
   import { router } from "@inertiajs/vue3";
@@ -107,9 +117,9 @@
   import TextInput from "@/Components/TextInput.vue";
   import InputLabel from "@/Components/InputLabel.vue";
   import SelectInput from "@/Components/SelectInput.vue";
+  import { ref, watch } from "vue";
 
   defineOptions({ layout: DonatingPageLayout });
-
 
   
   const props = defineProps({
@@ -127,6 +137,7 @@
     donations: [] 
   });
   const handleDonation = (proposalId, amount,currency_id, pay_online) => {
+
     const existingDonation = form.donations.find(d => d.proposal_id === proposalId);
     if (existingDonation) {
       existingDonation.amount = amount;
@@ -140,51 +151,20 @@ function saveWithPayOnline() {
   form.payOnline = true
 }
   
+
+  const clearPhoneInput = () =>{
+      console.log(form.phone)
+      form.phone = form.phone.replace(/(?!^\+)[^\d]/g, "");
+      
+      
+  }
   const submitDonations = () => {
-  // form
-  // .transform((data) => ({
-  //   ...data,
-  //   remember: data.remember ? 'on' : '',
-  // }))
-  form.post(route("donor.store"), {
+  form.phone = form.phone.replace(/(^\+)/g, "00");
+  form.post(route("store-donating-form"), {
     onFinish: () => {
       form.defaults();
     },
   });
 };
-
-
-//   const submitDonations = async () => {
-//   try {
-//     const payload = {
-//       name: form.value.name,
-//       phone: form.value.phone,
-//       country: form.value.country,
-//       donations: form.value.donations
-//     };
-
-//     console.log('Payload:', payload);
-
-//     // Replace with your API endpoint
-//     const response = await fetch('https://example.com/api/donations', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(payload)
-//     });
-
-//     if (response.ok) {
-//       alert(`Thank you, ${form.value.name}! Your donations have been successfully submitted.`);
-//       form.reset(); // Reset the form
-//       proposals.value.forEach(proposal => (proposal.donationAmount = ''));
-//     } else {
-//       const errorData = await response.json();
-//       console.error('Error:', errorData);
-//       alert('Failed to submit donations. Please try again.');
-//     }
-//   } catch (error) {
-//     console.error('Network error:', error);
-//     alert('An error occurred while submitting your donations. Please try again.');
-//   }
-// };
   </script>
   

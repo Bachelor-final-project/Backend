@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$t('Donations')" />
+  <Head :title="$t('Donors')" />
   <div class="dark:text-white">
     <Table
       title="Donors"
@@ -26,14 +26,14 @@ const actions = [
     type: "btn",
     icon: "edit",
     icon_color: "grey",
-    funcName: "edit",
+    funcName: "editing",
     tooltip: "edit donor",
   },
   {
     type: "btn",
     icon: "trash",
     icon_color: "#656565",
-    funcName: "delete",
+    funcName: "deleting",
     model: "donor",
     tooltip: "delete donor",
   },

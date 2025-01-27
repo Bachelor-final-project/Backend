@@ -49,7 +49,7 @@ const props = defineProps({
         required: true
     }
 });
-const imageSrc = ref(props.proposal.image || new URL(`@/assets/images/hero.jpg`, import.meta.url).href);
+const imageSrc = ref(props.proposal.cover_image || new URL(`@/assets/images/hero.jpg`, import.meta.url).href);
   
   const emit = defineEmits(['donate']);
   

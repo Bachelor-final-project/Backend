@@ -2,7 +2,7 @@
   <Card>
     <div class="flex flex-col self-center">
       <h2 class="text-2xl self-center mb-10 mt-5 font-bold dark:text-white">
-        {{ $t("Total reports by type") }}
+        {{ $t(chart_title) }}
       </h2>
     </div>
     <div id="chart">
@@ -23,18 +23,13 @@ export default {
   components: { Card },
   props: {
     color_theme: String,
-    data: Array,
-  },
-  data() {
-    return {
-      render_count: 1,
-      series: [
-        {
-          data: this.$props.data.data,
-        },
-      ],
-      chartOptions: {
-        colors: [
+    chart_title: {
+      type: String,
+      default: "title"
+    },
+    colors:{
+      type: Array,
+      default:[
           "#FF6384",
           "#36A2EB",
           "#FFCE56",
@@ -92,6 +87,19 @@ export default {
           "#00BFFF",
           "#6B8E23",
         ],
+    },
+    data: Array,
+  },
+  data() {
+    return {
+      render_count: 1,
+      series: [
+        {
+          data: this.$props.data.data,
+        },
+      ],
+      chartOptions: {
+        colors: this.$props.colors,
         theme: {
           mode: this.$props.color_theme,
         },

@@ -10,6 +10,8 @@ use Illuminate\Support\ServiceProvider;
 use App\Observers\UserObserver;
 use App\Models\User;
 use App\Observers\ProposalObserver;
+use App\Policies\ProposalPolicy;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,5 +38,7 @@ class AppServiceProvider extends ServiceProvider
             'document' => 'App\Models\Document',
             'proposal' => 'App\Models\Proposal',
         ]);
+        
+        
     }
 }

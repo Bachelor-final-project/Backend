@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 use App\Traits\TenantAttributeTrait;
 use App\Traits\TenantScoped;
@@ -12,7 +15,7 @@ class Proposal extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name'];
+    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image'];
     protected $with = ['entity', 'area', 'proposalType', 'currency'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
@@ -24,6 +27,10 @@ class Proposal extends BaseModel
         'darft' => 9,
         'completed' => 2,
         'processing' => 8,
+        1 => 'donating_status',
+        2 => 'execution_status',
+        3 => 'ready_to_archive_status',
+        8 => 'done_status'
     ];
 
     // public function getDonorNameAttribute()
@@ -35,14 +42,87 @@ class Proposal extends BaseModel
     // {
     //     return $this->belongsTo(User::class, 'donor_id');
     // }
+    public static function getDonatingStatusProposalsStackedGroup(){
+        $proposals = Proposal::selectRaw('proposals.id, proposals.title as title, sum(donations.amount) as paid, ROUND(cost - sum(donations.amount), 2) as remaining')
+        ->where('proposals.status', 1)
+        ->join('donations', 'proposals.id', '=', 'donations.proposal_id')
+        ->where('donations.status', 2)
+        ->groupByRaw('proposals.id, proposals.title')
+        ->get();
+        $data = [
+            [
+                'name' => __('paid amount'),
+                'data' => $proposals->pluck('paid')->toArray(),
+            ],
+            [
+                'name' => __('remaining amount'),
+                'data' => $proposals->pluck('remaining')->toArray(),
+            ],
+        ];
+        
+        return [
+            "data" => $data,
+            "categories" => $proposals->pluck('title')->toArray()
+        ];
+    }
+    public static function getCompletedProposalsLast30DaysChartData(){
+        $proposals = Proposal::selectRaw('status, COUNT(*) as count, date(created_at) as date')
+        ->where('created_at', '>', now()->subDays(30)->endOfDay())
+        ->where('status', 8)
+        ->groupByRaw('status, date(created_at)')
+        ->get();
 
+            $result = [
+                "data" => $proposals->pluck('count')->toArray()
+            ];
+
+        return $result;
+    }
+    public static function getProposalsByStatusChartData(){
+        $proposals = Proposal::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+            $statusMapping = [
+                1 => __('donating_status'),
+                2 => __('execution_status'),
+                3 => __('ready_to_archive_status'),
+                8 => __('done_status'),
+            ];
+            $result = [
+                "categories" => array_values($statusMapping),
+                "data" => array_map(function ($statusId) use ($proposals) {
+                    return $proposals[$statusId]->count ?? 0; // Default to 0 if status is missing
+                }, array_keys($statusMapping))
+            ];
+
+        return $result;
+    }
+    public static function getProposalsByTypesChartData(){
+        $proposals = Proposal::selectRaw('proposal_types.type_ar as type, COUNT(*) as count')
+            ->join('proposal_types', 'proposals.proposal_type_id', '=', 'proposal_types.id')
+            ->groupBy('proposal_type_id')
+            ->get();
+            $result = [
+                "categories" => $proposals->pluck('type')->toArray(),
+                "data" => $proposals->pluck('count')->toArray(),
+            ];
+
+        return $result;
+    }
     public function getStatusStrAttribute()
     {
-        return [1 => 'donating_status', 2 => 'execution_status', 3 => 'read_to_archive_status', 8 => 'done_status'][$this->status] ?? '';
+        return [1 => 'donating_status', 2 => 'execution_status', 3 => 'ready_to_archive_status', 8 => 'done_status'][$this->status] ?? '';
     }
     public function getStatusStrArAttribute()
     {
         return [1 => 'مرحلة جمع التبرعات', 2 => 'مرحلة التنفيذ والتوثيق', 3 => 'بحاجة للأرشفة', 8 => 'مكتمل'][$this->status] ?? '';
+    }
+    public function getStatusDetailsAttribute(){
+        return 'hi how are you';
+    }
+    public function getCoverImageAttribute(){
+        return  $this->attachments()->where('attachment_type', 1)->first()?->url;
     }
 
     public function getBeneficiariesAttribute()
@@ -62,15 +142,24 @@ class Proposal extends BaseModel
         return $this->currency->name;   
     }
 
+    public function getCanCompleteDonatingStatusAttribute(){
+        return Gate::allows('completeDonatingStatus', $this);   
+    }
+    public function getCanCompleteExecutionStatusAttribute(){
+        return Gate::allows('completeExecutionStatus', $this);   
+    }
+    public function getCanCompleteArchivingStatusAttribute(){
+        return Gate::allows('completeArchivingStatus', $this);   
+    }
+    // public function getCanCompleteExecutionStatusAttribute(){
+    //     return $this->currency->name;   
+    // }
+
     // public function getPropsalDetailsAttribute()
     // {
     //     return $this->hasMany(ProposalDetail::class, 'proposal_id');
     // }
 
-    // public function getTotalAttribute()
-    // {
-    //     return $this->propsal_details->sum('total');
-    // }
 
     // relations
     public function entity(){
@@ -84,6 +173,22 @@ class Proposal extends BaseModel
     }
     public function proposalType(){
         return $this->belongsTo(ProposalType::class, 'proposal_type_id');
+    }
+    public function donations(){
+        return $this->hasMany(Donation::class, 'proposal_id');
+    }
+    public function documents(){
+        return $this->hasMany(Document::class, 'proposal_id');
+    }
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    // Scopes
+
+    public function scopePublic($query){
+        $query->where('status', 1)->where('publishing_date', '<=', Carbon::now()->format('Y-m-d'));
     }
 
     public static function headers($user = null)
@@ -103,7 +208,8 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
             ['sortable' => true, 'value' => 'area name', 'key' => 'area_name'],
             ['sortable' => true, 'value' => 'payable online', 'key' => 'isPayableOnline', 'translate' => 'true'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true, 'details_key' => 'status_details'],
+
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

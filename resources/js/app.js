@@ -46,6 +46,7 @@ import '../css/app.css';
 import { createI18n } from "vue-i18n";
 import localeMessages from "./vue-i18n-locales.generated";
 
+import VueApexCharts from "vue3-apexcharts";
 import FontAwesomeIcon from './plugins/FontAwesome'
 
 import MyMixins from "./plugins/mixins";
@@ -88,6 +89,7 @@ createInertiaApp({
             .use(plugin)
             .use(Vue3Toasity, { autoClose: 3000 })
             .use(ZiggyVue, Ziggy)
+            .use(VueApexCharts)
             app.component('FIcon', FontAwesomeIcon)
         return app.mount(el);
     },

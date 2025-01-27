@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDonatingFormRequest;
+use App\Http\Requests\StoreDonorRequest;
 use App\Http\Requests\StoreEntityRequest;
 use App\Http\Requests\UpdateEntityRequest;
 use App\Models\Entity;
@@ -17,7 +19,7 @@ use App\Models\Currency;
 use App\Models\Donor;
 
 use App\Models\Country;
-
+use App\Models\Donation;
 
 class EntityController extends Controller
 {
@@ -56,13 +58,34 @@ class EntityController extends Controller
         return Inertia::render(Str::studly("Entity").'/DonatingForm', [
             "headers" => Proposal::guestHeaders(),
             "entity" => $entity,
-            "proposals" => Proposal::where('entity_id', $entity->id)->get(),
+            "proposals" => Proposal::where('entity_id', $entity->id)->public()->get(),
             'countries' => Country::select('id', 'name')->get(),
             'genders' => Donor::genders(),
             'show_payonline_button' => $showPayOnlineButton,
         ]);
     }
+    public function storeDonatingForm(StoreDonatingFormRequest $request)
+    {
+        $data = $request->validated();
+        $donor = Donor::firstOrCreate(['phone' => $data['phone']], $data);
 
+        // Handle donations if they exist
+        if (!empty($data['donations'])) {
+            foreach ($data['donations'] as $donation) {
+                Donation::create([
+                    'donor_id' => $donor->id,
+                    'proposal_id' => $donation['proposal_id'],
+                    'amount' => $donation['amount'],
+                    'currency_id' => $donation['currency_id'],
+                ]);
+            }
+        }
+        
+        return Inertia::render(Str::studly("Entity").'/CompletedDonatingForm', [
+            "donor" => $donor,
+            "donations" => $data['donations'],
+        ]);
+       }
     /**
      * Show the form for creating a new resource.
      */

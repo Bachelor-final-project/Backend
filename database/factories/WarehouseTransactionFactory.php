@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Item;
+use App\Models\Tenant;
+use App\Models\Warehouse;
 use App\Models\WarehouseTransaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +25,13 @@ class WarehouseTransactionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'warehouse_id' => $this->faker->randomElement(Warehouse::pluck('id')->toArray()), // Generates a Warehouse model and links it
+            'item_id' => $this->faker->randomElement(Item::pluck('id')->toArray()),          // Generates an Item model and links it
+            'amount' => $this->faker->numberBetween(1, 100), // Random amount between 1 and 100
+            'transaction_type' => $this->faker->randomElement([1, 2]), // Either "in" or "out"
+            'tenant_id' => $this->faker->randomElement(Tenant::pluck('id')->toArray()), // Random tenant_id from existing currencies
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

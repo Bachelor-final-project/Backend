@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Country;
+use App\Models\Currency;
+use App\Models\Proposal;
 use App\Models\User;
+use App\Models\Warehouse;
 use App\Models\Tenant;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -43,11 +47,19 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            CountriesSeeder::class,
+            CurrencySeeder::class,
             ProposalTypeSeeder::class,
             AreaSeeder::class,
             EntitySeeder::class,
-            CountriesSeeder::class,
-            CurrencySeeder::class,
+            ProposalSeeder::class,
+            DonationSeeder::class,
+            UnitSeeder::class,
+            ItemSeeder::class,
+            WarehouseSeeder::class,
+            WarehouseTransactionSeeder::class,
         ]);
+        Country::where('name', 'like', 'Israel')->delete();
+        
     }
 }

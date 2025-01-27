@@ -6,6 +6,16 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDonationRequest extends FormRequest
 {
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => deterministicEncrypt($this->phone),
+            ]);
+        }
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
