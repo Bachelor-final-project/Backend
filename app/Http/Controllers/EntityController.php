@@ -20,6 +20,7 @@ use App\Models\Donor;
 
 use App\Models\Country;
 use App\Models\Donation;
+use App\Models\StripeM;
 
 class EntityController extends Controller
 {
@@ -67,24 +68,37 @@ class EntityController extends Controller
     public function storeDonatingForm(StoreDonatingFormRequest $request)
     {
         $data = $request->validated();
-        $donor = Donor::firstOrCreate(['phone' => $data['phone']], $data);
+        $donor = Donor::firstOrCreate(['phone' => deterministicEncrypt($data['phone'])], $data);
 
+        $onlinePayableDonations = [];
+        $donationIds = [];
         // Handle donations if they exist
         if (!empty($data['donations'])) {
             foreach ($data['donations'] as $donation) {
-                Donation::create([
+                $d = Donation::create([
                     'donor_id' => $donor->id,
                     'proposal_id' => $donation['proposal_id'],
                     'amount' => $donation['amount'],
                     'currency_id' => $donation['currency_id'],
                 ]);
+                if($donation['pay_online']) {
+                    $onlinePayableDonations[] = $donation;
+                    array_push($donationIds, $d->id);
+                }
             }
         }
+        if(empty($onlinePayableDonations))
+            // return to_route($this->routeName() . '.index')->with('res', ['message' => __('Donor Saved Seccessfully'), 'type' => 'success']);
+            return Inertia::render(Str::studly("Entity").'/CompletedDonatingForm', [
+                "donor" => $donor,
+                "donations" => $data['donations'],
+            ]);
+
+        $backUrl = back()->getTargetUrl();
+        $sessionUrl = StripeM::doPayment($onlinePayableDonations, $donationIds, $backUrl);
+        return Inertia::location($sessionUrl);
+
         
-        return Inertia::render(Str::studly("Entity").'/CompletedDonatingForm', [
-            "donor" => $donor,
-            "donations" => $data['donations'],
-        ]);
        }
     /**
      * Show the form for creating a new resource.
