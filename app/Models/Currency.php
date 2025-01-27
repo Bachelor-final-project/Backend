@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TenantAttributeTrait;
 use App\Traits\TenantScoped;
+use Illuminate\Support\Facades\App;
 
 class Currency extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
-    protected $appends = [ ''];
+    protected $appends = ['name'];
     public static $controllable = true;
 
+    public function getNameAttribute(){
+        return App::currentLocale() == 'en'? $this->name_en: $this->name_ar;
+    }
     public static function headers($user = null)
     {
         return [

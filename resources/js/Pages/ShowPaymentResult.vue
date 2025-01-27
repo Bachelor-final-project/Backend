@@ -6,7 +6,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-gray-700">Payment Successful</h1>
+        <h1 class="text-2xl font-bold text-gray-700">{{ $t('Payment Successful') }}</h1>
       </div>
   
       <div v-else-if="status === 'fail'" class="text-center">
@@ -15,12 +15,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-gray-700">Payment Failed</h1>
+        <h1 class="text-2xl font-bold text-gray-700">{{ $t('Payment Failed') }}</h1>
       </div>
     </div>
   </template>
   
   <script setup>
+  import DonatingPageLayout from '@/Layouts/DonatingPageLayout.vue';
+  defineOptions({ layout: DonatingPageLayout });
+
   // Props to determine the payment status
   defineProps({
     status: {

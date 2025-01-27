@@ -32,6 +32,8 @@ class StoreDonatingFormRequest extends FormRequest
             'donations.*.proposal_id' => 'required_with:donations|integer|exists:proposals,id',
             'donations.*.currency_id' => 'required_with:donations|integer|exists:currencies,id',
             'donations.*.amount' => 'required_with:donations|numeric|min:1',
+            'donations.*.amount' => 'required_with:donations|numeric|min:1',
+            'donations.*.pay_online' => 'boolean',
         ];
     }
 }

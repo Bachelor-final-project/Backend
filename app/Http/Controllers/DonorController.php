@@ -58,32 +58,33 @@ class DonorController extends Controller
         $data = $request->validated();
         $donor = Donor::firstOrCreate(['phone' => $data['phone']], $data);
 
-        $onlinePayableDonations = [];
-        $donationIds = [];
-        // Handle donations if they exist
-        if (!empty($data['donations'])) {
-            foreach ($data['donations'] as $donation) {
-                $d = Donation::create([
-                    'donor_id' => $donor->id,
-                    'proposal_id' => $donation['proposal_id'],
-                    'amount' => $donation['amount'],
-                    'currency_id' => $donation['currency_id'],
-                ]);
-                if($donation['pay_online']) {
-                    $onlinePayableDonations[] = $donation;
-                    array_push($donationIds, $d->id);
-                }
-            }
-        }
-        if(empty($onlinePayableDonations))
-            return to_route($this->routeName() . '.index')->with('res', ['message' => __('Donor Saved Seccessfully'), 'type' => 'success']);
+        // $onlinePayableDonations = [];
+        // $donationIds = [];
+        // // Handle donations if they exist
+        // if (!empty($data['donations'])) {
+        //     foreach ($data['donations'] as $donation) {
+        //         $d = Donation::create([
+        //             'donor_id' => $donor->id,
+        //             'proposal_id' => $donation['proposal_id'],
+        //             'amount' => $donation['amount'],
+        //             'currency_id' => $donation['currency_id'],
+        //         ]);
+        //         if($donation['pay_online']) {
+        //             $onlinePayableDonations[] = $donation;
+        //             array_push($donationIds, $d->id);
+        //         }
+        //     }
+        // }
+        // if(empty($onlinePayableDonations))
 
-        $backUrl = back()->getTargetUrl();
-        // dd($backUrl);
-        $sessionUrl = StripeM::doPayment($onlinePayableDonations, $donationIds, $backUrl);
-        // dd($sessionUrl);
-        return Inertia::location($sessionUrl);
-        // return redirect()->away($sessionUrl);
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('Donor Saved Seccessfully'), 'type' => 'success']);
+
+        // $backUrl = back()->getTargetUrl();
+        // // dd($backUrl);
+        // $sessionUrl = StripeM::doPayment($onlinePayableDonations, $donationIds, $backUrl);
+        // // dd($sessionUrl);
+        // return Inertia::location($sessionUrl);
+        // // return redirect()->away($sessionUrl);
     }
 
     /**
