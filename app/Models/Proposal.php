@@ -17,6 +17,9 @@ class Proposal extends BaseModel
     protected $guarded = ['donated_amount'];
     protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image'];
     protected $with = ['entity', 'area', 'proposalType', 'currency'];
+    protected $casts = [
+        'isPayableOnline' => 'boolean'
+    ];
     public static $controllable = true;
 
     public const STATUSES = [
@@ -194,7 +197,7 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'title', 'key' => 'title'],
             ['sortable' => true, 'value' => 'body', 'key' => 'body'],
             // ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
-            ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
+            ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
             // ['sortable' => true, 'value' => 'proposal_effects', 'key' => 'proposal_effects'],
             ['sortable' => true, 'value' => 'cost', 'key' => 'cost'],
             ['sortable' => true, 'value' => 'share cost', 'key' => 'share_cost'],
@@ -204,7 +207,9 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'entity name', 'key' => 'entity_name'],
             ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
             ['sortable' => true, 'value' => 'area name', 'key' => 'area_name'],
+            ['sortable' => true, 'value' => 'payable online', 'key' => 'isPayableOnline', 'translate' => 'true'],
             ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true, 'details_key' => 'status_details'],
+
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

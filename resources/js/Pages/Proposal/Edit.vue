@@ -4,6 +4,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
+import SwitchInput from "@/Components/SwitchInput.vue";
 // import CheckBox from "@/Components/Checkbox.vue";
 import Textarea from "@/Components/Textaera.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
@@ -49,6 +50,7 @@ const form = useForm({
   entity_id: props.proposal.entity_id,
   proposal_type_id: props.proposal.proposal_type_id,
   area_id: props.proposal.area_id, 
+  isPayableOnline: props.proposal.isPayableOnline, 
 });
 
 const submit = () => {
@@ -221,7 +223,18 @@ const submit = () => {
           />
           <InputError :message="form.errors.publishing_date" class="mt-2" />
         </div> 
-        
+        <div class="auto-cols-max">
+          <InputLabel for="isPayableOnline" value="can be payed online" />
+          <div class="py-3">
+            <SwitchInput
+              id="isPayableOnline"
+              :value="1"
+              v-model="form.isPayableOnline"
+              class="mx-3"
+            />
+          </div>
+        </div> 
+
         <div class="col-span-2">
           <InputLabel for="body" value="proposal body" />
           <Textarea

@@ -80,6 +80,7 @@ class ProposalController extends Controller
     public function store(StoreProposalRequest $request)
     {
         $data = $request->validated();
+
         $file = $data['files']? $data['files'][0]: null;
         unset($data['files']);
         // if($data['files']){

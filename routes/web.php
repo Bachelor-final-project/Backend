@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\StripeController;
 
 // Route::get('/', function () {
 //    return 'hi';
@@ -56,7 +57,8 @@ Route::get('/', function () {
 $controllers = require base_path('vendor/composer/autoload_classmap.php');
 $controllers = array_keys($controllers);
 $controllers = array_filter($controllers, function ($controller) {
-    return strpos($controller, 'App\Http\Controllers') === 0 && strpos($controller, '\Auth') === false && $controller != 'App\Http\Controllers\Controller';
+    return strpos($controller, 'App\Http\Controllers') === 0 && strpos($controller, '\Auth') === false && $controller != 'App\Http\Controllers\Controller' 
+    && $controller != 'App\Http\Controllers\StripeController';
 });
 
 Route::group(['middleware' => 'auth'], function () use ($controllers) {
@@ -94,3 +96,6 @@ Route::get('/import-currencies', [GeneralController::class, 'importCurrencies'])
 Route::get('/import-proposals', [GeneralController::class, 'importProposals'])->name('import-proposals');
 Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiaries'])->name('import-beneficiaries');
 
+Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
+Route::post('/test', [StripeController::class, 'test']);
+Route::get('/success', [StripeController::class, 'success'])->name('success');

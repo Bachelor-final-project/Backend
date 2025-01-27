@@ -42,6 +42,7 @@ class StoreProposalRequest extends FormRequest
             'entity_id' => 'required|integer|exists:entities,id', 
             'proposal_type_id' => 'required|integer|exists:proposal_types,id', 
             'area_id' => 'required|integer|exists:areas,id',
+            'isPayableOnline' => 'required|boolean',
             'files' => 'sometimes',
         ];
     }

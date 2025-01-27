@@ -1,6 +1,7 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
+const checkboxRef = ref();
 const emit = defineEmits(['update:checked']);
 
 const props = defineProps({
@@ -19,16 +20,22 @@ const proxyChecked = computed({
     },
 
     set(val) {
-        emit('update:checked', val);
+        // emit('update:checked', val);
     },
 });
+
+function handleCheckedChages() {
+    emit('update:checked', checkboxRef.value);
+}
 </script>
 
 <template>
     <input
+        ref="checkboxRef"
         type="checkbox"
         :value="value"
         v-model="proxyChecked"
         class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+        @change="handleCheckedChages"
     />
 </template>

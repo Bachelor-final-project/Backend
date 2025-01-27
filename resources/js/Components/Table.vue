@@ -160,7 +160,7 @@
                   : ''
               "
             >
-              {{ head.translate ? $t(item[head.key]) : item[head.key] }}
+              {{ head.translate ? $t(item[head.key] + "") : item[head.key] }}
             </div>
           </th>
 

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('execution_place');
             $table->date('execution_date');
             $table->date('publishing_date');
+            $table->boolean('isPayableOnline')->default(false);
         });
     }
 

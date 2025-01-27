@@ -28,11 +28,11 @@ const props = defineProps({
 // });
 
 const form = useForm({
-  phone: donation.donor_phone,
-  proposal_id: donation.proposal_id,
-  currency_id: donation.currency_id,
-  amount: donation.amount,
-  status: donation.status
+  phone: props.donation.donor_phone,
+  proposal_id: props.donation.proposal_id,
+  currency_id: props.donation.currency_id,
+  amount: props.donation.amount,
+  status: props.donation.status
 });
 const submit = () => {
   // form
@@ -82,7 +82,7 @@ const submit = () => {
           <InputLabel for="proposal_id" value="Project" />
           <SelectInput
             :options="proposals"
-            :item_name="`name_${i18n_locale}`"
+            :item_name="`title`"
             id="currency_id"
             v-model="form.proposal_id"
             class="mt-1 block w-full"

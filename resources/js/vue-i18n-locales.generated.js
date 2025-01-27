@@ -1,5 +1,7 @@
 export default {
     "ar": {
+        "true":"صحيح",
+        "false":"خطأ",
         "Total Proposals by Status": "إحصاءات المشاريع حسب الحالة",
         "Total Proposals by Types": "إحصاءات المشاريع حسب طبيعة المشروع",
         "Total Donations by Statues": "إحصاءات عمليات التبرع حسب الحالة",
@@ -64,6 +66,10 @@ export default {
         "share cost": "تكلفة السهم الواحد",
         "execution date": "تاريخ التنفيذ",
         "publishing date": "تاريخ انطلاق المشروع",
+        "cover photo": "صورة غلاف",
+        "can be payed online": "يمكن الدفع اونلاين",
+        "payable online": "يدفع اونلاين",
+
         "Entities": "الجهات والمبادرات",
         "entity": "الجهة",
         "entity name": "اسم الجهة",

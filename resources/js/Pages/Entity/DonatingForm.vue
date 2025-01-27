@@ -69,7 +69,12 @@
           />
           <InputError :message="form.errors.country_id" class="mt-2" />
         </div>
+
+
           <div class="flex items-center gap-4">
+          <!-- <SecondaryButton v-if="show_payonline_button" :disabled="form.processing" v-on:click="1+1">{{
+            $t("Pay the selected online")
+          }}</SecondaryButton> -->
           <PrimaryButton :disabled="form.processing">{{
             $t("Save")
           }}</PrimaryButton>
@@ -122,23 +127,30 @@
     proposals: Array,
     countries: Array,
     genders: Array,
+    show_payonline_button: Boolean,
   });
   const form = useForm({
     name: '',
     phone: '',
     country: '',
     gender: '',
-    donations: []
+    donations: [] 
   });
+  const handleDonation = (proposalId, amount,currency_id, pay_online) => {
 
-  const handleDonation = (proposalId, amount,currency_id) => {
     const existingDonation = form.donations.find(d => d.proposal_id === proposalId);
     if (existingDonation) {
       existingDonation.amount = amount;
+      existingDonation.pay_online = pay_online;
     } else {
-      form.donations.push({ proposal_id: proposalId, amount: amount, currency_id: currency_id });
+      form.donations.push({ proposal_id: proposalId, amount: amount, currency_id: currency_id, pay_online: pay_online });
     }
   };
+
+function saveWithPayOnline() {
+  form.payOnline = true
+}
+  
 
   const clearPhoneInput = () =>{
       console.log(form.phone)

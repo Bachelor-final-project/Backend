@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
+
             $table->string('name_en');  // English name
             $table->string('name_ar');  // Arabic name
             $table->string('code');     // Currency code (e.g., USD, QAR)

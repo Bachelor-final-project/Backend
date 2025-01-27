@@ -15,6 +15,7 @@ class CurrencySeeder extends Seeder
      */
     public function run()
     {
+
         $currencies = [
             ['name_en' => 'US Dollar', 'name_ar' => 'دولار أمريكي', 'code' => 'USD', 'symbol' => '$'],
             ['name_en' => 'Jordanian Dinar', 'name_ar' => 'دينار أردني', 'code' => 'JOD', 'symbol' => 'د.أ'],
