@@ -45,12 +45,21 @@ class EntityController extends Controller
     {
         // dd('hi');
         $entity = Entity::where('donating_form_path', $donating_form_path)->firstOrFail();
+        $proposals = Proposal::where('entity_id', $entity->id)->where('status', Proposal::STATUSES['donatable'])->get();
+        $showPayOnlineButton = false;
+        foreach($proposals as $p) {
+            if($p->isPayableOnline) {
+                $showPayOnlineButton = true;
+                break;
+            }
+        }
         return Inertia::render(Str::studly("Entity").'/DonatingForm', [
             "headers" => Proposal::guestHeaders(),
             "entity" => $entity,
             "proposals" => Proposal::where('entity_id', $entity->id)->get(),
             'countries' => Country::select('id', 'name')->get(),
             'genders' => Donor::genders(),
+            'show_payonline_button' => $showPayOnlineButton,
         ]);
     }
 

@@ -52,7 +52,8 @@ const form = useForm({
   publishing_date: "",
   entity_id: "",
   proposal_type_id: "",
-  area_id: "", 
+  area_id: "",
+  isPayableOnline: false,
   files: "",
 });
 
@@ -229,6 +230,18 @@ function fileinputChanged(files) {
 
           />
           <InputError :message="form.errors.proposal_file" class="mt-2" />
+        </div> 
+        <div class="auto-cols-max" v-if="form.currency_id == 1">
+          <InputLabel for="isPayableOnline" value="can be payed online" />
+          <div class="py-3">
+            <SwitchInput
+              id="isPayableOnline"
+              :value="1"
+              v-model="form.isPayableOnline"
+              class="mx-3"
+              
+            />
+          </div>
         </div> 
         <div class="col-span-2">
           <InputLabel for="body" value="proposal body" />

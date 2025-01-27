@@ -1,5 +1,7 @@
 export default {
     "ar": {
+        "true":"صحيح",
+        "false":"خطأ",
         "entity": "الجهة",
         "donating form path": "رابط نموذج التبرع",
         "supervisor name": "اسم المشرف",
@@ -49,6 +51,9 @@ export default {
         "share cost": "تكلفة السهم الواحد",
         "execution date": "تاريخ التنفيذ",
         "publishing date": "تاريخ انطلاق المشروع",
+        "cover photo": "صورة غلاف",
+        "can be payed online": "يمكن الدفع اونلاين",
+        "payable online": "يدفع اونلاين",
         "entity": "الجهة",
         "entity name": "اسم الجهة",
         "proposal type": "طبيعة المشروع",

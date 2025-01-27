@@ -1,5 +1,6 @@
 <template>
-    <div class="p-4 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+  <div class="p-4 bg-white dark:bg-gray-800 shadow sm:rounded-lg flex flex-col justify-between">
+    <div class="flex flex-col justify-end ">
       <img
         :src="imageSrc"
         :alt="proposal.title"
@@ -21,18 +22,25 @@
             type="number"
             v-model="localDonationAmount"
             placeholder="Enter amount"
-            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
+            class="w-full my-2 px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
             @input="emitDonation"
           />
         </div>
       </div>
     </div>
+    <div v-if="proposal.isPayableOnline" class="flex flex-row justify-between">
+      <div class="text-gray-500 text-xs">{{ $t("pay online") }}</div>
+      <Checkbox :value="false" v-model="payonlineChecked" @update:checked="emitDonation"></Checkbox>
+    </div>
+
+  </div>
   </template>
   
   <script setup>
   import { ref } from 'vue';
   import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import Checkbox from './Checkbox.vue';
 
 
 const props = defineProps({
@@ -46,11 +54,11 @@ const imageSrc = ref(props.proposal.image || new URL(`@/assets/images/hero.jpg`,
   const emit = defineEmits(['donate']);
   
   const localDonationAmount = ref('');
+  const payonlineChecked = ref(false);
   
   const emitDonation = () => {
-    
     if (localDonationAmount.value) {
-      emit('donate', props.proposal.id, localDonationAmount.value, props.proposal.currency_id);
+      emit('donate', props.proposal.id, localDonationAmount.value, props.proposal.currency_id, payonlineChecked.value);
     } else {
       alert('Please enter a donation amount.');
     }

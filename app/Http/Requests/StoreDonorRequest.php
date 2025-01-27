@@ -26,12 +26,13 @@ class StoreDonorRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'gender' => 'required|integer|between:1,2',
-            'phone' => 'required|string|max:15|unique:donors,phone',
+            'phone' => 'required|string|max:15',
             'country_id' => 'nullable|integer|exists:countries,id',
             'donations' => 'nullable|array', // donations can be empty
             'donations.*.proposal_id' => 'required_with:donations|integer|exists:proposals,id',
             'donations.*.currency_id' => 'required_with:donations|integer|exists:currencies,id',
             'donations.*.amount' => 'required_with:donations|numeric|min:1',
+            'donations.*.pay_online' => 'boolean',
         ];
     }
 }

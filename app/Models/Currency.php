@@ -17,6 +17,7 @@ class Currency extends BaseModel
     {
         return [
             ['sortable' => true, 'value' => 'name', 'key' => 'name'],
+            ['sortable' => true, 'value' => 'code', 'key' => 'code'],
             // ['sortable' => true, 'value' => 'price', 'key' => 'estimated_price'],
             // ['sortable' => true, 'value' => 'description', 'key' => 'description'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],

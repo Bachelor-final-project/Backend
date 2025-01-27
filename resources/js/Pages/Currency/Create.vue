@@ -25,7 +25,8 @@ const props = defineProps({
 // });
 
 const form = useForm({
-  name: ""
+  name: "",
+  code: "",
 });
 const submit = () => {
   // form
@@ -80,6 +81,19 @@ const submit = () => {
           />
 
           <InputError class="mt-2" :message="form.errors.name" />
+        </div>
+        <div>
+          <InputLabel for="code" value="Code" />
+          <TextInput
+            id="code"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.code"
+            required
+            autocomplete="code"
+          />
+
+          <InputError class="mt-2" :message="form.errors.code" />
         </div>
 
         <div class="flex items-center gap-4">

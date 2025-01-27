@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('code', 10);
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
         });

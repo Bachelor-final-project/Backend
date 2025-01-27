@@ -5,7 +5,9 @@ import { useForm, usePage } from "@inertiajs/vue3";
 const page = usePage();
 const res = computed(() => page.props.flash);
 function run() {
+  console.log("Altert Run function: ");
   if (res && res.value && res.value.message && res.value.type) {
+    console.log("Altert Run function Conedestions met");
     toast[res.value.type](res.value.message, {
       position: getPosition(),
     });

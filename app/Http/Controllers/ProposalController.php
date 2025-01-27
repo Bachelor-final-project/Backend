@@ -78,7 +78,8 @@ class ProposalController extends Controller
     public function store(StoreProposalRequest $request)
     {
         $data = $request->validated();
-        $file = $data['files'][0];
+        $file = $data['files'];
+        $file = $file ? $data['files'][0] : null; // if user didn't send files then set it to null
         // dd($file);
         unset($data['files']);
         $proposal = Proposal::create($data);

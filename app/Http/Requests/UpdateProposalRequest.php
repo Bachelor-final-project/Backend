@@ -41,6 +41,7 @@ class UpdateProposalRequest extends FormRequest
             'area_id' => 'sometimes|integer|exists:areas,id', 
             'donated_amount' => 'sometimes|numeric', 
             'status' => 'sometimes|integer',
+            'isPayableOnline' => 'sometimes|boolean',
             'files' => 'sometimes',
         ];
     }
