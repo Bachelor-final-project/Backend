@@ -28,6 +28,7 @@ class CurrencySeeder extends Seeder
                 'name_ar' => $currency['name_ar'], // Arabic name
                 'code' => $currency['code'],       // Currency code
                 'symbol' => $currency['symbol'],   // Currency symbol
+                'tenant_id' => 1,   // Currency symbol
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

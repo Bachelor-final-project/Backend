@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateDonationRequest;
 use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Currency;
-use App\Models\Donor;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

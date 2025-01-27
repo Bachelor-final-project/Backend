@@ -7,6 +7,7 @@ use App\Models\Currency;
 use App\Models\Entity;
 use App\Models\Proposal;
 use App\Models\ProposalType;
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProposalFactory extends Factory
@@ -41,6 +42,7 @@ class ProposalFactory extends Factory
             'proposal_type_id' => $this->faker->randomElement(ProposalType::pluck('id')->toArray()), // Random proposal_type_id from existing proposal types
             'area_id' => $this->faker->randomElement(Area::pluck('id')->toArray()), // Random area_id from existing areas
             'min_documenting_amount' => $this->faker->randomFloat(2, 100, 5000), // Random minimum documenting amount between 100 and 5000
+            'tenant_id' => $this->faker->randomElement(Tenant::pluck('id')->toArray()), // Random tenant_id from existing currencies
             'created_at' => $this->faker->dateTimeBetween('-2 months', 'now'), // Random created_at within the last 2 months
             'updated_at' => now(), // Updated at is set to current time
         ];

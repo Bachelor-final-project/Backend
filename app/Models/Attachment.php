@@ -13,7 +13,6 @@ class Attachment extends BaseModel
     use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = ['url'];
     public static $controllable = true;
-    protected $appends = ['url'];
     public function attachable()
     {
         return $this->morphTo();
@@ -52,8 +51,5 @@ class Attachment extends BaseModel
             'filesize' => $fileSize,
         ]);
     }
-    public function getUrlAttribute()
-    {
-        return env('APP_URL') . Storage::url($this->path);
-    }
+
 }
