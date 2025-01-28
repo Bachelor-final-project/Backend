@@ -19,6 +19,9 @@ class Attachment extends BaseModel
     }
     public function getUrlAttribute()
     {
+        // dd(Storage::disk('public')->get($this->path));
+        // return Storage::disk('public')->get($this->path);
+        // return asset($this->path);
         return env('APP_URL') . Storage::url($this->path);
     }
     public static function storeAttachment($file, $attachableId, $attachableType, $attachamentType = 1) {

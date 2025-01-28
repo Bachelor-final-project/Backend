@@ -1,6 +1,6 @@
 <template>
       <input
-        accept="image/*,video/*" 
+        :accept="accept" 
         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
         id="multiple_files"
         type="file"
@@ -9,7 +9,7 @@
         @change="handleFileChange"
       />
       <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">
-        MP4, PNG, JPG, or GIF (MAX. 5 MB).
+        {{ file_input_help }}
       </p>
       <InputError v-for="error in form.errors" class="mt-2" :message="error" />
       <div v-if="show_files_details && form.files.length > 0" class="mt-3">
@@ -36,6 +36,14 @@ const props = defineProps({
   trigger: {
     type: String,
     default: "",
+  },
+  accept: {
+    type: String,
+    default: "image/*,video/*",
+  },
+  file_input_help: {
+    type: String,
+    default: "MP4, PNG, JPG, or GIF (MAX. 5 MB).",
   },
   item_id: {
     type: String,

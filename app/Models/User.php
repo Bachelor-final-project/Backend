@@ -87,7 +87,7 @@ class User extends Authenticatable
 
     public function getTypeStrAttribute()
     {
-        return [1 => 'individual', 2 => 'organisation'][$this->type] ?? "";
+        return self::TYPES[$this->type] ?? "";
     }
 
     public function getStatusStrAttribute()

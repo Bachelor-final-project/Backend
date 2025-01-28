@@ -7,6 +7,7 @@ use App\Models\Proposal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
+use App\Imports\BeneficiaryImport;
 use App\Models\Currency;
 use App\Models\Attachment;
 use App\Models\ProposalType;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProposalController extends Controller
 {
@@ -151,6 +152,7 @@ class ProposalController extends Controller
             $file = $validated['beneficiariesFile'][0];
             unset($validated['beneficiariesFile']);
             Attachment::storeAttachment($file, $proposal->id, 'proposal', 4);
+            Excel::import(new BeneficiaryImport($proposal->id), $file);
         }
         
         $proposal->update($validated);
