@@ -20,7 +20,7 @@ class CurrencySeeder extends Seeder
             ['name_en' => 'US Dollar', 'name_ar' => 'دولار أمريكي', 'code' => 'USD', 'symbol' => '$'],
             ['name_en' => 'Jordanian Dinar', 'name_ar' => 'دينار أردني', 'code' => 'JOD', 'symbol' => 'د.أ'],
             ['name_en' => 'Qatari Rial', 'name_ar' => 'ريال قطري', 'code' => 'QAR', 'symbol' => 'ر.ق'],
-            ['name_en' => 'Israeli Shekel', 'name_ar' => 'شيكل', 'code' => 'ILS', 'symbol' => '₪'],
+            ['name_en' => 'Shekel', 'name_ar' => 'شيكل', 'code' => 'ILS', 'symbol' => '₪'],
         ];
 
         foreach ($currencies as $currency) {

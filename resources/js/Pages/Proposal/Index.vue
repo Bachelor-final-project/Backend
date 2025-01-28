@@ -17,7 +17,8 @@
 import { Head } from "@inertiajs/vue3";
 import Table from "@/Components/Table.vue";
 
-const actions = [
+const actions = 
+[
   {
     type: "btn",
     icon: "trash",

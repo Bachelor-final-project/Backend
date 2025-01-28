@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('beneficiary_id');
             $table->integer('status'); // [1 => received, 2 => granted]
             $table->text('notes')->nullable();
+            $table->integer('count')->nullable();
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
 

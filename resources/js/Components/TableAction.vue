@@ -112,19 +112,20 @@
   <Modal :show="complete_execution_status" @close="closeCompleteExecutionStatusModal">
     <div class="p-6 dark:bg-gray-800">
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
-        {{ $t("titleForCompleteDonatingStatusModal") }}
+        {{ $t("titleForCompleteExecutionStatusModal") }}
       </h2>
 
       <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-        {{ $t("bodyForCompleteDonatingStatusModal") }}.
+        {{ $t("bodyForCompleteExecutionStatusModal") }}.
       </p>
-      <div class="grid grid-cols-3 gap-4 mt-5">
-        <div class="auto-cols-max">
+      <div class="grid grid-cols-2 gap-4 mt-5">
+        <div class="auto-cols">
           <InputLabel for="arabicVideoFile" value="arabicVideoFile" />
           <FileInput
             id="arabicVideoFile"
             model="proposal"
             v-model="arabicVideoFile"
+            :file_input_help="$t('Videos and Images')"
             attachment_type="2"
             :show_files_details="false"
             @fileinput-change="arabicFileinputChanged"
@@ -132,11 +133,12 @@
             @start-uploading="isFileInputLoading = true"
           />
       </div> 
-      <div class="auto-cols-max">
+      <div class="auto-cols">
           <InputLabel for="englishVideoFile" value="englishVideoFile" />
           <FileInput
             id="englishVideoFile"
             model="proposal"
+            :file_input_help="$t('Videos and Images')"
             v-model="englishVideoFile"
             attachment_type="3"
             :show_files_details="false"
@@ -163,18 +165,23 @@
   <Modal :show="complete_archiving_status" @close="closeCompleteArchivingStatusModal">
     <div class="p-6 dark:bg-gray-800">
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
-        {{ $t("titleForCompleteDonatingStatusModal") }}
+        {{ $t("titleForCompleteArchivingStatusModal") }}
       </h2>
 
       <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-        {{ $t("bodyForCompleteDonatingStatusModal") }}.
+        {{ $t("bodyForCompleteArchivingStatusModal") }}.
       </p>
       
       <div class="auto-cols-max">
           <InputLabel for="beneficiariesFile" value="beneficiariesFile" />
+          <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              {{ $t("toDownloadTheBeneficiariesFileTemplate") }} <a download="BeneficiariesFileTemplate.xlsx" href="/assets/templates/BeneficiariesFileTemplate.xlsx">{{ $t("Click Here") }}</a>
+          </p>
           <FileInput
             id="beneficiariesFile"
             model="proposal"
+            :file_input_help="$t('Spreadsheets')"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             v-model="beneficiariesFile"
             attachment_type="2"
             :show_files_details="false"

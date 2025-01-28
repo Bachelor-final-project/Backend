@@ -60,11 +60,11 @@
           v-if="add_item_route"
           color="green"
           class="absolute left-4 text-center w-4 h-4 text-blue-500 clickable"
-          data-tooltip-target="export-statistics-tooltip"
+          data-tooltip-target="add-item-tooltip"
           data-tooltip-trigger="hover"
         >
           <div
-            id="export-statistics-tooltip"
+            id="add-item-tooltip"
             role="tooltip"
             class="absolute z-50 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-400 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
           >

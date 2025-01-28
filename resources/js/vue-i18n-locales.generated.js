@@ -83,6 +83,21 @@ export default {
         "body" : "وصف المشروع",
         "titleForCompleteDonatingStatusModal" : "إعتماد المشروع للانتقال لمرحلة التوثيق والتنفيذ",
         "bodyForCompleteDonatingStatusModal" : "في حال كان التبرعات من خارج البرنامج، يرجى ادخال المبلغ الإجمالي للتبرع",
+        
+        "titleForCompleteExecutionStatusModal" : "إعتماد المشروع للانتقال لمرحلة الأرشفة",
+        "bodyForCompleteExecutionStatusModal" : "يرجى إرفاق ملفات التوثيق العامة الخاصة بالمشروع",
+        "arabicVideoFile" : "فيديو التوثيق باللغة العربية",
+        "englishVideoFile" : "فيديو التوثيق باللغة الانجليزية",
+        "beneficiariesFile" : "كشف المستفيدين",
+        "Videos and Images" : "صور أو فيديوهات",
+        "Spreadsheets" : "ملفات اكسل او جداول البيانات",
+        "toDownloadTheBeneficiariesFileTemplate" : "لتحميل قالب كشف المستفيدين المعتمد",
+        "Click Here" : "يرجى الضغط هنا",
+        
+        "titleForCompleteArchivingStatusModal" : "إعتماد المشروع بشكل كامل",
+        "bodyForCompleteArchivingStatusModal" : "يرجى إرفاق كشف المستفيدين باستخدام القالب المعتمد، ليتسنى للبرنامج قرائتها وإضافتها لقاعدة البيانات",
+        
+        
         "hasDonatingAmount" : "وجود تبرعات خارجية",
         "donatingAmount" : "المبلغ الإجمالي للتبرع",
         "approve" : "إعتماد",
