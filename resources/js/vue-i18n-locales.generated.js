@@ -10,6 +10,25 @@ export default {
         "All proposalTypes":"جميع المشاريع",
         "All areas":"جميع المناطق",
 
+        "Proposal Files":"الملفات الخاصة بالمشروع",
+        "proposal details":"التفاصيل الخاصة بالمشروع",
+        "File Type":"نوع الملف",
+        "File Name":"اسم الملف",
+        "Link":"رابط التحميل",
+        "Download":"تحميل",
+
+
+        "Proposal id": "معرف المشروع",
+        "Proposal Title": "عنوان المشروع",
+        "donor name": "اسم المتبرع",
+        "donor phone": "هاتف المتبرع",
+        "currency name": "اسم العملة",
+        "amount": "المبلغ",
+        "national id": "رقم الهوية",
+        "date of birth": "تاريخ الميلاد",
+        "father name": "اسم الأب",
+        "warehouse name": "اسم المخزن",
+
 
         "true":"صحيح",
         "false":"خطأ",
@@ -22,6 +41,8 @@ export default {
         "Total Benefits last 30 days": "مساعدة آخر 30 يوما",
         "entity": "الجهة",
         "Donating Status Proposals": "المشاريع المفتوحة",
+        "Documents": "التوثيقات",
+        "expected date": "تاريخ التوثيق",
         
         "min documenting amount": "الحد الأدنى للتوثيق",
         "Donating form is saved successfully": "تم حفظ التبرع الخاص بكم بنجاح، سيتم التواصل معكم في أسرع وقت ممكن إن شاء الله",

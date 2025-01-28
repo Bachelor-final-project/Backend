@@ -63,7 +63,7 @@ class Document extends BaseModel
     {
         return [
             ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
-            ['sortable' => true, 'value' => 'donor', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
             ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],

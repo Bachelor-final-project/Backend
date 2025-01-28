@@ -16,8 +16,8 @@ class Proposal extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar', 'beneficiaries', 'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image'];
-    protected $with = ['entity', 'area', 'proposalType', 'currency'];
+    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image'];
+    protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
     ];
@@ -126,10 +126,7 @@ class Proposal extends BaseModel
         return  $this->attachments()->where('attachment_type', 1)->first()?->url;
     }
 
-    public function getBeneficiariesAttribute()
-    {
-        return $this->belongsToMany(Beneficiary::class, 'proposal_beneficiaries', 'proposal_id', 'beneficiary_id');
-    }
+
     public function getEntityNameAttribute(){
         return $this->entity->name;   
     }
@@ -185,7 +182,10 @@ class Proposal extends BaseModel
     {
         return $this->morphMany(Attachment::class, 'attachable');
     }
-
+    public function beneficiaries()
+    {
+        return $this->belongsToMany(Beneficiary::class, 'proposal_beneficiaries', 'proposal_id', 'beneficiary_id');
+    }
     // Scopes
 
     public function scopePublic($query){

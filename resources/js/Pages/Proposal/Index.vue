@@ -10,7 +10,6 @@
       :table_filters="table_filters"
       import_url="import-proposals"
       add_item_route="proposal.create"
-
     />
   </div>
 </template>
@@ -119,17 +118,18 @@ const actions =
         return item.can_complete_archiving_status;
     }
   },
+  {
+    type: "href",
+    icon: "eye",
+    icon_color: "blue",
+    model: "proposal",
+    tooltip: "show proposal",
+    route: "proposal.show",  // Define the route here
+    includeId: true
+  }
 ];
 
-const user = useForm({
-  name: "",
-  email: "",
-  password: "",
-  type: "",
-  status: "",
-  job_title: "",
-  is_active: "",
-});
+
 
 function save() {
   console.log(user);
