@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 use App\Traits\TenantAttributeTrait;
 use App\Traits\TenantScoped;
+use Illuminate\Support\Str;
 
 class Proposal extends BaseModel
 {
@@ -190,10 +191,33 @@ class Proposal extends BaseModel
     public function scopePublic($query){
         $query->where('status', 1)->where('publishing_date', '<=', Carbon::now()->format('Y-m-d'));
     }
+    public function scopeSearch($query, $request){
+
+        // Filter the parameters ending with "_filter" and transform their keys
+        $filterColumns = collect($request->all())
+        ->filter(function ($value, $key) {
+            return str_ends_with($key, '_filter');
+        })
+        ->mapWithKeys(function ($value, $key) {
+            // Remove "_filter" from the key
+            $newKey = Str::replaceLast('_filter', '', $key);
+            return [$newKey => $value];
+        })
+        ->toArray();
+        
+        foreach ($filterColumns as $column => $value) {
+            if(empty($value) ||  $value == 0) continue;
+
+            if(is_numeric($value)) $query->where($column, $value);
+            
+            else if(is_string($value)) $query->where($column,'like', "%$value%");
+        }
+    }
 
     public static function headers($user = null)
     {
         return [
+            ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             ['sortable' => true, 'value' => 'title', 'key' => 'title'],
             ['sortable' => true, 'value' => 'body', 'key' => 'body'],
             // ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
@@ -227,11 +251,10 @@ class Proposal extends BaseModel
     }
     public static function statuses() {
         return [
-            ['name' => 'accepted', 'id' => '1'],
-            ['name' => 'unaccepted', 'id' => '2'],
-            ['name' => 'pending', 'id' => '3'],
-            ['name' => 'preparing', 'id' => '4'],
-            ['name' => 'done', 'id' => '8'],
+            ['name' => __('donating_status'), 'id' => 1],
+            ['name' => __('execution_status'), 'id' => 2],
+            ['name' => __('ready_to_archive_status'), 'id' => 3],
+            ['name' => __('done_status'), 'id' => 8],
         ];
     }
 }

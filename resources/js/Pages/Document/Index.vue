@@ -7,6 +7,7 @@
       :items="items"
       :headers="headers"
       model="document"
+      :table_filters="table_filters"
       add_item_route="document.create"
       add_file_input="add"
     />
@@ -20,23 +21,25 @@ import Card from "@/Components/Card.vue";
 import Table from "@/Components/Table.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const actions = [
   {
     type: "btn",
     icon: "trash",
     icon_color: "#656565",
     funcName: "deleting",
-    model: "beneficiary",
-    tooltip: "delete beneficiary",
+    model: "document",
+    tooltip: "delete document",
   },
   {
     type: "btn",
     icon: "edit",
     icon_color: "grey",
     funcName: "editing",
-    model: "beneficiary",
-    tooltip: "edit beneficiary",
+    model: "document",
+    tooltip: "edit document",
   },
   // {
   //   type: "btn",
@@ -50,8 +53,17 @@ const actions = [
 const props = defineProps({
   items: Array,
   headers: Array,
+  currencies: Array,
   name: String,
 });
+
+const table_filters = [
+  {
+    name: t("currency"),
+    model: "currency_id_filter",
+    options: [{ id: 0, name: t("All currencies") }, ...props.currencies],
+  },
+];
 
 const user = useForm({
   name: "",

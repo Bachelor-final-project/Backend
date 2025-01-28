@@ -1,5 +1,16 @@
 export default {
     "ar": {
+
+        //filters
+
+        "Filters":"فلاتر البحث",
+        "All Statuses":"جميع الحالات",
+        "All Entities":"جميع المبادرات",
+        "All currencies":"جميع العملات",
+        "All proposalTypes":"جميع المشاريع",
+        "All areas":"جميع المناطق",
+
+
         "true":"صحيح",
         "false":"خطأ",
         "Total Proposals by Status": "إحصاءات المشاريع حسب الحالة",

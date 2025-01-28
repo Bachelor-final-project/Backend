@@ -7,6 +7,7 @@
       :actions="actions"
       :items="items"
       :headers="headers"
+      :table_filters="table_filters"
       import_url="import-proposals"
       add_item_route="proposal.create"
 
@@ -17,6 +18,56 @@
 import { Head } from "@inertiajs/vue3";
 import Table from "@/Components/Table.vue";
 
+const props = defineProps({
+  items: Array,
+  statuses: Array,
+  entities: Array,
+  currencies: Array,
+  proposalTypes: Array,
+  areas: Array,
+  headers: Array,
+  name: String,
+});
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const table_filters = [
+  {
+    name: t("Status"),
+    model: "status_filter",
+    options: [{ id: 0, name: t("All Statuses") }, ...props.statuses],
+  },
+  {
+    name: t("entity"),
+    model: "entity_id_filter",
+    options: [{ id: 0, name: t("All Entities") }, ...props.entities],
+  },
+  {
+    name: t("currency"),
+    model: "currency_id_filter",
+    options: [{ id: 0, name: t("All currencies") }, ...props.currencies],
+  },
+  {
+    name: t("proposal type"),
+    model: "proposal_type_id_filter",
+    options: [{ id: 0, name: t("All proposalTypes") }, ...props.proposalTypes],
+  },
+  {
+    name: t("area"),
+    model: "area_id_filter",
+    options: [{ id: 0, name: t("All areas") }, ...props.areas],
+  },
+  {
+    name: t("title"),
+    model: "title_filter",
+    type: "text"
+  },
+  {
+    name: t("execution date"),
+    model: "execution_date_filter",
+    type: "date"
+  },
+];
 const actions = 
 [
   {
@@ -70,23 +121,17 @@ const actions =
   },
 ];
 
-const props = defineProps({
-  items: Array,
-  headers: Array,
-  name: String,
+const user = useForm({
+  name: "",
+  email: "",
+  password: "",
+  type: "",
+  status: "",
+  job_title: "",
+  is_active: "",
 });
 
-// const user = useForm({
-//   name: "",
-//   email: "",
-//   password: "",
-//   type: "",
-//   status: "",
-//   job_title: "",
-//   is_active: "",
-// });
-
-// function save() {
-//   console.log(user);
-// }
+function save() {
+  console.log(user);
+}
 </script>

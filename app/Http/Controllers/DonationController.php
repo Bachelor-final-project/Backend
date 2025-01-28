@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateDonationRequest;
 use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Currency;
+use App\Models\Document;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -58,7 +59,10 @@ class DonationController extends Controller
         unset($data['phone']);
         // dd($donorPhone);
         $data['donor_id'] = Donor::where('phone', '=', $donorPhone)->first()->id;
-        Donation::create($data);
+        $donation = Donation::create($data);
+        if($data['status'] && $data['status'] == 2){
+            Document::createDocumentForDonation($donation);
+        }
         
         return to_route($this->routeName() . '.index')->with('res', ['message' => __('Donation Saved Seccessfully'), 'type' => 'success']);
     }
@@ -92,6 +96,11 @@ class DonationController extends Controller
         $validated = $request->validated();
         
         $donation->update($validated);
+        // add Document after approving the donation
+        if($validated['status'] == 2){
+            Document::createDocumentForDonation($donation);
+        }
+
         return back()->with('res', ['message' => __('Donation Updated Seccessfully'), 'type' => 'success']);
     }
 

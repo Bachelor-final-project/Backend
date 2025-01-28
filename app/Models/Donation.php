@@ -80,6 +80,7 @@ class Donation extends BaseModel
     {
         return $this->proposal->title ?? null;
     }
+   
     public static function statuses() {
         return [
             ['id' => 0, 'name' => __('Pending')],
@@ -91,6 +92,7 @@ class Donation extends BaseModel
     public static function headers($user = null)
     {
         return [
+            ['sortable' => true, 'value' => 'Proposal id', 'key' => 'proposal_id'],
             ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
