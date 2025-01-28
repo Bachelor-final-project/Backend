@@ -11,6 +11,7 @@ class Donation extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'proposal_title'];
+    protected $with = ['donor'];
     public static $controllable = true;
 
     public const STATUSES = [
@@ -70,7 +71,7 @@ class Donation extends BaseModel
         return $this->currency()->first()->name ?? '';
     }
     public function getDonorPhoneAttribute() {
-        return $this->donor()->first()->phone ?? '';
+        return $this->donor->phone ?? '';
     }
 
     public function getStatusStrAttribute() {

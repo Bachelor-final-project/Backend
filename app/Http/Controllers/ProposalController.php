@@ -13,8 +13,11 @@ use App\Models\Attachment;
 use App\Models\ProposalType;
 use App\Models\Entity;
 use App\Models\Area;
+use App\Models\Beneficiary;
 use App\Models\Donor;
 use App\Models\Country;
+use App\Models\Document;
+use App\Models\Donation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -104,10 +107,21 @@ class ProposalController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(Proposal $proposal)
-    // {
-        //
-    // }
+    public function show(Proposal $proposal)
+    {
+        return Inertia::render(Str::studly("Proposal").'/Show', [
+            //'options' => $regions,
+            'proposal' => $proposal->toArray(),
+            'currencies' => Currency::all(),
+            'proposal_types' => ProposalType::all(),
+            'donations' => $proposal->donations()->paginate($this->pagination),
+            'donations_headers' => Donation::headers(),
+            'documents' => $proposal->documents()->paginate($this->pagination),
+            'documents_headers' => Document::headers(),
+            'beneficiaries' => $proposal->beneficiaries()->paginate($this->pagination),
+            'beneficiaries_headers' => Beneficiary::headers(),
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.

@@ -221,13 +221,13 @@
         v-if="action.icon"
         :color="action.icon_color || ''"
         :icon="action.icon"
-        class="text-xl"
+        class="text-2xl "
       ></f-icon>
     </button>
 
     <a
-      :href="generateUrl(action.route, action.queryParams)"
-      class="text-white px-1 py-1 hover:bg-gray-100"
+      :href="action.includeId? generateUrl(action.route, action.queryParams, item.id): generateUrl(action.route, action.queryParams)"
+      class="text-white px-1 py-[0.75rem] hover:bg-gray-100"
       :title="action.tooltip"
       v-else-if="action.type == 'href'"
     >
@@ -235,7 +235,7 @@
         v-if="action.icon"
         :color="action.icon_color || ''"
         :icon="action.icon"
-        class="text-xl"
+        class="text-2xl solid tex"
       ></f-icon>
     </a>
   </span>
@@ -390,11 +390,11 @@ export default {
     completingArchivingStatus() {
       this.complete_archiving_status = true;
     },
-    generateUrl(routeName, queryParams = {}) {
+    generateUrl(routeName, queryParams = {}, id = null) {
       // Generate the base URL using the Ziggy `route` function
       console.log("generatedURL");
       console.log(this.t.locale);
-      let url = route(routeName);
+      let url = id? route(routeName, id) : route(routeName);
       console.log(url);
       const queryParamObj = new URLSearchParams()
 
