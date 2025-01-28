@@ -81,5 +81,19 @@ class Document extends BaseModel
             ['name' => 'Close', 'id' => '4'],
         ];
     }
+    public static function createDocumentForDonation(Donation $donation){
+        $proposal = $donation->proposal;
+        if($donation->amount < $proposal->min_documenting_amount) return false;
+
+        $document = new Document();
+        $document->proposal_id = $donation->proposal_id;
+        $document->donor_id = $donation->donor_id;
+        $document->amount = $donation->amount;
+        $document->currency_id = $proposal->currency_id;
+        $document->save();
+        
+        return true;
+        
+    }
 
 }

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 
 class ProposalController extends Controller
 {
@@ -41,6 +42,11 @@ class ProposalController extends Controller
         
         return Inertia::render(Str::studly("Proposal").'/Index', [
             "headers" => Proposal::headers(),
+            "statuses" => Proposal::statuses(),
+            'entities' => Entity::get(),
+            'currencies' => Currency::get(),
+            'proposalTypes' => ProposalType::get(),
+            'areas' => Area::get(),
             "items" => Proposal::search($request)->sort($request)->paginate($this->pagination),
 
         ]);
