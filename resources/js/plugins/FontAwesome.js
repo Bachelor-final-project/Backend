@@ -34,6 +34,7 @@ import {
     faUpload,
     faLaptopFile,
     faCashRegister,
+    faEye,
     faCircleCheck
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -71,6 +72,7 @@ library.add(
     faUpload,
     faLaptopFile,
     faCashRegister,
+    faEye,
     faCircleCheck
 );
 

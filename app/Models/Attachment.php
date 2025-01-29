@@ -11,7 +11,7 @@ use App\Traits\TenantScoped;
 class Attachment extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
-    protected $appends = ['url'];
+    protected $appends = ['url', 'attachment_type_name'];
     public static $controllable = true;
     public function attachable()
     {
@@ -53,6 +53,24 @@ class Attachment extends BaseModel
             'file_extension' => $fileExtension,
             'filesize' => $fileSize,
         ]);
+    }
+    public function getAttachmentTypeNameAttribute(){
+        $types = [];
+        switch ($this->attachable_type) {
+            case 'proposal':
+                $types = [
+                    1 => __("Cover Image"),
+                    2 => __("Arabic Video File"),
+                    3 => __("English Video File"),
+                    4 => __("Beneficiaries File"),
+                ];
+                break;
+            
+            default:
+                return $this->attachable_type;
+        }
+
+        return $types[$this->attachment_type];
     }
 
 }
