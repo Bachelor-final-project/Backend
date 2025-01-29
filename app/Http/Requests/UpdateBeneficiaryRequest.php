@@ -39,7 +39,7 @@ class UpdateBeneficiaryRequest extends FormRequest
             'email' => 'sometimes|email|max:255',
             'dob' => 'sometimes|date',
             'father_national_id' => 'nullable|sometimes|string|min:9|max:9',
-            'warehouse_id' => 'required|integer|exists:warehouses,id',
+            // 'warehouse_id' => 'required|integer|exists:warehouses,id',
         ];
     }
 }

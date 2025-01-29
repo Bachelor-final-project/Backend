@@ -55,8 +55,16 @@ class BeneficiaryController extends Controller
         $data = $request->validated();
         $f_id = $data['father_national_id'];
         $isValid = Beneficiary::isValidFatherNationalId($data['national_id'], $data['father_national_id']);
-        if(!isValid) {
+        if(!$isValid) {
             return response()->json(['errors' => ['father_national_id' => 'This Father National ID Create Circualr Dependency']]);
+        }
+        $data = $request->validated();
+        $national_id = $data['national_id'];
+        $ben = Beneficiary::withTrashed()->where('national_id', $national_id)->first();
+        if ($ben?->id) {
+            $ben->update(array_merge($data, ['deleted_at' => null]));
+        } else {
+            Beneficiary::create($data);
         }
         // if($f_id) {
         //     $b = Beneficiary::where('national_id', '=', $f_id)->first();
@@ -65,7 +73,6 @@ class BeneficiaryController extends Controller
         // unset($data['father_national_id']);
         // $data['father_id'] = $father_id;
         // dd($data);
-        Beneficiary::create($data);
         
         return to_route($this->routeName() . '.index')->with('res', ['message' => __('Beneficiary Saved Seccessfully'), 'type' => 'success']);
     }

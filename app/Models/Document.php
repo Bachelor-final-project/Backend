@@ -11,7 +11,7 @@ use App\Traits\TenantScoped;
 class Document extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
-    protected $appends = ['proposal_name', 'donor_name', 'currency_name'];
+    protected $appends = ['proposal_name', 'donor_name', 'currency_name', 'is_attached'];
     protected $with = ['proposal', 'donor', 'currency', 'attachments'];
     public static $controllable = true;
 
@@ -26,6 +26,9 @@ class Document extends BaseModel
         ];
 
         return $result;
+    }
+    public function getIsAttachedAttribute() {
+        return count($this->files) > 0;
     }
     public function proposal()
     {
@@ -66,7 +69,7 @@ class Document extends BaseModel
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
-            ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
+            ['sortable' => true, 'value' => 'notes', 'key' => 'note'],
             ['sortable' => true, 'value' => 'expected date', 'key' => 'expected_date'],
             // ['sortable' => true, 'value' => 'currency', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],

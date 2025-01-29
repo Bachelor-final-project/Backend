@@ -49,7 +49,7 @@ const actions = [
   {
     type: "href",
     icon: "basket-shopping",
-    icon_color: "green",
+    icon_color: "#00cc66",
     funcName: () => { },
     model: "warehouse",
     tooltip: "show warehouse items",

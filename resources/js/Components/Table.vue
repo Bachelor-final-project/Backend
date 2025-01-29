@@ -1,35 +1,242 @@
 <template>
-  <Modal :show="showFileUploadModal" @close="closeModal">
+  <Modal :show="upload_document_file" @close="modalFunctions['closeDocumentFileModal']">
     <div class="p-6">
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
         {{ $t("File Upload") }}
       </h2>
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="document_upload_files">
         {{ $t("Upload documentation files here") }}:
       </label>
       <FileInput 
-        id="multiple_files"
-        :trigger="fileuploadInputTrigger"
-        :item_id="form.attachable_id"
-        :model="model"
+        id="document_upload_files"
+        model="document"
+        v-model="documentFiles"
         attachment_type="1"
-        @success-uploading="closeModal"
+        :file_input_help="$t('Videos and Images')"
+        :show_files_details="true"
+        @fileinput-change="modalFunctions['documentFileinputChanged']"
         @finish-uploading="isFileInputLoading = false"
         @start-uploading="isFileInputLoading = true"
       />
-
       <div class="mt-6 flex justify-end">
-        <SecondaryButton @click="closeModal">
+        <SecondaryButton @click="modalFunctions['closeDocumentFileModal']">
           {{ $t("Cancel") }}
         </SecondaryButton>
 
-        <PrimaryButton class="ml-3" @click="triggerFileInput">
+        <PrimaryButton class="ml-3" @click="modalFunctions['confirmDocumentFileUpload']">
           <span v-if="isFileInputLoading"> {{ $t("Uploading") }}...</span>
           <span v-else> {{ $t("Upload") }} </span>
         </PrimaryButton>
       </div>
     </div>
   </Modal>
+  <Modal :show="delete_dialog" @close="modalFunctions['closeDeleteModal']">
+    <div class="p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
+        {{ $t("Are you sure you want to delete ?") }}
+      </h2>
+
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{
+          $t("Once your accept, all of its data will be permanently deleted.")
+        }}.
+      </p>
+
+      <div class="mt-6 flex justify-end">
+        <SecondaryButton @click="modalFunctions['closeDeleteModal']">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+        <DangerButton class="ml-3" @click="modalFunctions['confirmDelete']">
+          {{ $t("delete") }}
+        </DangerButton>
+      </div>
+    </div>
+  </Modal>
+  <Modal :show="block_dialog" @close="modalFunctions['closeBlockModal']">
+    <div class="p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+        {{ $t("Are you sure ?") }}
+      </h2>
+
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t("Once your accept, User will be updated") }}.
+      </p>
+
+      <div class="mt-6 flex justify-end">
+        <SecondaryButton @click="modalFunctions['closeBlockModal']">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+        
+        <DangerButton class="ml-3" @click="modalFunctions['confirmBlock']">
+          {{ modal_item.status == "active" ? $t("block") : $t("activate") }}
+        </DangerButton>
+      </div>
+    </div>
+  </Modal>
+  <Modal :show="edit_dialog" @close="modalFunctions['closeEditModal']">
+    <div class="p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+        {{ $t("Are you sure ?") }}
+      </h2>
+
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t("Once your accept, User will be updated") }}.
+      </p>
+
+      <div class="mt-6 flex justify-end">
+        <SecondaryButton @click="modalFunctions['closeEditModal']">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+        
+        <PrimaryButton class="ml-3" @click="modalFunctions['confirmEdit']">
+          {{ $t("edit") }}
+        </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
+  <Modal :show="complete_archiving_status" @close="modalFunctions['closeCompleteArchivingStatusModal']">
+    <div class="p-6 dark:bg-gray-800">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
+        {{ $t("titleForCompleteArchivingStatusModal") }}
+      </h2>
+
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t("bodyForCompleteArchivingStatusModal") }}.
+      </p>
+      
+      <div class="auto-cols-max">
+          <InputLabel for="beneficiariesFile" value="beneficiariesFile" />
+          <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              {{ $t("toDownloadTheBeneficiariesFileTemplate") }} <a download="BeneficiariesFileTemplate.xlsx" href="/assets/templates/BeneficiariesFileTemplate.xlsx">{{ $t("Click Here") }}</a>
+          </p>
+          <FileInput
+            id="beneficiariesFile"
+            model="proposal"
+            :file_input_help="$t('Spreadsheets')"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            v-model="beneficiariesFile"
+            attachment_type="2"
+            :show_files_details="false"
+            @fileinput-change="modalFunctions['beneficiariesFileinputChanged']"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
+          />
+      </div> 
+      
+
+      <div class="mt-6 flex justify-end">
+        
+        <SecondaryButton @click="modalFunctions['closeCompleteArchivingStatusModal']">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+
+        <PrimaryButton class="ml-3" @click="modalFunctions['confirmCompleteArchivingStatusModal']">
+          {{ $t("approve") }}
+        </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
+  <Modal :show="complete_execution_status" @close="modalFunctions['closeCompleteExecutionStatusModal']">
+    <div class="p-6 dark:bg-gray-800">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
+        {{ $t("titleForCompleteExecutionStatusModal") }}
+      </h2>
+
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t("bodyForCompleteExecutionStatusModal") }}.
+      </p>
+      <div class="grid grid-cols-2 gap-4 mt-5">
+        <div class="auto-cols">
+          <InputLabel for="arabicVideoFile" value="arabicVideoFile" />
+          <FileInput
+            id="arabicVideoFile"
+            model="proposal"
+            v-model="arabicVideoFile"
+            :file_input_help="$t('Videos and Images')"
+            attachment_type="2"
+            :show_files_details="false"
+            @fileinput-change="modalFunctions['arabicFileinputChanged']"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
+          />
+      </div> 
+      <div class="auto-cols">
+          <InputLabel for="englishVideoFile" value="englishVideoFile" />
+          <FileInput
+            id="englishVideoFile"
+            model="proposal"
+            :file_input_help="$t('Videos and Images')"
+            v-model="englishVideoFile"
+            attachment_type="3"
+            :show_files_details="false"
+            @fileinput-change="modalFunctions['englishFileinputChanged']"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
+          />
+      </div> 
+      </div> 
+
+      <div class="mt-6 flex justify-end">
+        
+        <SecondaryButton @click="modalFunctions['closeCompleteExecutionStatusModal']">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+
+        <PrimaryButton class="ml-3" @click="modalFunctions['confirmCompleteExecutionStatusModal']">
+          {{ $t("approve") }}
+        </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
+  <Modal :show="complete_donating_status" @close="modalFunctions['closeCompleteDonatingStatusModal']">
+    <div class="p-6 dark:bg-gray-800">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
+        {{ $t("titleForCompleteDonatingStatusModal") }}
+      </h2>
+
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t("bodyForCompleteDonatingStatusModal") }}.
+      </p>
+      <div class="grid grid-cols-3 gap-4 mt-5">
+        <div class="auto-cols-max">
+          <InputLabel for="hasDonatingAmount" value="hasDonatingAmount" />
+          <SwitchInput 
+            id="hasDonatingAmount"
+            v-model="hasDonatingAmount"
+          />
+      </div> 
+      <div  v-show="hasDonatingAmount" class="col-span-2">
+          <InputLabel for="donatingAmount" value="donatingAmount" />
+          <TextInput
+            id="donatingAmount"
+            type="number"
+            class="mt-1 block w-full"
+            v-model="donatingAmount"
+            required
+            autofocus
+            autocomplete="publishing_date"
+           
+          />
+      </div> 
+      </div> 
+
+      <div class="mt-6 flex justify-end">
+        
+        <SecondaryButton @click="modalFunctions['closeCompleteDonatingStatusModal']">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+
+        <PrimaryButton class="ml-3" @click="modalFunctions['confirmCompleteDonatingStatusModal']">
+          {{ $t("approve") }}
+        </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
+
   <div v-if="!isEmpty(table_filters)" class="p-4 shadow-md sm:rounded-lg my-2 dark:bg-gray-800 relative ">
     <div v-show="isFilterLoading" role="status" class="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2">
         <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg>
@@ -211,7 +418,7 @@
           <td v-if="actions" class="px-6 py-4">
             <template v-for="(action, i) in actions" >
               <TableAction
-              
+              @modal_function="modal_function"
               :item="item"
               :action="action"
               :key="i"
@@ -238,7 +445,7 @@ import Paginator from "@/Components/Paginator.vue";
 import TableAction from "@/Components/TableAction.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { reactive, watch, ref, onMounted, onBeforeMount } from "vue";
+import { reactive, watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import FileInput from "@/Components/FileInput.vue";
@@ -246,6 +453,8 @@ import SecondaryButton from "./SecondaryButton.vue";
 import Modal from "@/Components/Modal.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
+import SwitchInput from "@/Components/SwitchInput.vue";
+import DangerButton from "@/Components/DangerButton.vue";
 import { debounce } from "lodash";
 import { isEmpty } from "lodash";
 const { t } = useI18n();
@@ -294,11 +503,35 @@ const props = defineProps({
 });
 
 const table_key = ref(0);
-const showFileUploadModal = ref(true);
+const upload_document_file = ref(false);
+const edit_dialog = ref(false);
+const delete_dialog = ref(false);
+const block_dialog = ref(false);
 const fileuploadInputTrigger = ref(0);
 const isFileInputLoading = ref(false);
 const isFilterLoading = ref(false);
+const documentFiles = ref(false);
+const beneficiariesFile = ref(false);
+const arabicVideoFile = ref(false);
+const englishVideoFile = ref(false);
+const complete_archiving_status = ref(false);
+const complete_execution_status = ref(false);
+const complete_donating_status = ref(false);
+const hasDonatingAmount = ref(0);
+const donatingAmount = ref(0);
 
+const modal_item = ref();
+
+const statuses = {
+  user: {
+    "open": 1,
+    "blocked": 3,
+  },
+  warehouse: {
+    "open": 1,
+    "blocked": 4
+  }
+};
 const form = useForm({
   files: [],
   attachable_id: "",
@@ -330,6 +563,14 @@ const debouncedReload = debounce((newValue) => {
 }, 300); // Adjust debounce time in milliseconds (200ms here)
 watch(filters, (newValue, old) => {
   debouncedReload(newValue);
+});
+
+watch(hasDonatingAmount, (newVal, oldVal) => {
+  if (!newVal) {
+    donatingAmount.value = 0; // Set to 0 when false
+  }else{
+    donatingAmount.value = modal_item.value.cost; 
+  }
 });
 
 const rowClass = (item) => {
@@ -370,6 +611,15 @@ const rowClass = (item) => {
         default:
           return "";
       }
+    case "document":
+      switch (item['is_attached']) {
+        case true:
+          return "green_ths"
+        case false:
+          return "grey_ths"
+        default:
+          return ""
+      }
   }
 };
 let sortBy = [];
@@ -396,7 +646,7 @@ const haveData = props.items && props.items.data && props.items.data[0];
 
 function fileuploadInputIconClick(id) {
   form.attachable_id = id; 
-  showFileUploadModal.value = !showFileUploadModal.value
+  upload_document_file.value = !upload_document_file.value
 }
 function handelDbClick(item) {
   if (props.model) {
@@ -405,62 +655,127 @@ function handelDbClick(item) {
     router.get(route(`${props.model}.edit`, item.id));
   }
 }
-function closeModal() {
-  showFileUploadModal.value = false;
+const modalFunctions = {
+  closeDocumentFileModal: function () {
+    upload_document_file.value = false;
+  },
+  closeEditModal: function (item) {
+    edit_dialog.value = false;
+  },
+  closeDeleteModal: function (item) {
+    delete_dialog.value = false;
+  },
+  closeBlockModal: function (item) {
+    block_dialog.value = false;
+  },
+  editing: function (item) {
+    modal_item.value = item;
+    edit_dialog.value = true;
+  },
+  deleting: function (item) {
+    modal_item.value = item;
+    delete_dialog.value = true;
+  },
+  blocking: function (item) {
+    modal_item.value = item;
+    block_dialog.value = true;
+  },
+  confirmEdit: function (item) {
+    router.get(route(`${props.model}.edit`, modal_item.value.id));
+    modalFunctions['closeEditModal'](item);
+  },
+  confirmDelete: function (item) {
+    router.delete(route(`${props.model}.destroy`, modal_item.value.id));
+    modalFunctions['closeDeleteModal'](item);
+  },
+  confirmBlock: function (item) {
+    console.log("Item Status: " + statuses[props.model]['blocked'] + " " + statuses[props.model]['open'] + " " + modal_item.value.status)
+    router.put(route(`${props.model}.update`, modal_item.value.id), {
+      status: modal_item.value.status == 1 ? statuses[props.model]['blocked'] : statuses[props.model]['open']
+    });
+    modalFunctions['closeBlockModal'](item);
+  },
+  documentFileinputChanged: function (files) {
+    documentFiles.value = files;
+  },
+  beneficiariesFileinputChanged: function (files) {
+    beneficiariesFile.value = files;
+  },
+  arabicFileinputChanged: function (files) {
+    arabicVideoFile.value = files;
+  },
+  englishFileinputChanged: function (files) {
+    englishVideoFile.value = files;
+  },
+  closeCompleteArchivingStatusModal: function (item) {
+    complete_archiving_status.value = false;
+  },
+  completingArchivingStatus: function (item) {
+    modal_item.value = item;
+    complete_archiving_status.value = true;
+  },
+  confirmCompleteArchivingStatusModal: function (item) {
+    if(!beneficiariesFile.value) return false;
+    router.post(route(`${props.model}.update`, modal_item.value.id), {
+      _method: 'put',
+      status: 8,
+      beneficiariesFile: beneficiariesFile.value,
+    });
+    modalFunctions['closeCompleteArchivingStatusModal'](item);
+  },
+  closeCompleteExecutionStatusModal: function (item) {
+    complete_execution_status.value = false;
+  },
+  completingExecutionStatus: function (item) {
+    modal_item.value = item;
+    complete_execution_status.value = true;
+  },
+  confirmCompleteExecutionStatusModal: function (item) {
+    if(!arabicVideoFile.value) return false;
+    router.post(route(`${props.model}.update`, modal_item.value.id), {
+      _method: 'put',
+      status: 3,
+      arabicVideoFile: arabicVideoFile.value,
+      englishVideoFile: englishVideoFile.value,
+    },{forceFormData: true});
+    modalFunctions['closeCompleteExecutionStatusModal'](item);
+  },
+  closeCompleteDonatingStatusModal: function (item) {
+    complete_donating_status.value = false;
+  },
+  completingDonatingStatus: function (item) {
+    modal_item.value = item;
+    donatingAmount.value = item.cost;
+    complete_donating_status.value = true;
+  },
+  confirmCompleteDonatingStatusModal: function (item) {
+    router.put(route(`${props.model}.update`, modal_item.value.id), {
+      status: 2,
+      donatingAmount: Number(donatingAmount.value),
+    });
+    modalFunctions['closeCompleteDonatingStatusModal']();
+  },
+  confirmDocumentFileUpload: function (item) {
+    if(!documentFiles.value) return false;
+    router.post(route('attachment.store'), {
+      files: documentFiles.value,
+      attachable_id: modal_item.value.id,
+      attachable_type: props.model,
+      attachment_type: 1,
+    },{forceFormData: true});
+    modalFunctions['closeDocumentFileModal'](item);
+  },
+  uploadingDocumentFile: function (item) {
+    modal_item.value = item;
+    upload_document_file.value = true;
+  },
 }
-
-function triggerFileInput() {
-  fileuploadInputTrigger.value = !fileuploadInputTrigger.value;
+function modal_function(funcName, item) {
+  modalFunctions[funcName](item);
 }
 function urlParams() {
   return "?" + new URLSearchParams(filters).toString();
 }
-/*
-const total_grievances_filters = [
-  {
-    name: "All Regions",
-    model: "region_id",
-    options: [{ id: 0, name: t("All Regions") }, ...props.all_regions],
-  },
-  {
-    name: "All Types",
-    model: "form_type",
-    options: [{ id: 0, name: t("All Types") }, ...props.all_types],
-  },
-  {
-    name: "All Years",
-    model: "time_period",
-    options: [
-      { id: "this_week", name: t("This Week") },
-      { id: "this_month", name: t("This Month") },
-      { id: "this_quarter", name: t("This Quarter") },
-      { id: "this_year", name: t("This Year") },
-      { id: "all_years", name: t("All Years") },
-    ],
-  },
-  {
-    name: "Pending",
-    model: "status",
-    options: [
-      { id: 0, name: t("All Statuses") },
-      { id: 1, name: t("New") },
-      { id: 2, name: t("In_process") },
-      { id: 3, name: t("Pending") },
-      { id: 4, name: t("Closed") },
-      { id: 5, name: t("Rejected") },
-    ],
-  },
-  {
-    name: "Priority",
-    model: "priority",
-    options: [
-      { id: 0, name: t("All Priorities") },
-      { id: 1, name: t("Normal") },
-      { id: 2, name: t("Critical") },
-    ],
-  },
-];
-*/
 </script>
 <style>
 ._2_user_status {
