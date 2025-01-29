@@ -121,15 +121,15 @@ const actions =
   },
 ];
 
-const user = useForm({
-  name: "",
-  email: "",
-  password: "",
-  type: "",
-  status: "",
-  job_title: "",
-  is_active: "",
-});
+// const user = useForm({
+//   name: "",
+//   email: "",
+//   password: "",
+//   type: "",
+//   status: "",
+//   job_title: "",
+//   is_active: "",
+// });
 
 function save() {
   console.log(user);
