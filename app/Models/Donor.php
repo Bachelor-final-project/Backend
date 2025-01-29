@@ -27,7 +27,6 @@ class Donor extends BaseModel
     ];
     public const PHONE_ALLOWED_USER_TYPES = [
        1
-
     ];
 
     public static function genders() {
