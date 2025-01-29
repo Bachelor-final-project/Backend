@@ -98,17 +98,17 @@
   <Modal :show="complete_archiving_status" @close="modalFunctions['closeCompleteArchivingStatusModal']">
     <div class="p-6 dark:bg-gray-800">
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
-        {{ $t("titleForCompleteArchivingStatusModal") }}
+        {{ $t("Final project approval") }}
       </h2>
 
       <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-        {{ $t("bodyForCompleteArchivingStatusModal") }}.
+        {{ $t("Please attach the beneficiary list using the approved template so the program can read and add it to the database") }}.
       </p>
       
       <div class="auto-cols-max">
-          <InputLabel for="beneficiariesFile" value="beneficiariesFile" />
+          <InputLabel for="beneficiariesFile" value="List of beneficiaries" />
           <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-              {{ $t("toDownloadTheBeneficiariesFileTemplate") }} <a download="BeneficiariesFileTemplate.xlsx" href="/assets/templates/BeneficiariesFileTemplate.xlsx">{{ $t("Click Here") }}</a>
+              {{ $t("To download the approved beneficiary list template") }} <a download="BeneficiariesFileTemplate.xlsx" href="/assets/templates/BeneficiariesFileTemplate.xlsx">{{ $t("Click Here") }}</a>
           </p>
           <FileInput
             id="beneficiariesFile"
@@ -141,15 +141,15 @@
   <Modal :show="complete_execution_status" @close="modalFunctions['closeCompleteExecutionStatusModal']">
     <div class="p-6 dark:bg-gray-800">
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
-        {{ $t("titleForCompleteExecutionStatusModal") }}
+        {{ $t("Project approval to proceed to the archiving phase") }}
       </h2>
 
       <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-        {{ $t("bodyForCompleteExecutionStatusModal") }}.
+        {{ $t("Please attach the project's general documentation files") }}.
       </p>
       <div class="grid grid-cols-2 gap-4 mt-5">
         <div class="auto-cols">
-          <InputLabel for="arabicVideoFile" value="arabicVideoFile" />
+          <InputLabel for="arabicVideoFile" value="Documentation video in Arabic" />
           <FileInput
             id="arabicVideoFile"
             model="proposal"
@@ -163,7 +163,7 @@
           />
       </div> 
       <div class="auto-cols">
-          <InputLabel for="englishVideoFile" value="englishVideoFile" />
+          <InputLabel for="englishVideoFile" value="Documentation video in English" />
           <FileInput
             id="englishVideoFile"
             model="proposal"
@@ -194,11 +194,11 @@
   <Modal :show="complete_donating_status" @close="modalFunctions['closeCompleteDonatingStatusModal']">
     <div class="p-6 dark:bg-gray-800">
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
-        {{ $t("titleForCompleteDonatingStatusModal") }}
+        {{ $t("Project approval to proceed to documentation and implementation phase") }}
       </h2>
 
       <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-        {{ $t("bodyForCompleteDonatingStatusModal") }}.
+        {{ $t("If the donations are from outside the program, please enter the total donation amount") }}.
       </p>
       <div class="grid grid-cols-3 gap-4 mt-5">
         <div class="auto-cols-max">
