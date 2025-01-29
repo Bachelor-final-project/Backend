@@ -28,7 +28,6 @@ class Donor extends BaseModel
     ];
     public const PHONE_ALLOWED_USER_TYPES = [
        1, 2
-
     ];
     protected function phone(): Attribute
     {
