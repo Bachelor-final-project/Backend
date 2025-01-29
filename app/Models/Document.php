@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ForUserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +11,7 @@ use App\Traits\TenantScoped;
 
 class Document extends BaseModel
 {
-    use HasFactory, TenantAttributeTrait, TenantScoped;
+    use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $appends = ['proposal_name', 'donor_name', 'currency_name'];
     protected $with = ['proposal', 'donor', 'currency', 'attachments'];
     public static $controllable = true;
@@ -59,6 +60,25 @@ class Document extends BaseModel
         return $this->morphMany(Attachment::class, 'attachable');
     }
 
+    //scopes
+    public function scopeForUser($query, $user)
+    {
+        switch ($user->type) {
+            case 1: // proposal_director
+            case 3: // donations_director
+            case 4: // warehouses_director
+            case 5: // media_director
+                // access to all records
+                break;
+                
+            case 2: // entity_director
+                $query->has('proposal');
+                break;
+            default:
+                $query->whereRaw('1=0');
+                break;
+        }
+    }
     public static function headers($user = null)
     {
         return [

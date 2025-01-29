@@ -34,7 +34,7 @@ export default {
     },
     colors: {
       type: Array,
-      default: ['#20c997', '#007bff'],
+      default: ['#2ECC71', '#F39C12', '#E74C3C'],
     },
     data: {
       type: Array,
@@ -64,6 +64,7 @@ export default {
         bar: {
           // horizontal: true,
           dataLabels: {
+            
             total: {
               enabled: true,
               offsetX: 0,
@@ -114,8 +115,9 @@ export default {
       },
       legend: {
         position: 'top',
-        horizontalAlign: 'right',
-        offsetX: 40
+        horizontalAlign: 'center',
+        offsetX: 0,
+        fontSize: '20px',
       }
     },
     };
