@@ -168,7 +168,7 @@ class Proposal extends BaseModel
         return [
             ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             ['sortable' => true, 'value' => 'title', 'key' => 'title'],
-            ['sortable' => true, 'value' => 'body', 'key' => 'body'],
+            // ['sortable' => true, 'value' => 'body', 'key' => 'body'],
             // ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
             // ['sortable' => true, 'value' => 'proposal_effects', 'key' => 'proposal_effects'],
