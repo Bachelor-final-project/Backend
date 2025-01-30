@@ -265,7 +265,7 @@
         <div v-else>
           <InputLabel :for="e.model + '_filter'" :value="e.name" />
           <SelectInput
-            :dir="this.$i18n.locale == 'ar' ? 'rtl' : 'ltr'"
+            :dir="locale == 'ar' ? 'rtl' : 'ltr'"
             classes="mt-1 block w-full"
             :id="e.model + '_filter'"
             v-model="filters[e.model]"
@@ -457,7 +457,7 @@ import SwitchInput from "@/Components/SwitchInput.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import { debounce } from "lodash";
 import { isEmpty } from "lodash";
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const props = defineProps({
   refresh_only: {
