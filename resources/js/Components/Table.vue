@@ -202,14 +202,14 @@
       </p>
       <div class="grid grid-cols-3 gap-4 mt-5">
         <div class="auto-cols-max">
-          <InputLabel for="hasDonatingAmount" value="hasDonatingAmount" />
+          <InputLabel for="hasDonatingAmount" value="External donations exist" />
           <SwitchInput 
             id="hasDonatingAmount"
             v-model="hasDonatingAmount"
           />
       </div> 
       <div  v-show="hasDonatingAmount" class="col-span-2">
-          <InputLabel for="donatingAmount" value="donatingAmount" />
+          <InputLabel for="donatingAmount" value="Total donation amount" />
           <TextInput
             id="donatingAmount"
             type="number"

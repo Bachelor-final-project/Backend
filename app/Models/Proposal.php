@@ -85,10 +85,10 @@ class Proposal extends BaseModel
             ->get()
             ->keyBy('status');
             $statusMapping = [
-                1 => __('donating_status'),
-                2 => __('execution_status'),
-                3 => __('ready_to_archive_status'),
-                8 => __('done_status'),
+                1 => __('Donation collection phase'),
+                2 => __('Implementation and documentation phase'),
+                3 => __('Needs archiving'),
+                8 => __('Completed'),
             ];
             $result = [
                 "categories" => array_values($statusMapping),
@@ -251,10 +251,10 @@ class Proposal extends BaseModel
     }
     public static function statuses() {
         return [
-            ['name' => __('donating_status'), 'id' => 1],
-            ['name' => __('execution_status'), 'id' => 2],
-            ['name' => __('ready_to_archive_status'), 'id' => 3],
-            ['name' => __('done_status'), 'id' => 8],
+            ['name' => __('Donation collection phase'), 'id' => 1],
+            ['name' => __('Implementation and documentation phase'), 'id' => 2],
+            ['name' => __('Needs archiving'), 'id' => 3],
+            ['name' => __('Completed'), 'id' => 8],
         ];
     }
 }

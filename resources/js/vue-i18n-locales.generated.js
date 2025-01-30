@@ -130,13 +130,13 @@ export default {
         "Please attach the beneficiary list using the approved template so the program can read and add it to the database" : "يرجى إرفاق كشف المستفيدين باستخدام القالب المعتمد، ليتسنى للبرنامج قرائتها وإضافتها لقاعدة البيانات",
         
         
-        "hasDonatingAmount" : "وجود تبرعات خارجية",
-        "donatingAmount" : "المبلغ الإجمالي للتبرع",
+        "External donations exist" : "وجود تبرعات خارجية",
+        "Total donation amount" : "المبلغ الإجمالي للتبرع",
         "approve" : "إعتماد",
-        "donating_status" : "مرحلة جمع التبرعات",
-        "execution_status" : "مرحلة التنفيذ والتوثيق",
-        "read_to_archive_status" : "بحاجة للأرشفة",
-        "done_status" : "مكتمل",
+        "Donation collection phase" : "مرحلة جمع التبرعات",
+        "Implementation and documentation phase" : "مرحلة التنفيذ والتوثيق",
+        "Needs archiving" : "بحاجة للأرشفة",
+        "Completed" : "مكتمل",
 
         //entity
         "Entity":"الجهات",
