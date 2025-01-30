@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ForUserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TenantAttributeTrait;
@@ -9,7 +10,7 @@ use App\Traits\TenantScoped;
 
 class Donation extends BaseModel
 {
-    use HasFactory, TenantAttributeTrait, TenantScoped;
+    use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'proposal_title'];
     protected $with = ['donor'];
     public static $controllable = true;
@@ -82,6 +83,26 @@ class Donation extends BaseModel
         return $this->proposal->title ?? null;
     }
    
+
+    //scopes
+    public function scopeForUser($query, $user)
+    {
+        switch ($user->type) {
+            case 1: // proposal_director
+            case 3: // donations_director
+            case 4: // warehouses_director
+            case 5: // media_director
+                // access to all records
+                break;
+                
+            case 2: // entity_director
+                $query->has('proposal');
+                break;
+            default:
+                $query->whereRaw('1=0');
+                break;
+        }
+    }
     public static function statuses() {
         return [
             ['id' => 0, 'name' => __('Pending')],

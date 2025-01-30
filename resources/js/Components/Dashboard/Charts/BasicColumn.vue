@@ -95,7 +95,7 @@ export default {
       render_count: 1,
       series: [
         {
-          data: this.$props.data.data,
+          data: this.$props.data?.data,
         },
       ],
       chartOptions: {
@@ -118,7 +118,7 @@ export default {
         },
 
         xaxis: {
-          categories: this.data.categories,
+          categories: this.data?.categories,
           labels: {
             show: false,
             enabled: true,
