@@ -26,7 +26,7 @@ class StoreBeneficiaryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'national_id' => 'required|string|min:9|max:9|unique:beneficiaries,national_id',
+            'national_id' => 'required|string|min:9|max:9|unique:beneficiaries,national_id,NULL,id,deleted_at,NULL',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
             'dob' => 'nullable|date',
@@ -45,7 +45,7 @@ class StoreBeneficiaryRequest extends FormRequest
                 }
             },
         ],
-            'warehouse_id' => 'required|integer|exists:warehouses,id',
+            // 'warehouse_id' => 'required|integer|exists:warehouses,id',
         ];
     }
 }

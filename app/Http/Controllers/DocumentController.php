@@ -43,11 +43,12 @@ class DocumentController extends Controller
      */
     public function create()
     {
+        // dd(Proposal::where('status','=', Proposal::STATUSES['completed'])->get(),);
          return Inertia::render(Str::studly("Document").'/Create', [
             // 'proposals' => Proposal::select('id', 'name')->where('status', '=', Proposal::STATUSES['completed'])->get(),
-            'proposals' => Proposal::all(),
+            'proposals' => Proposal::where('status','=', Proposal::STATUSES['completed'])->get(),
             'donors' => Donor::select('id', 'name')->get(),
-            'currencies' => Currency::select('id', 'name')->get(),
+            'currencies' => Currency::all(),
         ]);
     }
 
@@ -76,9 +77,9 @@ class DocumentController extends Controller
     public function edit(Document $document)
     {
         return Inertia::render(Str::studly("Document").'/Edit', [
-            'proposals' => Proposal::select('id', 'name')->where('status', '=', Proposal::STATUSES['completed'])->get(),
+            'proposals' => Proposal::where('status','=', Proposal::STATUSES['completed'])->get(),
             'donors' => Donor::select('id', 'name')->get(),
-            'currencies' => Currency::select('id', 'name')->get(),
+            'currencies' => Currency::all(),
             'document' => $document->toArray()
         ]);
     }

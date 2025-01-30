@@ -25,7 +25,7 @@ class BeneficiaryImport implements WithStartRow, ToModel
         $dob = $row[5];
         $dob = str_replace('\\','-',$dob);
         $dob = Carbon::parse($dob)->toDateString();
-        $beneficiary = Beneficiary::firstOrCreate(
+        $beneficiary = Beneficiary::updateOrCreate(
         [
             'national_id' => $row[1]
         ],
@@ -34,10 +34,10 @@ class BeneficiaryImport implements WithStartRow, ToModel
             'phone' => $row[3],
             'dob' => $dob,
             'email' => $row[6],
-            'father_national_id' => $row[7],
+            'father_national_id' => $row[7] ?? '0',
         ]);
 
-        ProposalBeneficiary::firstOrCreate(
+        ProposalBeneficiary::updateOrCreate(
             [
                 'proposal_id' => $this->proposal_id,
                 'beneficiary_id' => $beneficiary->id,

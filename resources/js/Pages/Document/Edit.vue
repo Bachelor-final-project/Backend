@@ -18,8 +18,10 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isValidPalestinianID } from '@/utils/validators';
 const props = defineProps({
-  warehouses: Array,
-  beneficiary: Array
+  proposals: Array,
+  donors: Array,
+  currencies: Array,
+  document: Array,
 });
 
 const datepicker = ref(null);
@@ -32,41 +34,19 @@ const datepicker = ref(null);
 // });
 
 const form = useForm({
-  name: props.beneficiary.name,
-  email:props.beneficiary.email,
-  phone:props.beneficiary.phone,
-  dob:props.beneficiary.dob,
-  national_id:props.beneficiary.national_id,
-  father_national_id:props.beneficiary.father_national_id,
-  warehouse_id: props.beneficiary.warehouse_id
+  proposal_id: props.document.proposal_id,
+  donor_id: props.document.donor_id,
+  currency_id: props.document.currency_id,
+  amount: props.document.amount,
+  note: props.document.note,
+  expected_date: props.document.expected_date,
 });
 
 const submit = () => {
-  form.national_id = "" + form.national_id;
-  form.father_national_id = "" + form.father_national_id;
 
-  if (!isValidPalestinianID(form.national_id)) {
-    form.errors.national_id = "Enter Valid National ID";
-    return;
-  } else {
-    form.errors.national_id = '';
-  }
-  if (form.father_national_id != "" && !isValidPalestinianID(form.father_national_id)) {
-    form.errors.father_national_id = "Enter Valid National ID";
-    return;
-  } else {
-    form.errors.father_national_id = '';
-  }
-  if (form.national_id == form.father_national_id) {
-    form.errors.father_national_id = 'Father National ID Can Not Be The Save As Your National ID';
-    return;
-  } else {
-    form.errors.father_national_id = '';
-  }
+  form.expected_date = datePickerFormat(form.expected_date);
 
-  form.dob = datePickerFormat(form.dob);
-
-  form.put(route("beneficiary.update", props.beneficiary), {
+  form.put(route("document.update", props.document), {
     onFinish: () => {
       form.defaults();
     },
@@ -89,8 +69,6 @@ const datePickerFormat = (date) => {
     let formattedDate  = `${date.getFullYear()}-${month}-${day}`;
     // form.dob = formattedDate ;
     return formattedDate ;
-  } else {
-    return form.dob;
   }
 }
 
@@ -105,14 +83,14 @@ const datePickerFormat = (date) => {
 
 </script>
 <template>
-  <Head :title="$t('Edit Beneficiary')" />
-  <CenterLayout>
+  <Head :title="$t('Edit Document')" />
+  <TopRightLayout>
     <section>
       <header>
         <h2
           class="capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
         >
-          {{ $t("update beneficiary") }}
+          {{ $t("update document") }}
         </h2>
 
         <!-- <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -122,101 +100,79 @@ const datePickerFormat = (date) => {
 
       <form @submit.prevent="submit" class="mt-6 space-y-6">
         <div>
-          <InputLabel for="name" value="Name" />
-          <TextInput
-            id="name"
-            type="text"
-            class="mt-1 block w-full"
-            v-model="form.name"
-            autofocus
-            autocomplete="name"
-            required
-          />
-          <InputError class="mt-2" :message="form.errors.name" />
-        </div>
-
-        <div>
-          <InputLabel for="email" value="Email" />
-
-          <TextInput
-            id="email"
-            type="email"
-            class="mt-1 block w-full"
-            v-model="form.email"
-            autocomplete="username"
-            required
-          />
-
-          <InputError class="mt-2" :message="form.errors.email" />
-        </div>
-        <div>
-          <InputLabel for="phone" value="Phone" />
-
-          <PhoneInput
-            id="phone"
-            type="text"
-            class="mt-1 block w-full"
-            v-model="form.phone"
-            autocomplete="username"
-            required
-          />
-
-          <InputError class="mt-2" :message="form.errors.phone" />
-        </div>
-        <div>
-          <InputLabel for="national_id" value="National ID" />
-
-          <NationalIDInput
-            id="national_id"
-            type="number"
-            class="mt-1 block w-full"
-            v-model="form.national_id"
-            autocomplete="username"
-            required
-          />
-
-          <InputError class="mt-2" :message="form.errors.national_id" />
-        </div>
-        <div>
-          <InputLabel for="father_national_id" value="Fathe National ID" />
-
-          <NationalIDInput
-            id="father_national_id"
-            type="number"
-            class="mt-1 block w-full"
-            v-model="form.father_national_id"
-            autocomplete="username"
-          />
-          <InputError class="mt-2" :message="form.errors.father_national_id" />
-        </div>
-
-        <div>
-          <InputLabel for="warehouse_id" value="Warehouse" />
+          <InputLabel for="proposal_id" value="Proposal" />
           <SelectInput
-            :options="warehouses"
-            :item_name="`name_${i18n_locale}`"
-            id="warehouse_id"
-            v-model="form.warehouse_id"
+            :options="proposals"
+            :item_name="`title`"
+            id="proposal_id"
+            v-model="form.proposal_id"
             class="mt-1 block w-full"
             autocomplete="new-password"
-            required
           />
-          <InputError :message="form.errors.warehouse_id" class="mt-2" />
+          <InputError :message="form.errors.proposal_id" class="mt-2" />
         </div>
 
+        <div>
+          <InputLabel for="donor_id" value="Donor" />
+          <SelectInput
+            :options="donors"
+            :item_name="`name_${i18n_locale}`"
+            id="donor_id"
+            v-model="form.donor_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+          />
+          <InputError :message="form.errors.donor_id" class="mt-2" />
+        </div>
+        <div>
+          <InputLabel for="amount" value="Amount" />
+          <TextInput
+            id="amount"
+            type="number"
+            class="mt-1 block w-full"
+            v-model="form.amount"
+            autofocus
+            autocomplete="amount"
+          />
+          <InputError class="mt-2" :message="form.errors.amount" />
+        </div>
+        <div>
+          <InputLabel for="currency_id" value="Currency" />
+          <SelectInput
+            :options="currencies"
+            :item_name="`name_${i18n_locale}`"
+            id="currency_id"
+            v-model="form.currency_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+          />
+          <InputError :message="form.errors.currency_id" class="mt-2" />
+        </div>
+        <div>
+          <InputLabel for="note" value="Note" />
+          <TextInput
+            id="note"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.note"
+            autofocus
+            autocomplete="note"
+          />
+          <InputError class="mt-2" :message="form.errors.note" />
+        </div>
+       
         <div class="flex col-span-6 md:col-span-2 pe-32 flex-col">
-          <InputLabel for="dob" value="Date Of Birth" />
+          <InputLabel for="expected_date" value="Expected Date" />
         <VueDatePicker
-            id="dob"
+            id="expected_date"
             class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 mt-1"
-            v-model="form.dob"
+            v-model="form.expected_date"
             auto-apply
-            :max-date="new Date()"
+            :min-date="new Date()"
             :year-range="getDatePcikerYearsRange()"
             :enable-time-picker="false"
             :format="datePickerFormat"
             ref="datepicker"
-            required
           >
           </VueDatePicker>      
         </div>  
@@ -240,5 +196,5 @@ const datePickerFormat = (date) => {
         </div>
       </form>
     </section>
-  </CenterLayout>
+  </TopRightLayout>
 </template>

@@ -28,7 +28,7 @@ class StoreDocumentRequest extends FormRequest
             'donor_id' => 'required|exists:donors,id',
             'amount' => 'sometimes|numeric|min:0',
             'currency_id' => 'sometimes|exists:currencies,id',
-            'notes' => 'sometimes|nullable|string|max:1024',
+            'note' => 'sometimes|nullable|string|max:1024',
             'expected_date' => 'sometimes|nullable|date_format:Y-m-d|after_or_equal:today',
         ];
     }

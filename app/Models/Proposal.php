@@ -200,10 +200,10 @@ class Proposal extends BaseModel
     }
     public static function statuses() {
         return [
-            ['name' => __('donating_status'), 'id' => 1],
-            ['name' => __('execution_status'), 'id' => 2],
-            ['name' => __('ready_to_archive_status'), 'id' => 3],
-            ['name' => __('done_status'), 'id' => 8],
+            ['name' => __('Donation collection phase'), 'id' => 1],
+            ['name' => __('Implementation and documentation phase'), 'id' => 2],
+            ['name' => __('Needs archiving'), 'id' => 3],
+            ['name' => __('Completed'), 'id' => 8],
         ];
     }
 

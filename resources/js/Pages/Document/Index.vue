@@ -2,14 +2,13 @@
   <Head :title="$t('Users')" />
   <div class="dark:text-white">
     <Table
-      title="Document"
+      title="Documents"
       :actions="actions"
       :items="items"
       :headers="headers"
       model="document"
       :table_filters="table_filters"
       add_item_route="document.create"
-      add_file_input="add"
     />
   </div>
 </template>
@@ -40,6 +39,14 @@ const actions = [
     funcName: "editing",
     model: "document",
     tooltip: "edit document",
+  },
+  {
+    type: "btn",
+    icon: "upload",
+    icon_color: "purple",
+    funcName: "uploadingDocumentFile",
+    model: "document",
+    tooltip: "upload document file",
   },
   // {
   //   type: "btn",

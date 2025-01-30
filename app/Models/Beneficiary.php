@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Traits\TenantAttributeTrait;
 use App\Traits\TenantScoped;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Beneficiary extends BaseModel
 {
-    use HasFactory, TenantAttributeTrait, TenantScoped;
+    use HasFactory, TenantAttributeTrait, TenantScoped, SoftDeletes;
 
-    protected $appends = ['father_name', 'warehouse', 'warehouse_name'];
+    protected $appends = ['father_name', /*'warehouse', 'warehouse_name'*/];
     public static $controllable = true;
 
 
@@ -21,22 +22,22 @@ class Beneficiary extends BaseModel
         return $this->father()->first()->name ?? '';
     }
 
-    public function warehouse()
-    {
-        return $this->belongsTo(Warehouse::class);
-    }
+    // public function warehouse()
+    // {
+    //     return $this->belongsTo(Warehouse::class);
+    // }
     public function father()
     {
         return $this->belongsTo(Beneficiary::class, 'father_national_id', 'national_id');
     }
 
-    public function getWarehouseAttribute() {
-        return $this->warehouse()->first();
-    }
+    // public function getWarehouseAttribute() {
+    //     return $this->warehouse()->first();
+    // }
     
-    public function getWarehouseNameAttribute() {
-        return $this->warehouse()->first()->name ?? '';
-    }
+    // public function getWarehouseNameAttribute() {
+    //     return $this->warehouse()->first()->name ?? '';
+    // }
 
     public static function headers($user = null)
     {
@@ -47,7 +48,7 @@ class Beneficiary extends BaseModel
             ['sortable' => true, 'value' => 'email', 'key' => 'email'],
             ['sortable' => true, 'value' => 'date of birth', 'key' => 'dob'],
             ['sortable' => true, 'value' => 'father name', 'key' => 'father_name'],
-            ['sortable' => true, 'value' => 'warehouse name', 'key' => 'warehouse_name'],
+            // ['sortable' => true, 'value' => 'warehouse name', 'key' => 'warehouse_name'],
         ];
     }
 

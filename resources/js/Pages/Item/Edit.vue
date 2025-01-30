@@ -52,7 +52,7 @@ const submit = () => {
         <h2
           class="capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
         >
-          {{ $t("update unit") }}
+          {{ $t("update item") }}
         </h2>
 
         <!-- <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">

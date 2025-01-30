@@ -87,7 +87,7 @@ const menus = [
             title: "Beneficiaries",
             icon: "face-smile",
             to: "beneficiary.index",
-            allowedUserTypes: [],
+            allowedUserTypes: [1],
         },
         {
             title: "Warehouses",
