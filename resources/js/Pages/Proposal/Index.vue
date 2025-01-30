@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$t('Proposal')" />
+  <Head :title="$t('Proposals')" />
   <div class="dark:text-white">
     <Table
       title="Proposal"

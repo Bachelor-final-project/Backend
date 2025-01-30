@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$t('Users')" />
+  <Head :title="$t('Transactins')" />
   <div class="dark:text-white">
     <Table
       title="Warehouse Transactions"
