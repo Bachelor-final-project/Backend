@@ -213,6 +213,19 @@ export default {
         "Needs archiving" : "بحاجة للأرشفة",
         "Completed" : "مكتمل",
 
+        "add new beneficiary": "إضافة مستفيد جديد",
+        "National ID": "رقم الهوية",
+        "Fathe National ID": "رقم هوية الأب",
+        "Num Of Family Members": "عدد أفراد الأسرة",
+        "Social Status": "الحالة الإجتماعية",
+        "Date Of Birth": "تاريخ الميلاد",
+        "Address": "العنوان",
+
+        'Single': "",
+        'Married': "",
+        'Divorced': "",
+        'Widow': "",
+
         //entity
         "Entity":"الجهات",
         "Settings Saved Seccessfully": "تم حفظ الاعدادات بنجاح",

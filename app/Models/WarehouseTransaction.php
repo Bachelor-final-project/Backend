@@ -47,13 +47,14 @@ class WarehouseTransaction extends BaseModel
     }
     public function getTransactionTypeStrAttribute()
     {
-        return [1 => __('Inbound Trnasaction'), 2 => __('Outbound Transaction')][$this->transaction_type];
+        return [1 => __('Inbound Trnasaction'), 2 => __('Outbound Transaction'), 3 => __('Deprecated')][$this->transaction_type];
     }
 
     public static function transactionTypes() {
         return [
             ['id' => 1, 'name' => __('Inbound')],
             ['id' => 2, 'name' => __('Outbound')],
+            ['id' => 3, 'name' => __('Deprecated')],
         ];
     }
 

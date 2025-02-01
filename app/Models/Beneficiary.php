@@ -13,9 +13,16 @@ class Beneficiary extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, SoftDeletes;
 
-    protected $appends = ['father_name', /*'warehouse', 'warehouse_name'*/];
+    protected $appends = ['father_name' /*'warehouse', 'warehouse_name'*/, 'social_status_str'];
     public static $controllable = true;
 
+    public static $arabicSocialStatusMapping = [
+        '0' => 0,
+        'اعزب' => 1,
+        'متزوج' => 2,
+        'مطلق' => 3,
+        'ارملة' => 4,
+    ];
 
     public function getFatherNameAttribute()
     {
@@ -29,6 +36,22 @@ class Beneficiary extends BaseModel
     public function father()
     {
         return $this->belongsTo(Beneficiary::class, 'father_national_id', 'national_id');
+    }
+
+    public function getSocialStatusStrAttribute()
+    {
+        return [0 => '', 1 => __('Single'), 2 => __('Married'), 3 => __('Divorced'), 4 => __('Widow')][$this->social_status];
+    }
+
+    
+
+    public static function socialStatuses() {
+        return [
+            ['id' => 1, 'name' => __('Single')],
+            ['id' => 2, 'name' => __('Married')],
+            ['id' => 3, 'name' => __('Divorced')],
+            ['id' => 3, 'name' => __('Widow')],
+        ];
     }
 
     // public function getWarehouseAttribute() {
@@ -47,6 +70,8 @@ class Beneficiary extends BaseModel
             ['sortable' => true, 'value' => 'phone', 'key' => 'phone'],
             ['sortable' => true, 'value' => 'email', 'key' => 'email'],
             ['sortable' => true, 'value' => 'date of birth', 'key' => 'dob'],
+            ['sortable' => true, 'value' => 'Num Of Family Members', 'key' => 'num_of_family_members'],
+            ['sortable' => true, 'value' => 'Social Status', 'key' => 'social_status_str'],
             ['sortable' => true, 'value' => 'father name', 'key' => 'father_name'],
             // ['sortable' => true, 'value' => 'warehouse name', 'key' => 'warehouse_name'],
         ];

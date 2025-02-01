@@ -27,7 +27,7 @@ class StoreWarehouseTransactionRequest extends FormRequest
             'warehouse_id' => 'required|exists:warehouses,id',
             'item_id' => 'required|exists:items,id',
             'amount' => 'required|integer|min:0',
-            'transaction_type' => 'required|integer|between:1,2',
+            'transaction_type' => 'required|integer|between:1,3',
         ];
     }
 }

@@ -39,6 +39,10 @@ class UpdateBeneficiaryRequest extends FormRequest
             'email' => 'sometimes|email|max:255',
             'dob' => 'sometimes|date',
             'father_national_id' => 'nullable|sometimes|string|min:9|max:9',
+            'num_of_family_members' => 'nullable|integer',
+            'social_status' => 'nullable|integer',
+            'address' => 'nullable|string|max:512',
+
             // 'warehouse_id' => 'required|integer|exists:warehouses,id',
         ];
     }

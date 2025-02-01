@@ -338,5 +338,10 @@
     "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account": "بمجرد حذف حسابك، سيتم حذف جميع الموارد والبيانات الخاصة به بشكل دائم. الرجاء إدخال كلمة المرور الخاصة بك لتأكيد رغبتك في حذف حسابك بشكل دائم",
     "total_reports": "",
     "Environmental Grievances Resolution": "حل المظالم البيئية",
+    "Single": "أعزب",
+    "Married": "متزوج",
+    "Divorced": "مطلق",
+    "Widow": "أرملة",
+
     "": ""
 }
