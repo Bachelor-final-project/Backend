@@ -856,7 +856,14 @@ function urlParams() {
   color: rgb(46, 179, 46);
 }
 ._2_warehouse_transaction_transaction_type {
+  
   background: rgb(250, 66, 66);
+  color: white;
+  text-align: center;
+  position: relative;
+}
+._3_warehouse_transaction_transaction_type{
+  background: rgb(255, 166, 0);
   color: white;
   text-align: center;
   position: relative;
@@ -884,6 +891,7 @@ function urlParams() {
 
 ._1_warehouse_transaction_transaction_type,
 ._2_warehouse_transaction_transaction_type,
+._3_warehouse_transaction_transaction_type,
 ._1_warehouse_status,
 ._2_warehouse_status,
 ._3_warehouse_status,

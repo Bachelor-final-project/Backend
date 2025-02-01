@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('item_id');
             $table->decimal('amount')->default(0);
-            $table->integer('transaction_type')->default(2); // [1 => 'Inbound transaction', 2 => 'Outbound transaction']
+            $table->integer('transaction_type')->default(2); // [1 => 'Inbound transaction', 2 => 'Outbound transaction', 3 => 'Deprecated']
             $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
             $table->unsignedBigInteger('tenant_id')->nullable();

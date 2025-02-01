@@ -30,6 +30,9 @@ class StoreBeneficiaryRequest extends FormRequest
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email|max:255',
             'dob' => 'nullable|date',
+            'num_of_family_members' => 'nullable|integer',
+            'social_status' => 'nullable|integer',
+            'address' => 'nullable|string|max:512',
             // 'father_national_id' => 'nullable|sometimes|string|min:9|max:9',
             'father_national_id' => [
             'nullable',

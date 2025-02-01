@@ -43,7 +43,8 @@ class BeneficiaryController extends Controller
     {
         $warehouses = Warehouse::all();
          return Inertia::render(Str::studly("Beneficiary").'/Create', [
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
+            'social_statuses' => Beneficiary::socialStatuses(),
         ]);
     }
 
@@ -94,7 +95,8 @@ class BeneficiaryController extends Controller
         return Inertia::render(Str::studly("Beneficiary").'/Edit', [
             //'options' => $regions,
             'beneficiary' => $beneficiary->toArray(),
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
+            'social_statuses' => Beneficiary::socialStatuses(),
         ]);
     }
 

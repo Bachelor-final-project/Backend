@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TenantAttributeTrait;
 use App\Traits\TenantScoped;
+use Illuminate\Support\Facades\DB;
 
 class Warehouse extends BaseModel
 {
@@ -58,5 +59,46 @@ class Warehouse extends BaseModel
             ['name' => 'Under Construction', 'id' => '3'],
             ['name' => 'Close', 'id' => '4'],
         ];
+    }
+
+    public static function getWarehouseItems($warehouse_id) {
+        $sql = "
+            WITH warehouses_items AS (
+                SELECT 
+                    w.name AS warehouse_name, 
+                    i.name AS item_name, 
+                    u.name AS unit_name, 
+                    SUM(
+                        CASE 
+                            WHEN wt.transaction_type = 1 THEN wt.amount 
+                            ELSE -wt.amount 
+                        END
+                    ) AS item_quantity, 
+                    w.id AS warehouse_id
+                FROM 
+                    warehouse_transactions wt
+                LEFT JOIN 
+                    items i ON wt.item_id = i.id
+                LEFT JOIN 
+                    units u ON i.unit_id = u.id
+                LEFT JOIN 
+                    warehouses w ON wt.warehouse_id = w.id
+                GROUP BY 
+                    wt.item_id, w.id, w.name
+            )
+            SELECT * 
+            FROM warehouses_items
+            WHERE item_quantity > 0
+        ";
+
+        // Add conditional WHERE clause for warehouse_id
+        if ($warehouse_id > 0) {
+            $sql .= " AND warehouse_id = ?";
+            $bindings = [$warehouse_id];
+        } else {
+            $bindings = [];
+        }
+        $results = DB::select($sql, $bindings);
+        return $results;
     }
 }
