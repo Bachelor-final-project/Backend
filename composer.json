@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "appstract/laravel-bootstrap-components": "*",
+        "barryvdh/laravel-dompdf": "^3.1",
         "bhuvidya/laravel-countries": "^11.0",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^11.9",
@@ -15,6 +16,7 @@
         "maatwebsite/excel": "^3.1",
         "madbob/larastrap": "^0.9.6",
         "phpoffice/phpspreadsheet": "^1.29",
+        "spatie/laravel-pdf": "^1.5",
         "stripe/stripe-php": "^16.4",
         "tightenco/ziggy": "^1.0"
     },

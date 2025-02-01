@@ -13,6 +13,8 @@ use App\Exports\ProposalsExport;
 use App\Exports\ItemsExport;
 use App\Exports\CurrenciesExport;
 use App\Exports\BeneficiariesExport;
+use App\Exports\ProposalsFromViewExport;
+use App\Models\Proposal;
 use Maatwebsite\Excel\Facades\Excel;
 
 class GeneralController extends Controller
@@ -68,6 +70,10 @@ class GeneralController extends Controller
     {
         $beneficiariesExport = new BeneficiariesExport($request);
         return Excel::download($beneficiariesExport, 'BeneficiariesExport.xlsx');
+    }
+    public function proposalPDF(Request $request){
+        return Excel::download(new ProposalsFromViewExport($request), 'invoices.xlsx');
+       
     }
     
 }
