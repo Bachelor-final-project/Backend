@@ -33,6 +33,8 @@ class DocumentController extends Controller
         return Inertia::render(Str::studly("Document").'/Index', [
             "headers" => Document::headers(),
             'currencies' => Currency::get(),
+            'proposals' => Proposal::get(),
+            'donors' => Donor::get(),
             "items" => Document::search($request)->sort($request)->paginate($this->pagination),
 
         ]);
