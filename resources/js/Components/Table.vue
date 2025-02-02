@@ -175,8 +175,19 @@
             @finish-uploading="isFileInputLoading = false"
             @start-uploading="isFileInputLoading = true"
           />
+          
       </div> 
+      <div class="col-span-2">
+        <div v-if="isUploading" class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+            <div 
+              class="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+              :style="{ width: progress + '%' }"
+            ></div>
+          </div>
+          <p v-if="isUploading" class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ progress }}%</p>
+      </div>
       </div> 
+
 
       <div class="mt-6 flex justify-end">
         
@@ -520,6 +531,9 @@ const complete_donating_status = ref(false);
 const hasDonatingAmount = ref(0);
 const donatingAmount = ref(0);
 
+const isUploading = ref(false);
+const progress = ref(0);
+
 const modal_item = ref();
 
 const statuses = {
@@ -732,13 +746,35 @@ const modalFunctions = {
   },
   confirmCompleteExecutionStatusModal: function (item) {
     if(!arabicVideoFile.value) return false;
+    isUploading.value = true;
+    progress.value = 0;
     router.post(route(`${props.model}.update`, modal_item.value.id), {
       _method: 'put',
       status: 3,
       arabicVideoFile: arabicVideoFile.value,
       englishVideoFile: englishVideoFile.value,
-    },{forceFormData: true});
-    modalFunctions['closeCompleteExecutionStatusModal'](item);
+    },{
+      forceFormData: true,
+      onProgress: (event) => {
+        if (event.total) {
+          progress.value = Math.round((event.loaded / event.total) * 100);
+        }
+      },
+      onSuccess: () => {
+        progress.value = 100;
+        setTimeout(() => { isUploading.value = false; }, 1000); // Hide progress bar after completion
+        
+      },
+      onError: () => {
+        isUploading.value = false;
+        progress.value = 0;
+      },
+      onFinish: () => {
+        isUploading.value = false;
+        modalFunctions['closeCompleteExecutionStatusModal'](item);
+      },
+    });
+    
   },
   closeCompleteDonatingStatusModal: function (item) {
     complete_donating_status.value = false;
