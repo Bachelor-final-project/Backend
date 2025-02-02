@@ -301,12 +301,13 @@
           <InputLabel :for="e.model + '_filter'" :value="e.name" />
           <SelectInput
             :dir="locale == 'ar' ? 'rtl' : 'ltr'"
-            classes="mt-1 block w-full"
+            classes="!mt-1 !block !w-full"
             :id="e.model + '_filter'"
             v-model="filters[e.model]"
             :options="e.options"
             :item_name="e.item_name || null"
             :disabled="isFilterLoading"
+            :searchable="e.searchable"
           />
         </div>
       </template>
@@ -480,7 +481,7 @@ import Paginator from "@/Components/Paginator.vue";
 import TableAction from "@/Components/TableAction.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { reactive, watch, ref } from "vue";
+import { reactive, watch, ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import FileInput from "@/Components/FileInput.vue";
@@ -589,9 +590,25 @@ const form = useForm({
 const filters = reactive({
 });
 if(!isEmpty(props.table_filters)){
-  props.table_filters.forEach((e) => {if(!e.type || e.type == 'select') filters[e.model] = 0});
+  const params = new URLSearchParams(window.location.search);
+
+  props.table_filters.forEach((e) => {
+     if(!e.type || e.type == 'select') filters[e.model] = params.get(e.model)?? 0;
+    });
 }
 
+/*onMounted(() => {
+  
+  const params = new URLSearchParams(window.location.search);
+  if (!isEmpty(props.table_filters)) {
+    props.table_filters.forEach((e) => {
+      if (!e.type || e.type === "select") {
+        filters[e.model] = params.get(e.model) ?? 0;
+      }
+    });
+  }
+  console.log(params.get("proposal_type_id_filter"))
+});*/
 
 
 const debouncedReload = debounce((newValue) => {
@@ -814,8 +831,10 @@ const modalFunctions = {
   },
   completingDonatingStatus: function (item) {
     modal_item.value = item;
-    donatingAmount.value = item.cost;
     complete_donating_status.value = true;
+    if (!hasDonatingAmount) {
+      donatingAmount.value = 0; // Set to 0 when false
+    }
   },
   completeDonatingStatusFileinputChanged: function (files){
     complete_donating_status_files.value = files;

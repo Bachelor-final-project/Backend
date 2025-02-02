@@ -114,8 +114,21 @@ class Donation extends BaseModel
     public static function headers($user = null)
     {
         return [
-            ['sortable' => true, 'value' => 'Proposal id', 'key' => 'proposal_id'],
+            // ['sortable' => true, 'value' => 'Proposal id', 'key' => 'proposal_id'],
             ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
+            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
+            ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
+            ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
+            // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
+    public static function headersForProposal($user = null)
+    {
+        return [
+            // ['sortable' => true, 'value' => 'Proposal id', 'key' => 'proposal_id'],
+            // ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
             ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],

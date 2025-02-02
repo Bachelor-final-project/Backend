@@ -17,7 +17,7 @@ class Proposal extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image'];
+    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date'];
     protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
@@ -49,6 +49,9 @@ class Proposal extends BaseModel
     }
     public function getCoverImageAttribute(){
         return  $this->attachments()->where('attachment_type', 1)->first()?->url;
+    }
+    public function getCompleteDonatingStatusDateAttribute(){
+        return  $this->logs()->where('log_type', 1)->first()?->formatted_created_at;
     }
     public function getEntityNameAttribute(){
         return $this->entity->name;   
@@ -176,6 +179,7 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'share cost', 'key' => 'share_cost'],
             ['sortable' => true, 'value' => 'expected benificiaries count', 'key' => 'expected_benificiaries_count'],
             ['sortable' => true, 'value' => 'execution date', 'key' => 'execution_date'],
+            ['sortable' => true, 'value' => 'Complete Donating Status Date', 'key' => 'complete_donating_status_date'],
             // ['sortable' => true, 'value' => 'publishing date', 'key' => 'publishing_date'],
             ['sortable' => true, 'value' => 'entity name', 'key' => 'entity_name'],
             ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],

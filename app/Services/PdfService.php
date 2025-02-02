@@ -18,6 +18,7 @@ class PdfService
 
     public function generatePdf(array $viewData): string
     {
+        // dd(env('gotenberg_url'));
         // Step 1: Ensure the model is passed as 'item' in view data
         $model = isset($viewData['item']) ? $viewData['item'] : null;
         
@@ -37,7 +38,11 @@ class PdfService
                     'contents' => $html,
                     'filename' => 'index.html',
                 ],
+                
+                
             ],
+            
+            
         ]);
 
         // Step 3: Ensure directory exists

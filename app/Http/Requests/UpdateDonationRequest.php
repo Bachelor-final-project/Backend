@@ -6,6 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDonationRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => deterministicEncrypt($this->phone),
+            ]);
+        }
+    }
+    
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,7 +36,7 @@ class UpdateDonationRequest extends FormRequest
             'phone' => 'sometimes|exists:donors,phone',
             'project_id' => 'sometimes|exists:proposals,id',
             'currency_id' => 'sometimes|exists:currencies,id',
-            'amount' => 'sometimes|numberic|min:0',
+            'amount' => 'sometimes|numeric|min:0',
             'status' => 'sometimes|integer|between:0,3',
         ];
     }

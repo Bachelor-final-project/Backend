@@ -35,7 +35,7 @@ const donations_table_actions = [
   },
   {
     type: "btn",
-    icon: "block",
+    icon: "ban",
     icon_color: "red",
     funcName: "rejectDonation",
     model: "donation",
@@ -71,7 +71,7 @@ const donations_table_actions = [
       <div class="mt-6 space-y-6">
         <div class="grid grid-cols-4 gap-4">
           <div>
-            <p class="font-medium">{{ $t("title") }}</p>
+            <p class="ont-medium dark:bg-gray-700 dark:text-gray-400">{{ $t("title") }}</p>
             <p class="text-gray-700 dark:text-gray-300">{{ proposal.title }}</p>
           </div>
 
