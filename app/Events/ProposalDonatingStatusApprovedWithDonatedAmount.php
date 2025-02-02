@@ -17,13 +17,17 @@ class ProposalDonatingStatusApprovedWithDonatedAmount
 
     public $proposal;
     public $donatingAmount;
+    public $recipient_id;
+    public $receipts;
     /**
      * Create a new event instance.
      */
-    public function __construct(Proposal $proposal, int $donatingAmount)
+    public function __construct(Proposal $proposal, int $donatingAmount, $recipient_id, $receipts)
     {
         $this->proposal = $proposal;
         $this->donatingAmount = $donatingAmount;
+        $this->recipient_id = $recipient_id;
+        $this->receipts = $receipts;
     }
 
     /**

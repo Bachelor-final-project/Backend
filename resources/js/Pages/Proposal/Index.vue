@@ -10,6 +10,7 @@
       :table_filters="table_filters"
       import_url="import-proposals"
       add_item_route="proposal.create"
+      :users="users"
     />
   </div>
 </template>
@@ -26,6 +27,7 @@ const props = defineProps({
   areas: Array,
   headers: Array,
   name: String,
+  users: Array,
 });
 import { useI18n } from "vue-i18n";
 

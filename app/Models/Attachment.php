@@ -24,7 +24,7 @@ class Attachment extends BaseModel
         // return asset($this->path);
         return env('APP_URL') . Storage::url($this->path);
     }
-    public static function storeAttachment($file, $attachableId, $attachableType, $attachamentType = 1) {
+    public static function storeAttachment($files, $attachableId, $attachableType, $attachamentType = 1) {
         Attachment::where('attachable_type', $attachableType)
         ->where('attachable_id', $attachableId)
         ->where('attachment_type', $attachamentType)
@@ -35,24 +35,26 @@ class Attachment extends BaseModel
         });
         // dd($data['files']);
         // Store the file in the storage/app/public/attachments directory
-        $filePath = $file->store('attachments', 'public');
+        foreach($files as $file) {
+            $filePath = $file->store('attachments', 'public');
 
-        // Get file details
-        $fileExtension = $file->getClientOriginalExtension();
-        $fileSize = $file->getSize();
-        $fileName = $file->getClientOriginalName();
+            // Get file details
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileSize = $file->getSize();
+            $fileName = $file->getClientOriginalName();
 
-        // Create the attachment record
-        Attachment::create([
-            'attachable_type' => $attachableType,
-            'attachable_id' => $attachableId,
-            'attachment_type' => $attachamentType, // Default to 1 if not provided
-            'user_id' => auth()->id() ?? null, // Assuming user_id should be the current authenticated user
-            'filename' => $fileName,
-            'path' => $filePath,
-            'file_extension' => $fileExtension,
-            'filesize' => $fileSize,
-        ]);
+            // Create the attachment record
+            Attachment::create([
+                'attachable_type' => $attachableType,
+                'attachable_id' => $attachableId,
+                'attachment_type' => $attachamentType, // Default to 1 if not provided
+                'user_id' => auth()->id() ?? null, // Assuming user_id should be the current authenticated user
+                'filename' => $fileName,
+                'path' => $filePath,
+                'file_extension' => $fileExtension,
+                'filesize' => $fileSize,
+            ]);
+        }
     }
     public function getAttachmentTypeNameAttribute(){
         $types = [];

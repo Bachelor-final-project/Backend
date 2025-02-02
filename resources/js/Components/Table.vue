@@ -200,7 +200,7 @@
       <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
         {{ $t("If the donations are from outside the program, please enter the total donation amount") }}.
       </p>
-      <div class="grid grid-cols-3 gap-4 mt-5">
+      <div  class="grid grid-cols-3 gap-4 mt-5">
         <div class="auto-cols-max">
           <InputLabel for="hasDonatingAmount" value="External donations exist" />
           <SwitchInput 
@@ -208,21 +208,45 @@
             v-model="hasDonatingAmount"
           />
       </div> 
-      <div  v-show="hasDonatingAmount" class="col-span-2">
-          <InputLabel for="donatingAmount" value="Total donation amount" />
-          <TextInput
-            id="donatingAmount"
-            type="number"
-            class="mt-1 block w-full"
-            v-model="donatingAmount"
-            required
-            autofocus
-            autocomplete="publishing_date"
-           
+      <div v-show="hasDonatingAmount" class="grid grid-cols-1 gap-4 col-span-2">
+        <div  class="col-span-1">
+            <InputLabel for="donatingAmount" value="Total donation amount" />
+            <TextInput
+              id="donatingAmount"
+              type="number"
+              class="mt-1 block w-full"
+              v-model="donatingAmount"
+              required
+              autofocus
+              autocomplete="publishing_date"
+            />
+        </div> 
+        <div class="col-span-1">
+            <InputLabel for="recipient_user_id" value="Recipient User" />
+            <SelectInput
+              :options="users"
+              :item_name="name"
+              id="recipient_user_id"
+              v-model="complete_donating_status_user"
+              class="no-scrollbar mt-1 block w-full"
+            />        
+        </div> 
+        <div class="col-span-1">
+            <InputLabel for="receipts" value="Receipts" />
+            <FileInput 
+            id="receipts"
+            model="proposal"
+            v-model="complete_donating_status_files"
+            attachment_type="1"
+            :show_files_details="false"
+            :multiple="true"
+            @fileinput-change="modalFunctions['completeDonatingStatusFileinputChanged']"
+            @finish-uploading="isFileInputLoading = false"
+            @start-uploading="isFileInputLoading = true"
           />
+        </div> 
       </div> 
-      </div> 
-
+    </div>
       <div class="mt-6 flex justify-end">
         
         <SecondaryButton @click="modalFunctions['closeCompleteDonatingStatusModal']">
@@ -458,6 +482,9 @@ import DangerButton from "@/Components/DangerButton.vue";
 import { debounce } from "lodash";
 import { isEmpty } from "lodash";
 const { t, locale } = useI18n();
+import { usePage } from "@inertiajs/vue3";
+
+const page = usePage();
 
 const props = defineProps({
   refresh_only: {
@@ -500,6 +527,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  users: {
+    type: Array,
+    default: ""
+  }
 });
 
 const table_key = ref(0);
@@ -517,6 +548,8 @@ const englishVideoFile = ref(false);
 const complete_archiving_status = ref(false);
 const complete_execution_status = ref(false);
 const complete_donating_status = ref(false);
+const complete_donating_status_files = ref(false);
+const complete_donating_status_user = ref(page.props.auth.user.id);
 const hasDonatingAmount = ref(0);
 const donatingAmount = ref(0);
 
@@ -748,11 +781,17 @@ const modalFunctions = {
     donatingAmount.value = item.cost;
     complete_donating_status.value = true;
   },
+  completeDonatingStatusFileinputChanged: function (files){
+    complete_donating_status_files.value = files;
+  },
   confirmCompleteDonatingStatusModal: function (item) {
-    router.put(route(`${props.model}.update`, modal_item.value.id), {
+    router.post(route(`${props.model}.update`, modal_item.value.id), {
+      _method: 'put',
       status: 2,
       donatingAmount: Number(donatingAmount.value),
-    });
+      receipts: complete_donating_status_files.value,
+      recipient: Number(complete_donating_status_user.value),
+    },{forceFormData: true});
     modalFunctions['closeCompleteDonatingStatusModal']();
   },
   confirmDocumentFileUpload: function (item) {
