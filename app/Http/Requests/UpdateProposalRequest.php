@@ -47,6 +47,8 @@ class UpdateProposalRequest extends FormRequest
             'englishVideoFile' => 'sometimes',
             'arabicVideoFile' => 'required_if:status,3',
             'beneficiariesFile' => 'required_if:status,8',
+            'recipient' => 'nullable|integer|exists:users,id',
+            'receipts' => 'sometimes'
         ];
     }
 }

@@ -13,6 +13,7 @@ use App\Models\Attachment;
 use App\Models\ProposalType;
 use App\Models\Entity;
 use App\Models\Area;
+use App\Models\User;
 use App\Models\Beneficiary;
 use App\Models\Donor;
 use App\Models\Country;
@@ -51,7 +52,7 @@ class ProposalController extends Controller
             'proposalTypes' => ProposalType::get(),
             'areas' => Area::get(),
             "items" => Proposal::search($request)->sort($request)->paginate($this->pagination),
-
+            "users" => User::get()
         ]);
     }
 
@@ -99,7 +100,7 @@ class ProposalController extends Controller
         $proposal = Proposal::create($data);
 
         if($file) {
-            Attachment::storeAttachment($file, $proposal->id, 'proposal', 1);
+            Attachment::storeAttachment([$file], $proposal->id, 'proposal', 1);
         }
         return to_route($this->routeName() . '.index')->with('res', ['message' => __('Proposal Saved Seccessfully'), 'type' => 'success']);
     }
@@ -156,22 +157,27 @@ class ProposalController extends Controller
         if(!empty($request->donatingAmount) && $request->status == 2 && $proposal->status != $request->status){
             //create new donation;
             // dd($request->donatingAmount);
-            ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount);
+            $recipient_id = isset($validated['recipient']) ? $validated['recipient'] : null;
+            $receipts = isset($validated['receipts']) ? $validated['receipts'] : null;
+            unset($validated['recipient']);
+            unset($validated['receipts']);
+            // dd($request->donatingAmount, $recipient_id, $receipts);
+            ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount, $recipient_id, $receipts);
         }
         if($request->arabicVideoFile){
             $file = $validated['arabicVideoFile'][0];
             unset($validated['arabicVideoFile']);
-            Attachment::storeAttachment($file, $proposal->id, 'proposal', 2);
+            Attachment::storeAttachment([$file], $proposal->id, 'proposal', 2);
         }
         if($request->englishVideoFile){
             $file = $validated['englishVideoFile'][0];
             unset($validated['englishVideoFile']);
-            Attachment::storeAttachment($file, $proposal->id, 'proposal', 3);
+            Attachment::storeAttachment([$file], $proposal->id, 'proposal', 3);
         }
         if($request->beneficiariesFile){
             $file = $validated['beneficiariesFile'][0];
             unset($validated['beneficiariesFile']);
-            Attachment::storeAttachment($file, $proposal->id, 'proposal', 4);
+            Attachment::storeAttachment([$file], $proposal->id, 'proposal', 4);
             Excel::import(new BeneficiaryImport($proposal->id), $file);
         }
         
