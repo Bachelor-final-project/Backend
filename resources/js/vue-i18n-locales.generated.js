@@ -226,6 +226,9 @@ export default {
         'Divorced': "",
         'Widow': "",
 
+        "All Proposals": "كل المشاريع",
+        "All Donors": "كل المتبرعين",
+
         //entity
         "Entity":"الجهات",
         "Settings Saved Seccessfully": "تم حفظ الاعدادات بنجاح",

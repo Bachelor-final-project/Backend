@@ -61,6 +61,8 @@ const props = defineProps({
   items: Array,
   headers: Array,
   currencies: Array,
+  proposals: Array,
+  donors: Array,
   name: String,
 });
 
@@ -69,6 +71,17 @@ const table_filters = [
     name: t("currency"),
     model: "currency_id_filter",
     options: [{ id: 0, name: t("All currencies") }, ...props.currencies],
+  },
+  {
+    name: t("proposals"),
+    model: "proposal_id_filter",
+    options: [{ id: 0, name: t("All Proposals") }, ...props.proposals],
+    item_name: 'title',
+  },
+  {
+    name: t("donors"),
+    model: "donor_id_filter",
+    options: [{ id: 0, name: t("All Donors") }, ...props.donors],
   },
 ];
 
