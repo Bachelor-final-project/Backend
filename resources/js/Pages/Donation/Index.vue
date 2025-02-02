@@ -35,7 +35,7 @@ const actions = [
   },
   {
     type: "btn",
-    icon: "block",
+    icon: "ban",
     icon_color: "red",
     funcName: "rejectDonation",
     model: "donation",

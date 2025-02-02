@@ -1,5 +1,12 @@
 export default {
     "ar": {
+        "Complete Donating Status" : "إكمال مرحلة التبرع",
+        "Complete Execution Status" : "إكمال مرحلة التنفيذ",
+        "Complete Archiving Status" : "إكمال مرحلة الأرشفة",
+        "Complete Donating Status Date" : "تاريخ إكمال مرحلة التبرع",
+        "Complete Execution Status Date" : "تاريخ إكمال مرحلة التنفيذ",
+        "Complete Archiving Status Date" : "تاريخ إكمال مرحلة الأرشفة",
+        "General Update" : "تعديل عام",
         "type": "النوع",
         "job title": "المسمى الوظيفي",
         "Status": "الحالة",

@@ -96,6 +96,19 @@ class Document extends BaseModel
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }
+    public static function headersForProposal($user = null)
+    {
+        return [
+            // ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
+            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
+            ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
+            ['sortable' => true, 'value' => 'notes', 'key' => 'note'],
+            ['sortable' => true, 'value' => 'expected date', 'key' => 'expected_date'],
+            // ['sortable' => true, 'value' => 'currency', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
+            // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
 
     public static function statuses() {
         return [

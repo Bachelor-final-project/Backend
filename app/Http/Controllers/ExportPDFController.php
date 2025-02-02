@@ -30,10 +30,11 @@ class ExportPDFController extends Controller
         $item = Proposal::where('id', $id)->first();
         $viewData = [
             'item' => $item,
-            'documents_headers' => Document::headers(),
-            'donations_headers' => Donation::headers(),
+            'documents_headers' => Document::headersForProposal(),
+            'donations_headers' => Donation::headersForProposal(),
             'beneficiaries_headers' => Beneficiary::headers(),
         ];
+        // return View::make('ExportPDF/proposal', $viewData)->render();
         
         $pdfPath = $this->pdfService->generatePdf($viewData);
 

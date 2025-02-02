@@ -6,7 +6,7 @@
     </style>
 @endpush
 
-<table id="myTable" class="table align-items-center">
+<table id="myTable" class="table align-items-center w-full">
     <thead>
         <tr>
             @foreach ($headers as $header)

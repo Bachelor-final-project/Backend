@@ -19,10 +19,10 @@ use App\Models\Donor;
 use App\Models\Country;
 use App\Models\Document;
 use App\Models\Donation;
+use App\Models\Log;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
@@ -154,34 +154,42 @@ class ProposalController extends Controller
         // Gate::authorize('update', [$proposal, $request['status']]);
         
         // check if there is a donatingAmount and a new donation record is needed to be added 
+        $logType = 4;
+
+        // dd($request->donatingAmount);
         if(!empty($request->donatingAmount) && $request->status == 2 && $proposal->status != $request->status){
             //create new donation;
-            // dd($request->donatingAmount);
+            
             $recipient_id = isset($validated['recipient']) ? $validated['recipient'] : null;
             $receipts = isset($validated['receipts']) ? $validated['receipts'] : null;
             unset($validated['recipient']);
             unset($validated['receipts']);
             // dd($request->donatingAmount, $recipient_id, $receipts);
+            $logType = 1;
             ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount, $recipient_id, $receipts);
         }
         if($request->arabicVideoFile){
             $file = $validated['arabicVideoFile'][0];
             unset($validated['arabicVideoFile']);
             Attachment::storeAttachment([$file], $proposal->id, 'proposal', 2);
+            $logType = 2;
         }
         if($request->englishVideoFile){
             $file = $validated['englishVideoFile'][0];
             unset($validated['englishVideoFile']);
             Attachment::storeAttachment([$file], $proposal->id, 'proposal', 3);
+            $logType = 2;
         }
         if($request->beneficiariesFile){
             $file = $validated['beneficiariesFile'][0];
             unset($validated['beneficiariesFile']);
             Attachment::storeAttachment([$file], $proposal->id, 'proposal', 4);
             Excel::import(new BeneficiaryImport($proposal->id), $file);
+            $logType = 3;
         }
         
         $proposal->update($validated);
+        Log::storeLog( $proposal->id, 'proposal', $logType);
 
         return back()->with('res', ['message' => __('Proposal Updated Seccessfully'), 'type' => 'success']);
     }

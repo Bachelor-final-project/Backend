@@ -12,6 +12,7 @@ use App\Http\Controllers\EntityController;
 use App\Http\Controllers\ExportPDFController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\StripeController;
+use Illuminate\Http\Request;
 
 // Route::get('/', function () {
 //    return 'hi';

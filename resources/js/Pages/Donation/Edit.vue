@@ -40,7 +40,7 @@ const submit = () => {
   //   ...data,
   //   remember: data.remember ? 'on' : '',
   // }))
-  form.put(route("donation.put", props.donation), {
+  form.put(route("donation.update", props.donation), {
     onFinish: () => {
       form.defaults();
     },
