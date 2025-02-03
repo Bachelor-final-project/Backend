@@ -11,7 +11,7 @@ use App\Traits\TenantScoped;
 class Donation extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
-    protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'proposal_title'];
+    protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'proposal_title', 'created_at_date_time'];
     protected $with = ['donor'];
     public static $controllable = true;
 
@@ -114,13 +114,15 @@ class Donation extends BaseModel
     public static function headers($user = null)
     {
         return [
+            ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             // ['sortable' => true, 'value' => 'Proposal id', 'key' => 'proposal_id'],
             ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
             ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
+            ['sortable' => true, 'value' => 'created at', 'key' => 'created_at_date_time'],
+            ['sortable' => true, 'sortBy' => 'status', 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

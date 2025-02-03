@@ -8,6 +8,7 @@
       :headers="headers"
       model="donation"
       add_item_route="donation.create"
+      :table_filters="table_filters"
       import_url="import-donations"
     />
   </div>
@@ -20,6 +21,9 @@ import Card from "@/Components/Card.vue";
 import Table from "@/Components/Table.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const actions = [
  
@@ -59,19 +63,39 @@ const actions = [
 
 const props = defineProps({
   items: Array,
+  currencies: Array,
+  proposals: Array,
+  donors: Array,
+  statuses: Array,
   headers: Array,
   name: String,
 });
 
-const user = useForm({
-  name: "",
-  email: "",
-  password: "",
-  type: "",
-  status: "",
-  job_title: "",
-  is_active: "",
-});
+const table_filters = [
+  {
+    name: t("currency"),
+    model: "currency_id_filter",
+    options: [{ id: 0, name: t("All currencies") }, ...props.currencies],
+  },
+  {
+    name: t("status"),
+    model: "status_filter",
+    options: [{ id: -1, name: t("All statuses") }, ...props.statuses],
+  },
+  {
+    name: t("proposals"),
+    model: "proposal_id_filter",
+    options: [{ id: 0, name: t("All Proposals") }, ...props.proposals],
+    item_name: 'title',
+    searchable: true
+  },
+  {
+    name: t("donors"),
+    model: "donor_id_filter",
+    options: [{ id: 0, name: t("All Donors") }, ...props.donors],
+    searchable: true
+  },
+];
 
 function save() {
   console.log(user);

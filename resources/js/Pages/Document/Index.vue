@@ -21,8 +21,10 @@ import Table from "@/Components/Table.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { useI18n } from "vue-i18n";
-
+import { computed } from "vue";
 const { t } = useI18n();
+const user = computed(() => page.props.auth.user);
+
 const actions = [
   {
     type: "btn",
@@ -31,6 +33,9 @@ const actions = [
     funcName: "deleting",
     model: "document",
     tooltip: "delete document",
+    showFunc: function(item){
+        return [1, 5].includes(user.type);
+    }
   },
   {
     type: "btn",
@@ -39,6 +44,9 @@ const actions = [
     funcName: "editing",
     model: "document",
     tooltip: "edit document",
+    showFunc: function(item){
+        return [1, 5].includes(user.type);
+    }
   },
   {
     type: "btn",
@@ -47,6 +55,9 @@ const actions = [
     funcName: "uploadingDocumentFile",
     model: "document",
     tooltip: "upload document file",
+    showFunc: function(item){
+        return [1, 5].includes(user.type);
+    }
   },
   // {
   //   type: "btn",
@@ -86,16 +97,6 @@ const table_filters = [
     searchable: true
   },
 ];
-
-const user = useForm({
-  name: "",
-  email: "",
-  password: "",
-  type: "",
-  status: "",
-  job_title: "",
-  is_active: "",
-});
 
 function save() {
   console.log(user);
