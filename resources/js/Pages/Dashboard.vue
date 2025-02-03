@@ -74,6 +74,7 @@ onMounted(() => {
           :color_theme="color_theme"
           chart_prop_name="stacked_group_chart"
           :chart_title="$t('Donating Status Proposals')"
+          :chart_tips="$t('Hold down the Ctrl key and click on a group to go to the donations page with the selected status.')"
         />
         <BasicColumn
           :data="proposalsByStatus"

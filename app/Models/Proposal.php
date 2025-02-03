@@ -243,6 +243,7 @@ class Proposal extends BaseModel
         
         return [
             "data" => $data,
+            "ids" => $proposals->pluck('id')->toArray(),
             "categories" => $proposals->pluck('title')->toArray()
         ];
     }

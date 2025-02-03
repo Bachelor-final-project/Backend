@@ -6,6 +6,7 @@ export default {
         "Complete Donating Status Date" : "تاريخ إكمال مرحلة التبرع",
         "Complete Execution Status Date" : "تاريخ إكمال مرحلة التنفيذ",
         "Complete Archiving Status Date" : "تاريخ إكمال مرحلة الأرشفة",
+        "Hold down the Ctrl key and click on a group to go to the donations page with the selected status." : "اضغط مع الاستمرار على زر Ctrl ثم انقر على المجموعة للانتقال إلى صفحة التبرعات بالحالة المحددة",
         "General Update" : "تعديل عام",
         "type": "النوع",
         "job title": "المسمى الوظيفي",
