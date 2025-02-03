@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class BaseModel extends Model
@@ -53,7 +54,43 @@ class BaseModel extends Model
     }
     public function scopeSort($query, $request)
     {
-        $query->orderBy('id', 'DESC');
+         $defaultSortColumn = 'id';
+         $defaultSortDirection = 'desc';
+         // Get sorting parameters
+         $sortBy = $request->input('sortBy', $defaultSortColumn);
+         $sortDirection = $request->input('sortDesc', $defaultSortDirection);
+        //  dd($request->input('sortDesc', [$defaultSortDesc])[0] === 'true'? 'desc':'asc');
+        //  $sortDirection = strtolower($request->input('sort_direction', $defaultSortDesc));
+ 
+         // Ensure sorting direction is either 'asc' or 'desc'
+         if (!in_array($sortDirection, ['asc', 'desc'])) {
+             $sortDirection = $defaultSortDirection;
+         }
+ 
+         if (str_contains($sortBy, '.')) {
+             // Handle sorting by related table
+             [$relation, $relatedColumn] = explode('.', $sortBy, 2);
+ 
+             if (method_exists($this, $relation)) { // check if there is really a relation between the two tables
+                 $relatedModel = $this->{$relation}()->getRelated();
+                 $relatedTable = $relatedModel->getTable();
+                // dd(Schema::hasColumn($relatedTable, $relatedColumn));
+                 // Ensure the related table has the requested column
+                 if (Schema::hasColumn($relatedTable, $relatedColumn)) {
+                     return $query
+                         ->leftJoin($relatedTable, "{$relatedTable}.id", '=', "{$this->getTable()}.{$this->{$relation}()->getForeignKeyName()}")
+                         ->orderBy("{$relatedTable}.{$relatedColumn}", $sortDirection)
+                         ->select("{$this->getTable()}.*"); // Avoid duplicate columns
+                 }
+             }
+         } elseif (Schema::hasColumn($this->getTable(), $sortBy)) {
+             // Sort by the main model attribute
+             return $query->orderBy($sortBy, $sortDirection);
+         }
+         
+        //  dd($defaultSortDirection);
+         // Fallback to default sorting
+         return $query->orderBy($defaultSortColumn, $defaultSortDirection);
     }
 
     public function files()

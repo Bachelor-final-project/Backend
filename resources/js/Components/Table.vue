@@ -382,11 +382,11 @@
               {{ $t(head.value) }}
               <a
                 v-if="head.sortable"
-                @click.prevent="handleSort(head.key)"
+                @click.prevent="handleSort(head.sortBy || head.key)"
                 href="#"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-3 h-3 ml-1"
+                  class="w-4 h-4 ml-1"
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 320 512"
@@ -686,16 +686,17 @@ const rowClass = (item) => {
       }
   }
 };
-let sortBy = [];
-let sortDesc = [];
+let sortBy = 'id';
+let sortDesc = 'desc';
 const handleSort = (head) => {
-  if (!sortBy.includes(head)) {
-    sortBy = [head];
-    sortDesc = [false];
-  } else {
-    sortDesc[0] = !sortDesc[0];
-  }
-  const page = route().params.page;
+    sortBy = head;
+    sortDesc = sortDesc == 'desc'? 'asc': 'desc'; //toggle the sortDirection
+  router.reload({
+    only: [props.refresh_only],
+    data: { ...{ sortDesc, sortBy }, forms_page: 1 }
+  });
+
+  /*const page = route().params.page;
   const url = page
     ? route(route().current()) + "?page=" + page
     : route(route().current());
@@ -703,7 +704,7 @@ const handleSort = (head) => {
     url,
     { sortDesc, sortBy },
     { preserveState: true, preserveScroll: true }
-  );
+  );*/
 };
 
 const haveData = props.items && props.items.data && props.items.data[0];

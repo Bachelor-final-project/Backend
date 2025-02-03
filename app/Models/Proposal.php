@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 use App\Traits\TenantAttributeTrait;
 use App\Traits\TenantScoped;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class Proposal extends BaseModel
@@ -173,7 +174,7 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'title', 'key' => 'title'],
             // ['sortable' => true, 'value' => 'body', 'key' => 'body'],
             // ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
-            ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
+            ['sortable' => true, 'sortBy' => 'currency.name_' . App::currentLocale() , 'value' => 'currency', 'key' => 'currency_name'],
             // ['sortable' => true, 'value' => 'proposal_effects', 'key' => 'proposal_effects'],
             ['sortable' => true, 'value' => 'cost', 'key' => 'cost'],
             ['sortable' => true, 'value' => 'share cost', 'key' => 'share_cost'],
@@ -181,10 +182,10 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'execution date', 'key' => 'execution_date'],
             ['sortable' => true, 'value' => 'Complete Donating Status Date', 'key' => 'complete_donating_status_date'],
             // ['sortable' => true, 'value' => 'publishing date', 'key' => 'publishing_date'],
-            ['sortable' => true, 'value' => 'entity name', 'key' => 'entity_name'],
-            ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
-            ['sortable' => true, 'value' => 'area name', 'key' => 'area_name'],
-            ['sortable' => true, 'value' => 'payable online', 'key' => 'isPayableOnline', 'translate' => 'true'],
+            ['sortable' => true, 'sortBy' => 'entity.name', 'value' => 'entity name', 'key' => 'entity_name'],
+            ['sortable' => true, 'sortBy' => 'proposalType.type_' . App::currentLocale(), 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
+            ['sortable' => true, 'sortBy' => 'entity.name', 'value' => 'area name', 'key' => 'area_name'],
+            // ['sortable' => true, 'value' => 'payable online', 'key' => 'isPayableOnline', 'translate' => 'true'],
             ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true, 'details_key' => 'status_details'],
 
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
