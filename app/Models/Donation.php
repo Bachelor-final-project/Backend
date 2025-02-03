@@ -121,7 +121,7 @@ class Donation extends BaseModel
             ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
             ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
-            ['sortable' => true, 'value' => 'created at', 'key' => 'created_at_date_time'],
+            ['sortable' => true, 'sortBy' => 'created_at', 'value' => 'created at', 'key' => 'created_at_date_time'],
             ['sortable' => true, 'sortBy' => 'status', 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
