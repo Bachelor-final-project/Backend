@@ -94,11 +94,12 @@ class DonationController extends Controller
     public function update(UpdateDonationRequest $request, Donation $donation)
     {
         $validated = $request->validated();
-
-        $donorPhone = $validated['phone'];
-        unset($validated['phone']);
-        // dd($donorPhone);
-        $validated['donor_id'] = Donor::where('phone', '=', $donorPhone)->first()->id;
+        if(isset($validated['phone'])){
+            $donorPhone = $validated['phone'];
+            unset($validated['phone']);
+            // dd($donorPhone);
+            $validated['donor_id'] = Donor::where('phone', '=', $donorPhone)->first()->id;
+        }
         
         $donation->update($validated);
         // add Document after approving the donation
