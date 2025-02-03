@@ -37,6 +37,7 @@
 
 <script>
 import { useI18n } from "vue-i18n";
+import { router } from "@inertiajs/vue3";
 
 export default {
   props: ["action", "item"],
@@ -75,6 +76,16 @@ export default {
     completingArchivingStatus() {
       this.$emit('modal_function', 'completingArchivingStatus', this.item);
       // this.complete_archiving_status = true;
+    },
+    approveDonation() {
+      router.put(route(`${this.action.model}.update`, this.item.id), {
+        status: this.item.status = 2, // approved status value 2
+      });
+    },
+    rejectDonation() {
+      router.put(route(`${this.action.model}.update`, this.item.id), {
+        status: this.item.status = 3, // rejected status value 3
+      });
     },
     generateUrl(routeName, queryParams = {}, id = null) {
       // Generate the base URL using the Ziggy `route` function
