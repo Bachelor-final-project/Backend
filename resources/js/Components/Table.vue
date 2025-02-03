@@ -18,6 +18,15 @@
         @finish-uploading="isFileInputLoading = false"
         @start-uploading="isFileInputLoading = true"
       />
+      <div class="col-span-2">
+        <div v-if="isUploading" class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+            <div 
+              class="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+              :style="{ width: progress + '%' }"
+            ></div>
+          </div>
+          <p v-if="isUploading" class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ progress }}%</p>
+      </div>
       <div class="mt-6 flex justify-end">
         <SecondaryButton @click="modalFunctions['closeDocumentFileModal']">
           {{ $t("Cancel") }}
@@ -424,7 +433,7 @@
           :href="item[head.key]"
           target="_blank"
           >
-          {{ item[head.key] }}
+          {{ head.link_text? item[head.link_text]:  item[head.key]}}
           </a>
             <div
               v-else
@@ -852,13 +861,34 @@ const modalFunctions = {
   },
   confirmDocumentFileUpload: function (item) {
     if(!documentFiles.value) return false;
+    progress.value = 0;
+    isUploading.value = true;
     router.post(route('attachment.store'), {
       files: documentFiles.value,
       attachable_id: modal_item.value.id,
       attachable_type: props.model,
       attachment_type: 1,
-    },{forceFormData: true});
-    modalFunctions['closeDocumentFileModal'](item);
+    },{
+      forceFormData: true,
+      onProgress: (event) => {
+        if (event.total) {
+          progress.value = Math.round((event.loaded / event.total) * 100);
+        }
+      },
+      onSuccess: () => {
+        progress.value = 100;
+        setTimeout(() => { isUploading.value = false; }, 1000); // Hide progress bar after completion
+        
+      },
+      onError: () => {
+        isUploading.value = false;
+        progress.value = 0;
+      },
+      onFinish: () => {
+        isUploading.value = false;
+        modalFunctions['closeDocumentFileModal'](item);
+      },
+    });
   },
   uploadingDocumentFile: function (item) {
     modal_item.value = item;

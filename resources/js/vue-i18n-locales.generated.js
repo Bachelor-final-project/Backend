@@ -8,6 +8,8 @@ export default {
         "Complete Archiving Status Date" : "تاريخ إكمال مرحلة الأرشفة",
         "Hold down the Ctrl key and click on a group to go to the donations page with the selected status." : "اضغط مع الاستمرار على زر Ctrl ثم انقر على المجموعة للانتقال إلى صفحة التبرعات بالحالة المحددة",
         "General Update" : "تعديل عام",
+        "Document File" : "ملف التوثيق",
+        "document file" : "ملف التوثيق",
         "type": "النوع",
         "job title": "المسمى الوظيفي",
         "Status": "الحالة",
