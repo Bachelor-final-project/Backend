@@ -97,6 +97,8 @@ Route::get('/import-units', [GeneralController::class, 'importUnits'])->name('im
 Route::get('/import-currencies', [GeneralController::class, 'importCurrencies'])->name('import-currencies');
 Route::get('/import-proposals', [GeneralController::class, 'importProposals'])->name('import-proposals');
 Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiaries'])->name('import-beneficiaries');
+Route::get('/import-donors', [GeneralController::class, 'importDonors'])->name('import-donors');
+Route::get('/import-donations', [GeneralController::class, 'importDonations'])->name('import-donations');
 
 Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 Route::post('/test', [StripeController::class, 'test']);

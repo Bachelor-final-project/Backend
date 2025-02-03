@@ -14,6 +14,8 @@ use App\Exports\ItemsExport;
 use App\Exports\CurrenciesExport;
 use App\Exports\BeneficiariesExport;
 use App\Exports\ProposalsFromViewExport;
+use App\Exports\DonorsExport;
+use App\Exports\DonationsExport;
 use App\Models\Proposal;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -73,6 +75,14 @@ class GeneralController extends Controller
     }
     public function proposalPDF(Request $request){
         return Excel::download(new ProposalsFromViewExport($request), 'invoices.xlsx');
+       
+    }
+    public function importDonors(Request $request){
+        return Excel::download(new DonorsExport($request), 'DonorsExport.xlsx');
+       
+    }
+    public function importDonations(Request $request){
+        return Excel::download(new DonationsExport($request), 'DonationsExport.xlsx');
        
     }
     
