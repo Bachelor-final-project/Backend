@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ForUserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class Document extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
     protected $appends = ['proposal_name', 'donor_name', 'currency_name', 'is_attached'];
+
     protected $with = ['proposal', 'donor', 'currency', 'attachments'];
     public static $controllable = true;
 
@@ -62,10 +64,42 @@ class Document extends BaseModel
         return $this->morphMany(Attachment::class, 'attachable');
     }
 
+    //scopes
+    public function scopeForUser($query, $user)
+    {
+        switch ($user->type) {
+            case 1: // proposal_director
+            case 3: // donations_director
+            case 4: // warehouses_director
+            case 5: // media_director
+                // access to all records
+                break;
+                
+            case 2: // entity_director
+                $query->has('proposal');
+                break;
+            default:
+                $query->whereRaw('1=0');
+                break;
+        }
+    }
     public static function headers($user = null)
     {
         return [
             ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
+            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
+            ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
+            ['sortable' => true, 'value' => 'notes', 'key' => 'note'],
+            ['sortable' => true, 'value' => 'expected date', 'key' => 'expected_date'],
+            // ['sortable' => true, 'value' => 'currency', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
+            // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
+    public static function headersForProposal($user = null)
+    {
+        return [
+            // ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],

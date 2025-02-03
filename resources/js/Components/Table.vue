@@ -175,8 +175,19 @@
             @finish-uploading="isFileInputLoading = false"
             @start-uploading="isFileInputLoading = true"
           />
+          
       </div> 
+      <div class="col-span-2">
+        <div v-if="isUploading" class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+            <div 
+              class="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+              :style="{ width: progress + '%' }"
+            ></div>
+          </div>
+          <p v-if="isUploading" class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ progress }}%</p>
+      </div>
       </div> 
+
 
       <div class="mt-6 flex justify-end">
         
@@ -290,12 +301,13 @@
           <InputLabel :for="e.model + '_filter'" :value="e.name" />
           <SelectInput
             :dir="locale == 'ar' ? 'rtl' : 'ltr'"
-            classes="mt-1 block w-full"
+            classes="!mt-1 !block !w-full"
             :id="e.model + '_filter'"
             v-model="filters[e.model]"
             :options="e.options"
             :item_name="e.item_name || null"
             :disabled="isFilterLoading"
+            :searchable="e.searchable"
           />
         </div>
       </template>
@@ -469,7 +481,7 @@ import Paginator from "@/Components/Paginator.vue";
 import TableAction from "@/Components/TableAction.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { reactive, watch, ref } from "vue";
+import { reactive, watch, ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import FileInput from "@/Components/FileInput.vue";
@@ -553,6 +565,9 @@ const complete_donating_status_user = ref(page.props.auth.user.id);
 const hasDonatingAmount = ref(0);
 const donatingAmount = ref(0);
 
+const isUploading = ref(false);
+const progress = ref(0);
+
 const modal_item = ref();
 
 const statuses = {
@@ -575,9 +590,25 @@ const form = useForm({
 const filters = reactive({
 });
 if(!isEmpty(props.table_filters)){
-  props.table_filters.forEach((e) => {if(!e.type || e.type == 'select') filters[e.model] = 0});
+  const params = new URLSearchParams(window.location.search);
+
+  props.table_filters.forEach((e) => {
+     if(!e.type || e.type == 'select') filters[e.model] = params.get(e.model)?? 0;
+    });
 }
 
+/*onMounted(() => {
+  
+  const params = new URLSearchParams(window.location.search);
+  if (!isEmpty(props.table_filters)) {
+    props.table_filters.forEach((e) => {
+      if (!e.type || e.type === "select") {
+        filters[e.model] = params.get(e.model) ?? 0;
+      }
+    });
+  }
+  console.log(params.get("proposal_type_id_filter"))
+});*/
 
 
 const debouncedReload = debounce((newValue) => {
@@ -765,21 +796,45 @@ const modalFunctions = {
   },
   confirmCompleteExecutionStatusModal: function (item) {
     if(!arabicVideoFile.value) return false;
+    isUploading.value = true;
+    progress.value = 0;
     router.post(route(`${props.model}.update`, modal_item.value.id), {
       _method: 'put',
       status: 3,
       arabicVideoFile: arabicVideoFile.value,
       englishVideoFile: englishVideoFile.value,
-    },{forceFormData: true});
-    modalFunctions['closeCompleteExecutionStatusModal'](item);
+    },{
+      forceFormData: true,
+      onProgress: (event) => {
+        if (event.total) {
+          progress.value = Math.round((event.loaded / event.total) * 100);
+        }
+      },
+      onSuccess: () => {
+        progress.value = 100;
+        setTimeout(() => { isUploading.value = false; }, 1000); // Hide progress bar after completion
+        
+      },
+      onError: () => {
+        isUploading.value = false;
+        progress.value = 0;
+      },
+      onFinish: () => {
+        isUploading.value = false;
+        modalFunctions['closeCompleteExecutionStatusModal'](item);
+      },
+    });
+    
   },
   closeCompleteDonatingStatusModal: function (item) {
     complete_donating_status.value = false;
   },
   completingDonatingStatus: function (item) {
     modal_item.value = item;
-    donatingAmount.value = item.cost;
     complete_donating_status.value = true;
+    if (!hasDonatingAmount) {
+      donatingAmount.value = 0; // Set to 0 when false
+    }
   },
   completeDonatingStatusFileinputChanged: function (files){
     complete_donating_status_files.value = files;

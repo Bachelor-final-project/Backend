@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ForUserTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,9 +15,9 @@ use Illuminate\Support\Str;
 
 class Proposal extends BaseModel
 {
-    use HasFactory, TenantAttributeTrait, TenantScoped;
+    use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image'];
+    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date'];
     protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
@@ -34,83 +35,7 @@ class Proposal extends BaseModel
         8 => 'done_status'
     ];
 
-    // public function getDonorNameAttribute()
-    // {
-    //     return $this->donor?->name;
-    // }
-
-    // public function getDonorAttribute()
-    // {
-    //     return $this->belongsTo(User::class, 'donor_id');
-    // }
-    public static function getDonatingStatusProposalsStackedGroup(){
-        $proposals = Proposal::selectRaw('proposals.id, proposals.title as title, sum(donations.amount) as paid, ROUND(cost - sum(donations.amount), 2) as remaining')
-        ->where('proposals.status', 1)
-        ->join('donations', 'proposals.id', '=', 'donations.proposal_id')
-        ->where('donations.status', 2)
-        ->groupByRaw('proposals.id, proposals.title')
-        ->get();
-        $data = [
-            [
-                'name' => __('paid amount'),
-                'data' => $proposals->pluck('paid')->toArray(),
-            ],
-            [
-                'name' => __('remaining amount'),
-                'data' => $proposals->pluck('remaining')->toArray(),
-            ],
-        ];
-        
-        return [
-            "data" => $data,
-            "categories" => $proposals->pluck('title')->toArray()
-        ];
-    }
-    public static function getCompletedProposalsLast30DaysChartData(){
-        $proposals = Proposal::selectRaw('status, COUNT(*) as count, date(created_at) as date')
-        ->where('created_at', '>', now()->subDays(30)->endOfDay())
-        ->where('status', 8)
-        ->groupByRaw('status, date(created_at)')
-        ->get();
-
-            $result = [
-                "data" => $proposals->pluck('count')->toArray()
-            ];
-
-        return $result;
-    }
-    public static function getProposalsByStatusChartData(){
-        $proposals = Proposal::selectRaw('status, COUNT(*) as count')
-            ->groupBy('status')
-            ->get()
-            ->keyBy('status');
-            $statusMapping = [
-                1 => __('Donation collection phase'),
-                2 => __('Implementation and documentation phase'),
-                3 => __('Needs archiving'),
-                8 => __('Completed'),
-            ];
-            $result = [
-                "categories" => array_values($statusMapping),
-                "data" => array_map(function ($statusId) use ($proposals) {
-                    return $proposals[$statusId]->count ?? 0; // Default to 0 if status is missing
-                }, array_keys($statusMapping))
-            ];
-
-        return $result;
-    }
-    public static function getProposalsByTypesChartData(){
-        $proposals = Proposal::selectRaw('proposal_types.type_ar as type, COUNT(*) as count')
-            ->join('proposal_types', 'proposals.proposal_type_id', '=', 'proposal_types.id')
-            ->groupBy('proposal_type_id')
-            ->get();
-            $result = [
-                "categories" => $proposals->pluck('type')->toArray(),
-                "data" => $proposals->pluck('count')->toArray(),
-            ];
-
-        return $result;
-    }
+    //attributes
     public function getStatusStrAttribute()
     {
         return [1 => 'donating_status', 2 => 'execution_status', 3 => 'ready_to_archive_status', 8 => 'done_status'][$this->status] ?? '';
@@ -125,8 +50,9 @@ class Proposal extends BaseModel
     public function getCoverImageAttribute(){
         return  $this->attachments()->where('attachment_type', 1)->first()?->url;
     }
-
-
+    public function getCompleteDonatingStatusDateAttribute(){
+        return  $this->logs()->where('log_type', 1)->first()?->formatted_created_at;
+    }
     public function getEntityNameAttribute(){
         return $this->entity->name;   
     }
@@ -140,6 +66,8 @@ class Proposal extends BaseModel
         return $this->currency->name;   
     }
 
+    //authorization
+
     public function getCanCompleteDonatingStatusAttribute(){
         return Gate::allows('completeDonatingStatus', $this);   
     }
@@ -149,14 +77,7 @@ class Proposal extends BaseModel
     public function getCanCompleteArchivingStatusAttribute(){
         return Gate::allows('completeArchivingStatus', $this);   
     }
-    // public function getCanCompleteExecutionStatusAttribute(){
-    //     return $this->currency->name;   
-    // }
 
-    // public function getPropsalDetailsAttribute()
-    // {
-    //     return $this->hasMany(ProposalDetail::class, 'proposal_id');
-    // }
 
 
     // relations
@@ -186,6 +107,17 @@ class Proposal extends BaseModel
     {
         return $this->belongsToMany(Beneficiary::class, 'proposal_beneficiaries', 'proposal_id', 'beneficiary_id');
     }
+    public function donors()
+    {
+        return $this->hasManyThrough(
+            Donor::class,     // Final related model
+            Donation::class,  // Intermediate model (pivot)
+            'proposal_id',    // Foreign key on donations (to proposals)
+            'id',             // Primary key on donors
+            'id',             // Primary key on proposals
+            'donor_id'        // Foreign key on donations (to donors)
+        );
+    }
     // Scopes
 
     public function scopePublic($query){
@@ -213,13 +145,33 @@ class Proposal extends BaseModel
             else if(is_string($value)) $query->where($column,'like', "%$value%");
         }
     }
+    public function scopeForUser($query, $user)
+    {
+        switch ($user->type) {
+            case 1: // proposal_director
+            case 3: // donations_director
+            case 4: // warehouses_director
+            case 5: // media_director
+                // access to all records
+                break;
+                
+            case 2: // entity_director
+                $query->whereIn('proposals.entity_id', function($q) use($user){
+                    $q->select('entities.id')->from('entities')->where('supervisor_id', $user->id);
+                });
+                break;
+            default:
+                $query->whereRaw('1=0');
+                break;
+        }
+    }
 
     public static function headers($user = null)
     {
         return [
             ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             ['sortable' => true, 'value' => 'title', 'key' => 'title'],
-            ['sortable' => true, 'value' => 'body', 'key' => 'body'],
+            // ['sortable' => true, 'value' => 'body', 'key' => 'body'],
             // ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
             // ['sortable' => true, 'value' => 'proposal_effects', 'key' => 'proposal_effects'],
@@ -227,6 +179,7 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'share cost', 'key' => 'share_cost'],
             ['sortable' => true, 'value' => 'expected benificiaries count', 'key' => 'expected_benificiaries_count'],
             ['sortable' => true, 'value' => 'execution date', 'key' => 'execution_date'],
+            ['sortable' => true, 'value' => 'Complete Donating Status Date', 'key' => 'complete_donating_status_date'],
             // ['sortable' => true, 'value' => 'publishing date', 'key' => 'publishing_date'],
             ['sortable' => true, 'value' => 'entity name', 'key' => 'entity_name'],
             ['sortable' => true, 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
@@ -256,5 +209,87 @@ class Proposal extends BaseModel
             ['name' => __('Needs archiving'), 'id' => 3],
             ['name' => __('Completed'), 'id' => 8],
         ];
+    }
+
+    // statistics
+    public static function getDonatingStatusProposalsStackedGroup(){
+        $proposals = Proposal::selectRaw("proposals.id, proposals.title as title,
+         sum(case when donations.status = 2 then donations.amount else 0 end) as paid,
+         sum(case when donations.status = 0 then donations.amount else 0 end) as pending,
+         ROUND(cost - sum(case when donations.status = 2 then donations.amount else 0 end), 2) as remaining")
+        ->where('proposals.status', 1)
+        // ->leftJoin('donations', 'proposals.id', '=', 'donations.proposal_id')
+        ->leftJoin('donations', function($join){
+            $join->on('proposals.id', '=', 'donations.proposal_id');
+            $join->where('donations.status', '<>' ,3);
+        })
+        // ->where('donations.status', 2)
+        ->groupByRaw('proposals.id')
+        ->get();
+        $data = [
+            [
+                'name' => __('paid amount'),
+                'data' => $proposals->pluck('paid')->toArray(),
+            ],
+            [
+                'name' => __('pending amount'),
+                'data' => $proposals->pluck('pending')->toArray(),
+            ],
+            [
+                'name' => __('remaining amount'),
+                'data' => $proposals->pluck('remaining')->toArray(),
+            ],
+        ];
+        
+        return [
+            "data" => $data,
+            "ids" => $proposals->pluck('id')->toArray(),
+            "categories" => $proposals->pluck('title')->toArray()
+        ];
+    }
+    public static function getCompletedProposalsLast30DaysChartData(){
+        $proposals = Proposal::selectRaw('status, COUNT(*) as count, date(created_at) as date')
+        ->where('created_at', '>', now()->subDays(30)->endOfDay())
+        ->where('status', 8)
+        ->groupByRaw('status, date(created_at)')
+        ->get();
+
+            $result = [
+                "data" => $proposals->pluck('count')->toArray()
+            ];
+
+        return $result;
+    }
+    public static function getProposalsByStatusChartData(){
+        $proposals = Proposal::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+            $statusMapping = [
+                1 => __('donating_status'),
+                2 => __('execution_status'),
+                3 => __('ready_to_archive_status'),
+                8 => __('done_status'),
+            ];
+            $result = [
+                "categories" => array_values($statusMapping),
+                "data" => array_map(function ($statusId) use ($proposals) {
+                    return $proposals[$statusId]->count ?? 0; // Default to 0 if status is missing
+                }, array_keys($statusMapping))
+            ];
+
+        return $result;
+    }
+    public static function getProposalsByTypesChartData(){
+        $proposals = Proposal::selectRaw('proposal_types.type_ar as type, COUNT(*) as count')
+            ->join('proposal_types', 'proposals.proposal_type_id', '=', 'proposal_types.id')
+            ->groupBy('proposal_type_id')
+            ->get();
+            $result = [
+                "categories" => $proposals->pluck('type')->toArray(),
+                "data" => $proposals->pluck('count')->toArray(),
+            ];
+
+        return $result;
     }
 }

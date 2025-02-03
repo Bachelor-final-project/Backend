@@ -21,6 +21,7 @@ use App\Models\Donor;
 use App\Models\Country;
 use App\Models\Donation;
 use App\Models\StripeM;
+use App\Scopes\ForUserScope;
 
 class EntityController extends Controller
 {
@@ -47,8 +48,8 @@ class EntityController extends Controller
     public function donatingForm(Request $request, string $donating_form_path)
     {
         // dd('hi');
-        $entity = Entity::where('donating_form_path', $donating_form_path)->firstOrFail();
-        $proposals = Proposal::where('entity_id', $entity->id)->where('status', Proposal::STATUSES['donatable'])->get();
+        $entity = Entity::withoutGlobalScope(ForUserScope::class)->where('donating_form_path', $donating_form_path)->firstOrFail();
+        $proposals = Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->where('status', Proposal::STATUSES['donatable'])->get();
         $showPayOnlineButton = false;
         foreach($proposals as $p) {
             if($p->isPayableOnline) {
@@ -59,7 +60,7 @@ class EntityController extends Controller
         return Inertia::render(Str::studly("Entity").'/DonatingForm', [
             "headers" => Proposal::guestHeaders(),
             "entity" => $entity,
-            "proposals" => Proposal::where('entity_id', $entity->id)->public()->get(),
+            "proposals" => Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->public()->get(),
             'countries' => Country::select('id', 'name')->get(),
             'genders' => Donor::genders(),
             'show_payonline_button' => $showPayOnlineButton,

@@ -14,9 +14,9 @@ return new class extends Migration {
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->string('entity_id')->nullable();
-            $table->unsignedBigInteger('record_id')->nullable();
-            $table->string('type')->nullable();
+            $table->string('loggable_type')->nullable()->index();
+            $table->unsignedBigInteger('loggable_id')->nullable()->index();
+            $table->string('log_type')->nullable();
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');

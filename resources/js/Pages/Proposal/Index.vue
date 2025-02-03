@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$t('Proposal')" />
+  <Head :title="$t('Proposals')" />
   <div class="dark:text-white">
     <Table
       title="Proposal"
@@ -52,6 +52,7 @@ const table_filters = [
     name: t("proposal type"),
     model: "proposal_type_id_filter",
     options: [{ id: 0, name: t("All proposalTypes") }, ...props.proposalTypes],
+    searchable: true
   },
   {
     name: t("area"),

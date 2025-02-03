@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$t('entity')" />
+  <Head :title="$t('entities')" />
   <div class="dark:text-white">
     <Table
       title="entity"

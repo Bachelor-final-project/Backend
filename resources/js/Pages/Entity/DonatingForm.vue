@@ -13,8 +13,8 @@
       </div>
 
       <div class="mt-10">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $t('Your Information') }}</h2>
-        <form @submit.prevent="submitDonations" class="space-y-4">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 pb-2">{{ $t('Your Information') }}</h2>
+        <form @submit.prevent="submitDonations" class="grid grid-cols-2 gap-4">
           <div>
             <InputLabel for="name" value="name" />
             <TextInput

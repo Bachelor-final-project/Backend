@@ -1,5 +1,5 @@
 <template>
-  <Head :title="$t('Users')" />
+  <Head :title="$t('Items')" />
   <div class="dark:text-white">
     <Table
       title="Items"
@@ -53,15 +53,6 @@ const props = defineProps({
   name: String,
 });
 
-const user = useForm({
-  name: "",
-  email: "",
-  password: "",
-  type: "",
-  status: "",
-  job_title: "",
-  is_active: "",
-});
 
 function save() {
   console.log(user);

@@ -5,9 +5,10 @@ import { onMounted, ref } from "vue";
 let type = ref(2);
 const page = usePage();
 type.value = page.props.auth.user.type;
+console.log(type.value);
 </script>
 <template>
-  <div v-if="type == 1">
+  <div >
     <slot />
   </div>
 </template>

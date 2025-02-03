@@ -48,7 +48,7 @@ const menus = [
                     title: "new proposal",
                     icon: "laptop-file",
                     to: "proposal.create",
-                    allowedUserTypes: [1,2,5],
+                    allowedUserTypes: [1,5],
                 },
             ]
         },
@@ -56,25 +56,19 @@ const menus = [
             title: "Donations",
             icon: "hand-holding-dollar",
             to: "donation.index",
-            allowedUserTypes: [1,],
+            allowedUserTypes: [1,2,],
         },
         {
             title: "Donors",
             icon: "handshake-simple",
             to: "donor.index",
-            allowedUserTypes: [1,],
-        },
-        {
-            title: "Donations",
-            icon: "hand-holding-dollar",
-            to: "donation.create",
-            allowedUserTypes: [3,],
-        },        
+            allowedUserTypes: [1,2,],
+        },      
         {
             title: "Documentations",
             icon: "photo-film",
             to: "document.index",
-            allowedUserTypes: [1,4],
+            allowedUserTypes: [1,2,4],
         },
 
         // {

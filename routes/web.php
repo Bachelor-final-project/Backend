@@ -9,8 +9,10 @@ use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\EntityController;
+use App\Http\Controllers\ExportPDFController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\StripeController;
+use Illuminate\Http\Request;
 
 // Route::get('/', function () {
 //    return 'hi';
@@ -99,3 +101,5 @@ Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiar
 Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 Route::post('/test', [StripeController::class, 'test']);
 Route::get('/success', [StripeController::class, 'success'])->name('success');
+
+Route::get('ExportPDF/proposal/{id}', [ExportPDFController::class, 'proposal'])->name('export-pdf-proposal');

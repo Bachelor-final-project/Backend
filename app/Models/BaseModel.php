@@ -33,9 +33,18 @@ class BaseModel extends Model
              return [$newKey => $value];
          })
          ->toArray();
-         
          foreach ($filterColumns as $column => $value) {
-             if(empty($value) ||  $value == 0) continue;
+            // dd(class_basename($this) );
+             if(
+                empty($value) && $value != 0 ||
+                $value == 0 && class_basename($this) != "Donation" && $column != 'status' ||
+                $value == '-1' && class_basename($this) == "Donation" && $column == 'status' 
+                
+                ){
+                    
+                 continue;
+                }
+
  
              if(is_numeric($value)) $query->where($column, $value);
              
@@ -50,6 +59,10 @@ class BaseModel extends Model
     {
         return $this->morphMany(Attachment::class, 'attachable');
     }
-    
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'loggable');
+    }
+
 
 }

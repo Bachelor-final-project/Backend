@@ -7,22 +7,22 @@
         class="w-full h-48 object-cover"
       />
       <div class="p-4">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ proposal.title }}</h3>
-        <p class="font-medium text-gray-900 dark:text-gray-100">{{$t('cost')}}: {{ proposal.cost }} {{ proposal['currency_name'] }}</p>
-        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ proposal.body }}</p>
-        <div>
+        <h3 class="text-lg text-center font-bold text-gray-900 dark:text-gray-100">{{ proposal.title }}</h3>
+        <p class="font-medium text-gray-900 dark:text-gray-100 py-2"><span class="font-bold">{{$t('cost')}}: </span>{{ proposal.cost }} {{ proposal['currency_name'] }}</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100"><span class="font-bold">{{$t('proposal details')}}: <br></span>{{ proposal.body }}</p>
+        <div class="mt-10">
           <InputLabel
             for="donationAmount"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            {{$t("Enter Donation Amount")}}
+            {{$t("Enter Donation Amount")}} ({{ proposal.currency_name }})
           </InputLabel>
           <TextInput
             id="donationAmount"
             type="number"
             v-model="localDonationAmount"
-            placeholder="Enter amount"
-            class="w-full my-2 px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
+            :placeholder="$t('Enter amount')"
+            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
             @input="emitDonation"
           />
         </div>
