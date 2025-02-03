@@ -53,6 +53,7 @@ class BaseModel extends Model
     }
     public function scopeSort($query, $request)
     {
+        $query->orderBy('id', 'DESC');
     }
 
     public function files()
