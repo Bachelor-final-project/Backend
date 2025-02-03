@@ -13,7 +13,7 @@
   </div>
 </template>
 <script setup>
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
 import Card from "@/Components/Card.vue";
@@ -23,8 +23,10 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 const { t } = useI18n();
+const page = usePage();
 const user = computed(() => page.props.auth.user);
-
+// console.log(page.props.auth.user);
+// console.log(user.value);
 const actions = [
   {
     type: "btn",
@@ -34,7 +36,7 @@ const actions = [
     model: "document",
     tooltip: "delete document",
     showFunc: function(item){
-        return [1, 5].includes(user.type);
+        return [1, 5].includes(user.value.type);
     }
   },
   {
@@ -45,7 +47,7 @@ const actions = [
     model: "document",
     tooltip: "edit document",
     showFunc: function(item){
-        return [1, 5].includes(user.type);
+        return [1, 5].includes(user.value.type);
     }
   },
   {
@@ -56,7 +58,7 @@ const actions = [
     model: "document",
     tooltip: "upload document file",
     showFunc: function(item){
-        return [1, 5].includes(user.type);
+        return [1, 5].includes(user.value.type);
     }
   },
   // {
