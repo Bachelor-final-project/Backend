@@ -62,43 +62,66 @@ class Warehouse extends BaseModel
     }
 
     public static function getWarehouseItems($warehouse_id) {
-        $sql = "
-            WITH warehouses_items AS (
-                SELECT 
-                    w.name AS warehouse_name, 
-                    i.name AS item_name, 
-                    u.name AS unit_name, 
-                    SUM(
-                        CASE 
-                            WHEN wt.transaction_type = 1 THEN wt.amount 
-                            ELSE -wt.amount 
-                        END
-                    ) AS item_quantity, 
-                    w.id AS warehouse_id
-                FROM 
-                    warehouse_transactions wt
-                LEFT JOIN 
-                    items i ON wt.item_id = i.id
-                LEFT JOIN 
-                    units u ON i.unit_id = u.id
-                LEFT JOIN 
-                    warehouses w ON wt.warehouse_id = w.id
-                GROUP BY 
-                    wt.item_id, w.id, w.name
-            )
-            SELECT * 
-            FROM warehouses_items
-            WHERE item_quantity > 0
-        ";
+        // $sql = "
+        //     WITH warehouses_items AS (
+        //         SELECT 
+        //             w.name AS warehouse_name, 
+        //             i.name AS item_name, 
+        //             u.name AS unit_name, 
+        //             SUM(
+        //                 CASE 
+        //                     WHEN wt.transaction_type = 1 THEN wt.amount 
+        //                     ELSE -wt.amount 
+        //                 END
+        //             ) AS item_quantity, 
+        //             w.id AS warehouse_id
+        //         FROM 
+        //             warehouse_transactions wt
+        //         LEFT JOIN 
+        //             items i ON wt.item_id = i.id
+        //         LEFT JOIN 
+        //             units u ON i.unit_id = u.id
+        //         LEFT JOIN 
+        //             warehouses w ON wt.warehouse_id = w.id
+        //         GROUP BY 
+        //             wt.item_id, w.id, w.name
+        //     )
+        //     SELECT * 
+        //     FROM warehouses_items
+        //     WHERE item_quantity > 0
+        // ";
+
+        // // Add conditional WHERE clause for warehouse_id
+        // if ($warehouse_id > 0) {
+        //     $sql .= " AND warehouse_id = ?";
+        //     $bindings = [$warehouse_id];
+        // } else {
+        //     $bindings = [];
+        // }
+        // $results = DB::select($sql, $bindings);
+        // return $results;
+        // Start the query builder for warehouse transactions
+        $query = DB::table('warehouse_transactions as wt')
+            ->select([
+                'w.name as warehouse_name',
+                'i.name as item_name',
+                'u.name as unit_name',
+                DB::raw('SUM(CASE WHEN wt.transaction_type = 1 THEN wt.amount ELSE -wt.amount END) as item_quantity'),
+                'w.id as warehouse_id'
+            ])
+            ->leftJoin('items as i', 'wt.item_id', '=', 'i.id')
+            ->leftJoin('units as u', 'i.unit_id', '=', 'u.id')
+            ->leftJoin('warehouses as w', 'wt.warehouse_id', '=', 'w.id')
+            ->groupBy('wt.item_id', 'w.id', 'w.name');
 
         // Add conditional WHERE clause for warehouse_id
         if ($warehouse_id > 0) {
-            $sql .= " AND warehouse_id = ?";
-            $bindings = [$warehouse_id];
-        } else {
-            $bindings = [];
+            $query->where('w.id', '=', $warehouse_id);
         }
-        $results = DB::select($sql, $bindings);
+
+        // Get the results
+        $results = $query->havingRaw('item_quantity > 0')->get();
+
         return $results;
     }
 }
