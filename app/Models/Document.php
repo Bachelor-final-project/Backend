@@ -94,6 +94,7 @@ class Document extends BaseModel
     public static function headers($user = null)
     {
         return [
+            ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],

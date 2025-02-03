@@ -33,6 +33,10 @@ class DonationController extends Controller
         
         return Inertia::render(Str::studly("Donation").'/Index', [
             "headers" => Donation::headers(),
+            'currencies' => Currency::get(),
+            'proposals' => Proposal::get(),
+            'statuses' => Donation::statuses(),
+            'donors' => Donor::get(),
             "items" => Donation::search($request)->sort($request)->paginate($this->pagination),
         ]);
     }

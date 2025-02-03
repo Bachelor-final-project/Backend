@@ -10,6 +10,7 @@ export default {
         "General Update" : "تعديل عام",
         "Document File" : "ملف التوثيق",
         "document file" : "ملف التوثيق",
+        "created at" : "تاريخ الإضافة",
         "type": "النوع",
         "job title": "المسمى الوظيفي",
         "Status": "الحالة",

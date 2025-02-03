@@ -14,12 +14,19 @@ class BaseModel extends Model
     public static $controllable = true;
 
     protected $guarded = [];
+
     protected $hidden = [
         'updated_at'
     ];
+
+
     public static function getTableName()
     {
         return with(new static)->getTable();
+    }
+
+    public function getCreatedAtDateTimeAttribute(){
+        return date('Y-m-d - H:i', strtotime($this->created_at));
     }
     public function scopeSearch($query, $request)
     {
@@ -34,19 +41,22 @@ class BaseModel extends Model
              return [$newKey => $value];
          })
          ->toArray();
+
+        //  dd($filterColumns);
          foreach ($filterColumns as $column => $value) {
             // dd(class_basename($this) );
+
              if(
-                empty($value) && $value != 0 ||
-                $value == 0 && class_basename($this) != "Donation" && $column != 'status' ||
-                $value == '-1' && class_basename($this) == "Donation" && $column == 'status' 
+                (empty($value) || $value == 0) && class_basename($this) != "Donation" ||
+                (empty($value) || $value == 0) && class_basename($this) == "Donation" && $column != 'status'  ||
+                ($value == '-1' && class_basename($this) == "Donation" && $column == 'status' )
                 
                 ){
                     
                  continue;
                 }
 
- 
+                // dd($value);
              if(is_numeric($value)) $query->where($column, $value);
              
              else if(is_string($value)) $query->where($column,'like', "%$value%");
