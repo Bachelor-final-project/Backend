@@ -67,6 +67,11 @@ class Attachment extends BaseModel
                     4 => __("Beneficiaries File"),
                 ];
                 break;
+            case 'document':
+                $types = [
+                    1 => __("Document File"),
+                ];
+                break;
             
             default:
                 return $this->attachable_type;
