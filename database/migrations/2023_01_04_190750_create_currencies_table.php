@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name_en');  // English name
             $table->string('name_ar');  // Arabic name
             $table->string('code');     // Currency code (e.g., USD, QAR)
-            $table->string('symbol');   // Currency symbol (e.g., $, ر.ق)
+            $table->string('symbol')->nullable();   // Currency symbol (e.g., $, ر.ق)
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();      // created_at and updated_at columns
         });

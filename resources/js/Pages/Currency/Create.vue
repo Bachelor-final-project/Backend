@@ -25,7 +25,8 @@ const props = defineProps({
 // });
 
 const form = useForm({
-  name: "",
+  name_ar: "",
+  name_en: "",
   code: "",
 });
 const submit = () => {
@@ -59,28 +60,30 @@ const submit = () => {
 
       <form @submit.prevent="submit" class="mt-6 space-y-6">
         <div>
-          <!-- <div class="flex">
-            <InputLabel for="is_admin" value="Set Admin" />
-            <SwitchInput
-              id="is_admin"
-              :value="1"
-              v-model="isAdminChecked"
-              class="mx-3"
-            />
-          </div> -->
-          <InputLabel for="name" value="Name" />
-
+          <InputLabel for="name_ar" value="Name In Arabic" />
           <TextInput
-            id="name"
+            id="name_ar"
             type="text"
             class="mt-1 block w-full"
-            v-model="form.name"
+            v-model="form.name_ar"
             required
             autofocus
-            autocomplete="name"
+            autocomplete="name_ar"
           />
-
-          <InputError class="mt-2" :message="form.errors.name" />
+          <InputError class="mt-2" :message="form.errors.name_ar" />
+        </div>
+        <div>
+          <InputLabel for="name_en" value="Name In English" />
+          <TextInput
+            id="name_en"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.name_en"
+            required
+            autofocus
+            autocomplete="name_en"
+          />
+          <InputError class="mt-2" :message="form.errors.name_en" />
         </div>
         <div>
           <InputLabel for="code" value="Code" />

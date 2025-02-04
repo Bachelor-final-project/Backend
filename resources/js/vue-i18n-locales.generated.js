@@ -154,6 +154,8 @@ export default {
         "All Proposals": "كل المشاريع",
         "All Donors": "كل المتبرعين",
 
+        "Name In Arabic": "الإسم بالعربية",
+        "Name In English": "الإسم بالانجليزية",
         //entity
         "Entity":"الجهات",
         "Settings Saved Seccessfully": "تم حفظ الاعدادات بنجاح",

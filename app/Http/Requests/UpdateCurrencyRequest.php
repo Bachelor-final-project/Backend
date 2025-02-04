@@ -24,7 +24,8 @@ class UpdateCurrencyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name_ar' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'code' => 'required|string|max:255'
         ];
     }

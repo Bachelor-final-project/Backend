@@ -48,6 +48,8 @@ class CurrencyController extends Controller
      */
     public function store(StoreCurrencyRequest $request)
     {
+        // dd(request());
+
         $data = $request->validated();
         Currency::create($data);
         
