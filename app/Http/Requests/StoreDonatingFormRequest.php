@@ -25,9 +25,11 @@ class StoreDonatingFormRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'document_nickname' => 'nullable|string|max:255',
             'gender' => 'required|integer|between:1,2',
             'phone' => 'required|string|max:15|unique:donors,phone',
             'country_id' => 'nullable|integer|exists:countries,id',
+            'payment_method_id' => 'nullable|integer|exists:payment_methods,id',
             'donations' => 'required|array', // donations can be empty
             'donations.*.proposal_id' => 'required_with:donations|integer|exists:proposals,id',
             'donations.*.currency_id' => 'required_with:donations|integer|exists:currencies,id',

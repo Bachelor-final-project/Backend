@@ -9,6 +9,7 @@
       <div class="p-4">
         <h3 class="text-lg text-center font-bold text-gray-900 dark:text-gray-100">{{ proposal.title }}</h3>
         <p class="font-medium text-gray-900 dark:text-gray-100 py-2"><span class="font-bold">{{$t('cost')}}: </span>{{ proposal.cost }} {{ proposal['currency_name'] }}</p>
+        <p class="font-medium text-gray-900 dark:text-gray-100 py-2"><span class="font-bold">{{$t('min_documenting_amount')}}: </span>{{ proposal.min_documenting_amount }} {{ proposal['currency_name'] }}</p>
         <p class="text-sm font-medium text-gray-900 dark:text-gray-100"><span class="font-bold">{{$t('proposal details')}}: <br></span>{{ proposal.body }}</p>
         <div class="mt-10">
           <InputLabel
@@ -58,9 +59,9 @@ const imageSrc = ref(props.proposal.cover_image || new URL(`@/assets/images/hero
   
   const emitDonation = () => {
     if (localDonationAmount.value) {
-      emit('donate', props.proposal.id, localDonationAmount.value, props.proposal.currency_id, payonlineChecked.value);
+      emit('donate', props.proposal.id, localDonationAmount.value, props.proposal.currency_id, payonlineChecked.value, props.proposal.min_documenting_amount);
     } else {
-      alert('Please enter a donation amount.');
+      
     }
   };
   </script>

@@ -28,34 +28,8 @@ Route::get('/', function () {
 });
 
 
-// $controllers = [];
+Route::get('/proposal/overview', [ProposalController::class, 'overview'])->name('proposal.overview');
 
-
-// foreach (glob(app_path('Http/Controllers/*.php')) as $file) {
-//     $basename = basename($file, '.php');
-//     $class = 'App\\Http\\Controllers\\' . $basename;
-//     if (in_array($basename, ['AuthController.php', 'Controller.php'])) {
-//         continue;
-//     }
-//     if (class_exists($class)) {
-//         $reflection = new ReflectionClass($class);
-//         if (!$reflection->isAbstract() && !$reflection->isInterface() && !$reflection->isTrait()) {
-//             $controllers[] = $class;
-//         }
-//     }
-// }
-// Route::middleware(['web'])->middleware('auth')->group(function () use ($controllers) {
-//     array_map(function ($controller) {
-//         if (method_exists($controller, 'routeName')) {
-//             // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
-//             Route::resource($controller::routeName(), $controller);
-//         }
-//         if (method_exists($controller, 'indexApi')) {
-//             // Artisan::call('make:resource ' . ucfirst(Str::camel($controller::routeName())) . 'Resource ');
-//             Route::get($controller::routeName() . 'Api', [$controller, 'indexApi'])->name(strtolower($controller::routeName() . ".index.api"));
-//         }
-//     }, $controllers);
-// });
 $controllers = require base_path('vendor/composer/autoload_classmap.php');
 $controllers = array_keys($controllers);
 $controllers = array_filter($controllers, function ($controller) {
@@ -72,7 +46,6 @@ Route::group(['middleware' => 'auth'], function () use ($controllers) {
     }, $controllers);
 });
 
-Route::get('/guest_index', [ProposalController::class, 'guestIndex'])->name('guest-index');
 Route::get('/donating-form/{donating_form_path}', [EntityController::class, 'donatingForm'])->name('donating-form');
 Route::post('/donating-form/', [EntityController::class, 'storeDonatingForm'])->name('store-donating-form');
 
@@ -99,6 +72,8 @@ Route::get('/import-proposals', [GeneralController::class, 'importProposals'])->
 Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiaries'])->name('import-beneficiaries');
 Route::get('/import-donors', [GeneralController::class, 'importDonors'])->name('import-donors');
 Route::get('/import-donations', [GeneralController::class, 'importDonations'])->name('import-donations');
+Route::get('/import-documents', [GeneralController::class, 'importDocuments'])->name('import-documents');
+Route::get('/import-proposals-overview', [GeneralController::class, 'importProposalsOverview'])->name('import-proposals-overview');
 
 Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 Route::post('/test', [StripeController::class, 'test']);

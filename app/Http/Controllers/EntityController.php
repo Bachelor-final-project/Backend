@@ -63,14 +63,18 @@ class EntityController extends Controller
             "proposals" => Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->public()->get(),
             'countries' => Country::select('id', 'name')->get(),
             'genders' => Donor::genders(),
+            'payment_methods' => $entity->payment_methods,
             'show_payonline_button' => $showPayOnlineButton,
         ]);
     }
     public function storeDonatingForm(StoreDonatingFormRequest $request)
     {
         $data = $request->validated();
+        $entity_donating_form_path = Str::afterLast(parse_url(back()->getTargetUrl(), PHP_URL_PATH), '/');
+        $entity = Entity::where('donating_form_path', $entity_donating_form_path)->first();
+        $data['tenant_id'] = $entity->tenant_id;
         $donor = Donor::firstOrCreate(['phone' => deterministicEncrypt($data['phone'])], $data);
-
+        
         $onlinePayableDonations = [];
         $donationIds = [];
         // Handle donations if they exist
@@ -79,8 +83,11 @@ class EntityController extends Controller
                 $d = Donation::create([
                     'donor_id' => $donor->id,
                     'proposal_id' => $donation['proposal_id'],
+                    'document_nickname' => $data['document_nickname'],
+                    'payment_method_id' => $data['payment_method_id'],
                     'amount' => $donation['amount'],
                     'currency_id' => $donation['currency_id'],
+                    'tenant_id' => $entity->tenant_id,
                 ]);
                 if($donation['pay_online']) {
                     $onlinePayableDonations[] = $donation;

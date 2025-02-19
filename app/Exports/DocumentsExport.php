@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Donation;
+use App\Models\Document;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class DonationsExport implements FromCollection, WithEvents, WithHeadings, WithCustomStartCell, WithStrictNullComparison, ShouldAutoSize, WithStyles
+class DocumentsExport implements FromCollection, WithEvents, WithHeadings, WithCustomStartCell, WithStrictNullComparison, ShouldAutoSize, WithStyles
 {
     use RegistersEventListeners;
     public $request;
@@ -35,13 +35,12 @@ class DonationsExport implements FromCollection, WithEvents, WithHeadings, WithC
      */
     public function collection()
     {
-        $headers = Donation::headers();
+        $headers = Document::exportHeaders();
         $dbHeadersToShow = array();
         foreach ($headers as $header) {
             $dbHeadersToShow[$header['key']] = $header['value'];
         }
-        
-        $usersCollection = Donation::search($this->request)->sort($this->request)->get()->map->only(array_column($headers, 'key'));
+        $usersCollection = Document::search($this->request)->sort($this->request)->get()->map->only(array_column($headers, 'key'));
         // logger("Users");
         // logger($usersCollection);
         $usersCollection = $usersCollection->map(function ($user) use ($dbHeadersToShow) {
@@ -63,7 +62,7 @@ class DonationsExport implements FromCollection, WithEvents, WithHeadings, WithC
         $en_datetime = Carbon::now()->format('Y-m-d H:i:s');
         $appLocale = app()->getLocale();
         $sheet = $event->sheet;
-        $highestColumn = Coordinate::stringFromColumnIndex(count(Donation::headers()));
+        $highestColumn = Coordinate::stringFromColumnIndex(count(Document::exportHeaders()));
         $event->sheet->getDelegate()->mergeCells('A1:' . $highestColumn .'1');
         $event->sheet->getDelegate()->setRightToLeft($appLocale == 'ar');
         $sheet->setCellValue('A1', __("Exported At") . ": " . ${$appLocale . "_datetime"});

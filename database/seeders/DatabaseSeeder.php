@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             AreaSeeder::class,
             EntitySeeder::class,
             ProposalSeeder::class,
+            PaymentMethodSeeder::class,
             DonationSeeder::class,
             UnitSeeder::class,
             ItemSeeder::class,

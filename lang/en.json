@@ -14,5 +14,6 @@
     "solution": "solution",
     "start_processing_date": "start processing date",
     "end_processing_date": "end processing date",
-    "action_notes": "action notes"
+    "action_notes": "action notes",
+    "document_nickname": "Name as it Appears in the Documentation"
 }

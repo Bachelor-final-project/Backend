@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\TenantAttributeTrait;
 use App\Traits\TenantScoped;
+use Illuminate\Support\Facades\App;
 
 class Donation extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
-    protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'proposal_title', 'created_at_date_time'];
+    protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'payment_method_name', 'proposal_title', 'created_at_date_time'];
     protected $with = ['donor'];
     public static $controllable = true;
 
@@ -59,6 +60,9 @@ class Donation extends BaseModel
     public function proposal(){
         return $this->belongsTo(Proposal::class, 'proposal_id');
     }
+    public function payment_method(){
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
     public function donor() {
         return $this->belongsTo(Donor::class, 'donor_id');
     }
@@ -73,6 +77,9 @@ class Donation extends BaseModel
     }
     public function getDonorPhoneAttribute() {
         return $this->donor->phone ?? '';
+    }
+    public function getPaymentMethodNameAttribute() {
+        return App::currentLocale() == 'en'? $this->payment_method->name_en: $this->payment_method->name_ar;
     }
 
     public function getStatusStrAttribute() {
@@ -119,6 +126,7 @@ class Donation extends BaseModel
             ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
+            ['sortable' => true, 'value' => 'payment method', 'key' => 'payment_method_name'],
             ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'sortBy' => 'created_at', 'value' => 'created at', 'key' => 'created_at_date_time'],

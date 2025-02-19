@@ -55,6 +55,20 @@ class ProposalController extends Controller
             "users" => User::get()
         ]);
     }
+    public function overview(Request $request)
+    {
+        
+        return Inertia::render(Str::studly("Proposal").'/Overview', [
+            "headers" => Proposal::overviewHeaders(),
+            "statuses" => Proposal::statuses(),
+            'entities' => Entity::get(),
+            'currencies' => Currency::get(),
+            'proposalTypes' => ProposalType::get(),
+            'areas' => Area::get(),
+            "items" => Proposal::where('status', 1)->search($request)->sort($request)->paginate($this->pagination),
+            "users" => User::get()
+        ]);
+    }
 
     /**
      * Display a listing of the resource.

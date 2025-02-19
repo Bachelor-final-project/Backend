@@ -34,7 +34,7 @@ class Donor extends BaseModel
         return Attribute::make(
             set: fn (string $value) => deterministicEncrypt($value),
             get: function (string $value) {
-                if(in_array(auth()->user()->type, self::PHONE_ALLOWED_USER_TYPES))
+                if(auth()->user() && in_array(auth()->user()->type, self::PHONE_ALLOWED_USER_TYPES))
                     return deterministicDecrypt($value);
                 return str_repeat("●", 15);
             },

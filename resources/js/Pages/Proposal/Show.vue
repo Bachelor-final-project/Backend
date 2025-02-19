@@ -220,7 +220,7 @@ const donations_table_actions = [
           :headers="documents_headers"
           model="document"
           add_item_route="document.create"
-          import_url="import-documents"
+          :import_url="`import-documents?proposal_id_filter=${proposal.id}`"
         />
       </div>
     </section>
@@ -233,7 +233,8 @@ const donations_table_actions = [
           :headers="donations_headers"
           model="donation"
           add_item_route="donation.create"
-          import_url="import-donations"
+          
+          :import_url="`import-donations?proposal_id_filter=${proposal.id}`"
         />
       </div>
     </section>
