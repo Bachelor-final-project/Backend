@@ -39,9 +39,15 @@ const menus = [
             allowedUserTypes: [1,2,5],
             items: [
                 {
-                    title: "Proposals",
+                    title: "All Proposals",
                     icon: "laptop-file",
                     to: "proposal.index",
+                    allowedUserTypes: [1,2,5],
+                },
+                {
+                    title: "Proposals Overview",
+                    icon: "laptop-file",
+                    to: "proposal.overview",
                     allowedUserTypes: [1,2,5],
                 },
                 {

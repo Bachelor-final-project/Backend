@@ -13,17 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('proposal_id');
-            $table->unsignedBigInteger('donor_id');
-            $table->float('amount')->nullable();
-            $table->unsignedBigInteger('currency_id')->nullable();
-            $table->string('document_nickname')->nullable();
-            $table->string('note', 1024)->nullable();
-            $table->datetime('expected_date')->nullable();
+            $table->string('name_ar');
+            $table->string('name_en');
+            $table->unsignedBigInteger('entity_id');
             $table->unsignedBigInteger('tenant_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('entity_id')->references('id')->on('entities');
         });
     }
 
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('payment_methods');
     }
 };

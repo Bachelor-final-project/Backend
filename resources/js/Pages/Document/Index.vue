@@ -9,6 +9,7 @@
       model="document"
       :table_filters="table_filters"
       add_item_route="document.create"
+      import_url="import-documents"
     />
   </div>
 </template>

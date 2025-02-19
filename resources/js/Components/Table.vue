@@ -422,7 +422,7 @@
           class="cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 items-center"
           :class="rowClass(item)"
         >
-          <th
+          <td
             :key="index"
             v-for="(head, index) in headers"
             scope="row"
@@ -445,7 +445,7 @@
             >
               {{ head.translate ? $t(item[head.key] + "") : item[head.key] }}
             </div>
-          </th>
+          </td>
 
           <td v-if="add_file_input" class="px-6 py-4 min-w-40">
             <span class="p-1">
@@ -504,6 +504,7 @@ import { debounce } from "lodash";
 import { isEmpty } from "lodash";
 const { t, locale } = useI18n();
 import { usePage } from "@inertiajs/vue3";
+import { includes } from "lodash";
 
 const page = usePage();
 
@@ -899,7 +900,7 @@ function modal_function(funcName, item) {
   modalFunctions[funcName](item);
 }
 function urlParams() {
-  return "?" + new URLSearchParams(filters).toString();
+  return (props.import_url.includes("?")? "&": "?") + new URLSearchParams(filters).toString();
 }
 </script>
 <style>

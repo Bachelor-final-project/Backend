@@ -97,6 +97,7 @@ class Document extends BaseModel
             ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'document_nickname', 'key' => 'document_nickname'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
             ['sortable' => true, 'value' => 'notes', 'key' => 'note'],
@@ -105,6 +106,19 @@ class Document extends BaseModel
             // ['sortable' => true, 'value' => 'currency', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
+    }
+    public static function exportHeaders($user = null)
+    {
+        return [
+            ['sortable' => true, 'value' => 'id', 'key' => 'id'],
+            ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
+            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'value' => 'document_nickname', 'key' => 'document_nickname'],
+            ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
+            ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
+            ['sortable' => true, 'value' => 'notes', 'key' => 'note'],
+            ['sortable' => true, 'value' => 'expected date', 'key' => 'expected_date'],
+         ];
     }
     public static function headersForProposal($user = null)
     {
@@ -138,6 +152,7 @@ class Document extends BaseModel
         $document->proposal_id = $donation->proposal_id;
         $document->donor_id = $donation->donor_id;
         $document->amount = $donation->amount;
+        $document->document_nickname = $donation->document_nickname;
         $document->currency_id = $proposal->currency_id;
         $document->save();
         

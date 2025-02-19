@@ -18,7 +18,7 @@ class Proposal extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date'];
+    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount'];
     protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
@@ -53,6 +53,12 @@ class Proposal extends BaseModel
     }
     public function getCompleteDonatingStatusDateAttribute(){
         return  $this->logs()->where('log_type', 1)->first()?->formatted_created_at;
+    }
+    public function getPaidAmountAttribute(){
+        return  round($this->donations()->where('status', 2)->sum('amount'), 2);
+    }
+    public function getRemainingAmountAttribute(){
+        return  max(round($this->cost - $this->paid_amount, 2), 0);
     }
     public function getEntityNameAttribute(){
         return $this->entity->name;   
@@ -201,6 +207,17 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'status', 'key' => 'status_str'],
             ['sortable' => true, 'value' => 'notes', 'key' => 'notes'],
             ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
+        ];
+    }
+    // headers for overview proposals table
+    public static function overviewHeaders($user = null)
+    {
+        return [
+            ['sortable' => true, 'value' => 'title', 'key' => 'title'],
+            ['sortable' => true, 'value' => 'cost', 'key' => 'cost'],
+            ['sortable' => true, 'value' => 'paid_amount', 'key' => 'paid_amount'],
+            ['sortable' => true, 'value' => 'remaining_amount', 'key' => 'remaining_amount'],
+            // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }
     public static function statuses() {

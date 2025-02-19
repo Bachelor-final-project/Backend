@@ -14,7 +14,8 @@
 
       <div class="mt-10">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 pb-2">{{ $t('Your Information') }}</h2>
-        <form @submit.prevent="submitDonations" class="grid grid-cols-2 gap-4">
+        <form @submit.prevent="submitDonations" >
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div>
             <InputLabel for="name" value="name" />
             <TextInput
@@ -25,6 +26,20 @@
               required
             />
             <InputError :message="form.errors.name" class="mt-2" />
+
+          </div>
+          <div
+              v-show="hasDocument"
+          >
+            <InputLabel for="document_nickname" value="document_nickname" />
+            <TextInput
+              id="document_nickname"
+              type="text"
+              v-model="form.document_nickname"
+              class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
+              
+            />
+            <InputError :message="form.errors.document_nickname" class="mt-2" />
 
           </div>
           <div>
@@ -69,12 +84,23 @@
           />
           <InputError :message="form.errors.country_id" class="mt-2" />
         </div>
+        <div>
+          <InputLabel for="payment_method_id" value="Payment method" />
+          <SelectInput
+            :options="payment_methods"
+            :item_name="`name_${i18n_locale}`"
+            id="payment_method_id"
+            v-model="form.payment_method_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+            
+          />
+          <InputError :message="form.errors.payment_method_id" class="mt-2" />
+        </div>
+        </div>
 
 
-          <div class="flex items-center gap-4">
-          <!-- <SecondaryButton v-if="show_payonline_button" :disabled="form.processing" v-on:click="1+1">{{
-            $t("Pay the selected online")
-          }}</SecondaryButton> -->
+        <div class="pt-2 flex justify-end">
           <PrimaryButton :disabled="form.processing">{{
             $t("Save")
           }}</PrimaryButton>
@@ -120,13 +146,14 @@
   import { ref, watch } from "vue";
 
   defineOptions({ layout: DonatingPageLayout });
-
+  const hasDocument = ref(false);
   
   const props = defineProps({
     entity: Array,
     proposals: Array,
     countries: Array,
     genders: Array,
+    payment_methods: Array,
     show_payonline_button: Boolean,
   });
   const form = useForm({
@@ -134,17 +161,22 @@
     phone: '',
     country: '',
     gender: '',
+    payment_method_id: '',
+    document_nickname: '',
     donations: [] 
   });
-  const handleDonation = (proposalId, amount,currency_id, pay_online) => {
+  const handleDonation = (proposalId, amount,currency_id, pay_online, min_documenting_amount) => {
 
     const existingDonation = form.donations.find(d => d.proposal_id === proposalId);
     if (existingDonation) {
       existingDonation.amount = amount;
       existingDonation.pay_online = pay_online;
     } else {
-      form.donations.push({ proposal_id: proposalId, amount: amount, currency_id: currency_id, pay_online: pay_online });
+      form.donations.push({ proposal_id: proposalId, amount: amount, currency_id: currency_id, pay_online: pay_online, min_documenting_amount:min_documenting_amount });
     }
+
+    hasDocument.value = form.donations.some(item => item.amount >= item.min_documenting_amount);
+
   };
 
 function saveWithPayOnline() {
