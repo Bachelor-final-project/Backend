@@ -97,6 +97,8 @@ class EntityController extends Controller
         }
         if(empty($onlinePayableDonations))
             // return to_route($this->routeName() . '.index')->with('res', ['message' => __('Donor Saved Seccessfully'), 'type' => 'success']);
+            return to_route('completed-donating-form')->with('res', ['message' => __('Donation Saved Seccessfully'), 'type' => 'success']);
+
             return Inertia::render(Str::studly("Entity").'/CompletedDonatingForm', [
                 "donor" => $donor,
                 "donations" => $data['donations'],
@@ -107,6 +109,9 @@ class EntityController extends Controller
         return Inertia::location($sessionUrl);
 
         
+       }
+       public function completedDonatingForm(){
+            return Inertia::render(Str::studly("Entity").'/CompletedDonatingForm');
        }
     /**
      * Show the form for creating a new resource.
