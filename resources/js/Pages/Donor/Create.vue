@@ -85,6 +85,7 @@ const submit = () => {
             v-model="form.phone"
             required
             autocomplete="phone"
+            dir="ltr"
           />
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>

@@ -45,7 +45,7 @@ onMounted(() => {
   <div>
     <AdminLayout>
       <div>
-        <div class="grid grid-cols-3 gap-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           <BasicSparkLines
             :data="approvedDonationLast30Days"
             :color_theme="color_theme"

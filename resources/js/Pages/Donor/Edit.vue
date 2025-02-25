@@ -38,7 +38,7 @@ const submit = () => {
   //   ...data,
   //   remember: data.remember ? 'on' : '',
   // }))
-  form.put(route("donor.put", props.donor), {
+  form.put(route("donor.update", props.donor), {
     onFinish: () => {
       form.defaults();
     },
@@ -85,6 +85,7 @@ const submit = () => {
             v-model="form.phone"
             autofocus
             autocomplete="phone"
+            dir="ltr"
           />
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
@@ -109,7 +110,7 @@ const submit = () => {
             id="currency_id"
             v-model="form.country_id"
             class="mt-1 block w-full"
-            autocomplete="new-password"
+            searchable="true"
           />
           <InputError :message="form.errors.country_id" class="mt-2" />
         </div>

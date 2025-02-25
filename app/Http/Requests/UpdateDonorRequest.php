@@ -13,7 +13,7 @@ class UpdateDonorRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class UpdateDonorRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'gender' => 'required|integer|between:1,2',
-            'phone' => 'required|string|msx:15|unique:donors,phone,'.$this->donor->id,
+            'phone' => 'required|string|max:15|unique:donors,phone,'.$this->donor->id,
             'country_id' => 'nullable|integer|exists:countries,id'
         ];
     }
