@@ -52,6 +52,7 @@
               placeholder="Enter your phone number"
               class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
               required
+              dir="ltr"
               @input="clearPhoneInput"
             />
             <InputError :message="form.errors.phone" class="mt-2" />
@@ -77,12 +78,12 @@
             :options="countries"
             :item_name="`name_${i18n_locale}`"
             id="country_id"
-            v-model="form.country_id"
+            v-model="form.country"
             class="mt-1 block w-full"
-            autocomplete="new-password"
+            searchable="true"
             
           />
-          <InputError :message="form.errors.country_id" class="mt-2" />
+          <InputError :message="form.errors.country" class="mt-2" />
         </div>
         <div>
           <InputLabel for="payment_method_id" value="Payment method" />

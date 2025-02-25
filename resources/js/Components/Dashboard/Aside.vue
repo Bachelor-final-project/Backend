@@ -28,7 +28,9 @@ const user = computed(() => page.props.auth.user);
       </Link>
       <ul class="space-y-3 mt-5 font-medium">
         <li :key="index" v-for="(menu_item, index) in menu">
-          <ItemList v-if="menu_item.allowedUserTypes.includes(user.type)" :item="menu_item" />
+          <ItemList 
+            
+          v-if="menu_item.allowedUserTypes.includes(user.type)" :item="menu_item" />
         </li>
       </ul>
 

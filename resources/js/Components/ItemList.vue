@@ -1,5 +1,8 @@
 <template v-if="item.allowedUserTypes.includes(user.type)">
   <Link
+    data-drawer-target="logo-sidebar"
+    data-drawer-hide="logo-sidebar"
+    aria-controls="logo-sidebar"
     @click="handleActive"
     v-if="!item.items"
     :href="route(item.to)"
@@ -43,6 +46,9 @@
       <template v-for="(sub_item, index) in item.items" :key="index" >
         <li v-if="sub_item.allowedUserTypes.includes(user.type)" >
           <Link
+            data-drawer-target="logo-sidebar"
+            data-drawer-hide="logo-sidebar"
+            aria-controls="logo-sidebar"
             :href="route(sub_item.to)"
             class="acrive flex items-center w-full p-2 text-white transition duration-75 rounded-lg ps-11 group hover:bg-gray-600 dark:hover:bg-gray-70 dark:text-white dark:hover:bg-gray-700"
             >{{ $t(sub_item.title) }} </Link
