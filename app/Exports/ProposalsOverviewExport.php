@@ -40,7 +40,7 @@ class ProposalsOverviewExport implements FromCollection, WithEvents, WithHeading
         foreach ($headers as $header) {
             $dbHeadersToShow[$header['key']] = $header['value'];
         }
-        $usersCollection = Proposal::search($this->request)->sort($this->request)->get()->map->only(array_column($headers, 'key'));
+        $usersCollection = Proposal::where('status', 1)->search($this->request)->sort($this->request)->get()->map->only(array_column($headers, 'key'));
         // logger("Users");
         // logger($usersCollection);
         $usersCollection = $usersCollection->map(function ($user) use ($dbHeadersToShow) {

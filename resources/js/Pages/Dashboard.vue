@@ -7,6 +7,7 @@ import BasicSparkLines from "@/Components/Dashboard/Charts/BasicSparkLines.vue";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { useI18n } from "vue-i18n";
 
+import Table from "@/Components/Table.vue";
 const { t } = useI18n();
 
 const props = defineProps({
@@ -18,6 +19,10 @@ const props = defineProps({
   completedProposalsLast30Days: Array,
   benefitsLast30Days: Array,
   donatingStatusProposalsStackedGroup: Array,
+
+
+  proposals_overview: Array,
+  proposals_overview_headers: Array,
 });
 
 let color_theme = ref(localStorage.getItem("color-theme"));
@@ -69,6 +74,17 @@ onMounted(() => {
           />
 
         </div>
+        <div class="dark:text-white">
+          <Table
+            title="Proposals Overview"
+            model="proposal_overview"
+            :actions="actions"
+            :items="proposals_overview"
+            :headers="proposals_overview_headers"
+            import_url="import-proposals-overview"
+          />
+        </div>
+
         <BasicStackedBars
           :data="donatingStatusProposalsStackedGroup"
           :color_theme="color_theme"
