@@ -188,8 +188,6 @@ function saveWithPayOnline() {
   const clearPhoneInput = () =>{
       console.log(form.phone)
       form.phone = form.phone.replace(/(?!^\+)[^\d]/g, "");
-      
-      
   }
   const submitDonations = () => {
   form.phone = form.phone.replace(/(^\+)/g, "00");

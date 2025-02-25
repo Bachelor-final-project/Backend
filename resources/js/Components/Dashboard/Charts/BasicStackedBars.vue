@@ -4,7 +4,7 @@
       <h2 class="text-2xl self-center mb-10 mt-5 font-bold dark:text-white">
         {{ $t(chart_title) }}
       </h2>
-      <h6 v-if="chart_tips" class="text-l self-center font-bold dark:text-white absolute top-10 ltr:left-10 rtl:right-10">
+      <h6 v-if="chart_tips" class="text-l self-center font-bold dark:text-white absolute pt-3 top-10 ltr:left-10 rtl:right-10">
         {{ $t(chart_tips) }}
       </h6>
     </div>

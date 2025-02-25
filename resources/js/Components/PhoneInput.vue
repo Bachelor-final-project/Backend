@@ -21,6 +21,7 @@ defineExpose({ focus: () => input.value.focus() });
 
 // Watch the model and validate input
 watch(model, (newValue, oldValue) => {
+    model.value = newValue.replace(/(^\+)/g, "00");
     if (!phoneRegex.test(newValue)) {
         // Revert to the previous value if input is invalid
         model.value = oldValue;

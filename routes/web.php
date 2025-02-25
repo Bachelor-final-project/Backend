@@ -28,7 +28,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/proposal/overview', [ProposalController::class, 'overview'])->name('proposal.overview');
 
 $controllers = require base_path('vendor/composer/autoload_classmap.php');
 $controllers = array_keys($controllers);
@@ -38,6 +37,7 @@ $controllers = array_filter($controllers, function ($controller) {
 });
 
 Route::group(['middleware' => 'auth'], function () use ($controllers) {
+    Route::get('/proposal/overview', [ProposalController::class, 'overview'])->name('proposal.overview');
     // Route::get('/', fn () => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/warehouse_items', [WarehouseController::class, 'warehouse_items'])->name('warehouse.items');
@@ -63,21 +63,21 @@ Route::post('/donating-form/', [EntityController::class, 'storeDonatingForm'])->
 Route::get('/change-language/{locale}', [GeneralController::class, 'changeLanguage'])->name('change-language');
 
 require __DIR__.'/auth.php';
-
-Route::get('/import-users', [GeneralController::class, 'importUsers'])->name('import-users');
-Route::get('/import-warehouses', [GeneralController::class, 'importWarehouses'])->name('import-warehouses');
-Route::get('/import-items', [GeneralController::class, 'importItems'])->name('import-items');
-Route::get('/import-units', [GeneralController::class, 'importUnits'])->name('import-units');
-Route::get('/import-currencies', [GeneralController::class, 'importCurrencies'])->name('import-currencies');
-Route::get('/import-proposals', [GeneralController::class, 'importProposals'])->name('import-proposals');
-Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiaries'])->name('import-beneficiaries');
-Route::get('/import-donors', [GeneralController::class, 'importDonors'])->name('import-donors');
-Route::get('/import-donations', [GeneralController::class, 'importDonations'])->name('import-donations');
-Route::get('/import-documents', [GeneralController::class, 'importDocuments'])->name('import-documents');
-Route::get('/import-proposals-overview', [GeneralController::class, 'importProposalsOverview'])->name('import-proposals-overview');
-
+Route::middleware('auth')->group(function () {
+    Route::get('/import-users', [GeneralController::class, 'importUsers'])->name('import-users');
+    Route::get('/import-warehouses', [GeneralController::class, 'importWarehouses'])->name('import-warehouses');
+    Route::get('/import-items', [GeneralController::class, 'importItems'])->name('import-items');
+    Route::get('/import-units', [GeneralController::class, 'importUnits'])->name('import-units');
+    Route::get('/import-currencies', [GeneralController::class, 'importCurrencies'])->name('import-currencies');
+    Route::get('/import-proposals', [GeneralController::class, 'importProposals'])->name('import-proposals');
+    Route::get('/import-beneficiaries', [GeneralController::class, 'importBeneficiaries'])->name('import-beneficiaries');
+    Route::get('/import-donors', [GeneralController::class, 'importDonors'])->name('import-donors');
+    Route::get('/import-donations', [GeneralController::class, 'importDonations'])->name('import-donations');
+    Route::get('/import-documents', [GeneralController::class, 'importDocuments'])->name('import-documents');
+    Route::get('/import-proposals-overview', [GeneralController::class, 'importProposalsOverview'])->name('import-proposals-overview');
+    Route::get('ExportPDF/proposal/{id}', [ExportPDFController::class, 'proposal'])->name('export-pdf-proposal');
+});
 Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 Route::post('/test', [StripeController::class, 'test']);
 Route::get('/success', [StripeController::class, 'success'])->name('success');
 
-Route::get('ExportPDF/proposal/{id}', [ExportPDFController::class, 'proposal'])->name('export-pdf-proposal');

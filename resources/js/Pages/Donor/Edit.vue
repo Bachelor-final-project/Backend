@@ -55,10 +55,6 @@ const submit = () => {
         >
           {{ $t("update donor") }}
         </h2>
-
-        <!-- <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          {{ $t("New user can review forms depens on his/her region.") }}
-        </p> -->
       </header>
 
       <form @submit.prevent="submit" class="mt-6 space-y-6">

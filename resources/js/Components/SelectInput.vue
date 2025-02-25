@@ -58,7 +58,7 @@ const main_class = props.underline
     :value="modelValue"
     :options="formattedOptions"
     :class="twMerge(main_class, classes)"
-    class="font-semibold"
+    class="!font-semibold "
     @update:modelValue="$emit('update:modelValue', selectedValue)"
 
     />
