@@ -167,20 +167,22 @@ class ProposalController extends Controller
         
         // Gate::authorize('update', [$proposal, $request['status']]);
         
-        // check if there is a donatingAmount and a new donation record is needed to be added 
         $logType = 4;
-
+        
+        // check if there is a donatingAmount and a new donation record is needed to be added 
         // dd($request->donatingAmount);
-        if(!empty($request->donatingAmount) && $request->status == 2 && $proposal->status != $request->status){
-            //create new donation;
-            
-            $recipient_id = isset($validated['recipient']) ? $validated['recipient'] : null;
-            $receipts = isset($validated['receipts']) ? $validated['receipts'] : null;
-            unset($validated['recipient']);
-            unset($validated['receipts']);
-            // dd($request->donatingAmount, $recipient_id, $receipts);
+        if($request->status == 2 && $proposal->status != $request->status){
             $logType = 1;
-            ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount, $recipient_id, $receipts);
+            if(!empty($request->donatingAmount)){
+                //create new donation;
+                $recipient_id = isset($validated['recipient']) ? $validated['recipient'] : null;
+                $receipts = isset($validated['receipts']) ? $validated['receipts'] : null;
+                unset($validated['recipient']);
+                unset($validated['receipts']);
+                // dd($request->donatingAmount, $recipient_id, $receipts);
+                ProposalDonatingStatusApprovedWithDonatedAmount::dispatch($proposal, $request->donatingAmount, $recipient_id, $receipts);
+            }
+
         }
         if($request->arabicVideoFile){
             $file = $validated['arabicVideoFile'][0];
