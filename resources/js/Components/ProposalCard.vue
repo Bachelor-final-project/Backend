@@ -90,11 +90,7 @@ const imageSrc = ref(props.proposal.cover_image || new URL(`@/assets/images/hero
   const payonlineChecked = ref(false);
   
   const emitDonation = () => {
-    if (localDonationAmount.value) {
       emit('donate', props.proposal.id, localDonationAmount.value, props.proposal.currency_id, payonlineChecked.value, props.proposal.min_documenting_amount);
-    } else {
-      
-    }
   };
   </script>
   
