@@ -175,9 +175,8 @@
     } else {
       form.donations.push({ proposal_id: proposalId, amount: amount, currency_id: currency_id, pay_online: pay_online, min_documenting_amount:min_documenting_amount });
     }
-
     hasDocument.value = form.donations.some(item => item.amount >= item.min_documenting_amount);
-
+    form.donations = form.donations.filter((item) => item.amount != 0);
   };
 
 function saveWithPayOnline() {
