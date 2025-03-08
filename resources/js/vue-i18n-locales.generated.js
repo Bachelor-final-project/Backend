@@ -246,6 +246,8 @@ export default {
         "paid_amount": "المبلغ المدفوع",
         "remaining_amount": "المبلغ المتبقي",
         "All Donors": "جميع المتبرعين",
+        "Funding Progress": "تقدم التبرع",
+
 
         //entity
         "Entity":"الجهات",
