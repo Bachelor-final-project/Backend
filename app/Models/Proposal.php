@@ -215,8 +215,8 @@ class Proposal extends BaseModel
         return [
             ['sortable' => true, 'value' => 'title', 'key' => 'title'],
             ['sortable' => true, 'value' => 'cost', 'key' => 'cost'],
-            ['sortable' => true, 'value' => 'paid_amount', 'key' => 'paid_amount'],
-            ['sortable' => true, 'value' => 'remaining_amount', 'key' => 'remaining_amount'],
+            ['sortable' => true, 'sortBy' => 'calc_proposal_paid_amount', 'value' => 'paid_amount', 'key' => 'paid_amount'],
+            ['sortable' => true, 'sortBy' => 'calc_proposal_remaining_amount', 'value' => 'remaining_amount', 'key' => 'remaining_amount'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

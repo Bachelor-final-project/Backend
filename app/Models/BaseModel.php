@@ -76,6 +76,27 @@ class BaseModel extends Model
          if (!in_array($sortDirection, ['asc', 'desc'])) {
              $sortDirection = $defaultSortDirection;
          }
+
+         $sortableComputedAttributes = [
+            'calc_proposal_paid_amount' => function ($query) {
+                return "(SELECT SUM(amount)
+                     FROM donations 
+                     WHERE donations.proposal_id = proposals.id 
+                     AND donations.status = 2)";
+            },
+            'calc_proposal_remaining_amount' => function ($query) {
+                return "( proposals.cost -
+                     (SELECT  COALESCE(SUM(amount), 0)
+                      FROM donations 
+                      WHERE donations.proposal_id = proposals.id 
+                      AND donations.status = 2))";
+            },
+        ];
+    
+        if (isset($sortableComputedAttributes[$sortBy])) {
+            // Apply sorting using raw expression
+            return $query->orderByRaw($sortableComputedAttributes[$sortBy]($query) . " $sortDirection");
+        }
  
          if (str_contains($sortBy, '.')) {
              // Handle sorting by related table
