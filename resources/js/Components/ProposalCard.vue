@@ -47,13 +47,13 @@
       </div>
 <!-- Details with Badges -->
     <div class="mt-3 space-y-2">
-        <span class="inline-block py-1 px-3 text-s font-medium text-white bg-blue-600 rounded-full">
+        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-blue-600 rounded-full">
           {{ $t("cost") }} : {{ proposal.cost }} {{proposal.currency_name}}
         </span>
-        <span class="inline-block py-1 px-3 text-s font-medium text-white bg-green-400 rounded-full">
+        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-green-400 rounded-full">
           {{ $t("paid_amount") }} : {{ proposal.paid_amount }} {{proposal.currency_name}}
         </span>
-        <span class="inline-block py-1 px-3 text-s font-medium text-white bg-amber-300 rounded-full">
+        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-amber-300 rounded-full">
           {{ $t("remaining_amount") }} : {{ (proposal.remaining_amount) }} {{proposal.currency_name}}
         </span>
       </div>
