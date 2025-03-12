@@ -37,7 +37,7 @@ class DonationController extends Controller
             'proposals' => Proposal::get(),
             'statuses' => Donation::statuses(),
             'donors' => Donor::get(),
-            "items" => Donation::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Donation::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
         ]);
     }
 

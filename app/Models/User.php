@@ -45,6 +45,10 @@ class User extends Authenticatable
     protected $guarded = [];
 
     public static $datatableHeaders = ['id', 'name', 'type', 'actions'];
+
+    public function country(){
+        return $this->belongsTo(Country::class);
+    }
     public function scopeSearch($query, $request)
     {
     }

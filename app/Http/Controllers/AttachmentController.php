@@ -31,7 +31,7 @@ class AttachmentController extends Controller
         
         return Inertia::render(Str::studly("Attachment").'/Index', [
             "headers" => Attachment::headers(),
-            "items" => Attachment::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Attachment::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

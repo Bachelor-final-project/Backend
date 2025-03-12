@@ -31,7 +31,7 @@ class BeneficiaryController extends Controller
         
         return Inertia::render(Str::studly("Beneficiary").'/Index', [
             "headers" => Beneficiary::headers(),
-            "items" => Beneficiary::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Beneficiary::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

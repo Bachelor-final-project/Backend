@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Country;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::search($request)->sort($request)->paginate($this->pagination);
+        $users = User::search($request)->sort($request)->paginate($request->per_page?? $this->pagination);
         return Inertia::render(Str::studly("User") . '/Index', [
             "headers" => User::headers(),
             "items" => $users,
@@ -45,7 +46,8 @@ class UserController extends Controller
     public function create()
     {
         return Inertia::render(Str::studly("User") . '/Create', [
-            'type_options' => User::types()
+            'type_options' => User::types(),
+            'countries' => Country::select('id', 'name')->get(),
         ]);
     }
 
@@ -89,6 +91,7 @@ class UserController extends Controller
             'status_options' => User::statuses(),
             'type_options' => User::types(),
             'user' => $user->toArray(),
+            'countries' => Country::select('id', 'name')->get(),
         ]);
     }
 

@@ -32,7 +32,7 @@ class WarehouseTransactionController extends Controller
         
         return Inertia::render(Str::studly("WarehouseTransaction").'/Index', [
             "headers" => WarehouseTransaction::headers(),
-            "items" => WarehouseTransaction::search($request)->sort($request)->paginate($this->pagination),
+            "items" => WarehouseTransaction::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
             "warehouses" => Warehouse::select('id', 'name')->get(),
         ]);
     }

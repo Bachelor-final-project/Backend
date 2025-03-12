@@ -30,7 +30,7 @@ class ProposalDetailController extends Controller
         
         return Inertia::render(Str::studly("ProposalDetail").'/Index', [
             "headers" => ProposalDetail::headers(),
-            "items" => ProposalDetail::search($request)->sort($request)->paginate($this->pagination),
+            "items" => ProposalDetail::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

@@ -30,6 +30,7 @@ class StoreUserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'sometimes|email|unique:users,email,NULL,id,deleted_at,NULL',
             'phone' => 'required|string|max:20|unique:users,phone,NULL,id,deleted_at,NULL',
+            'country_id' => 'nullable|exists:countries,id',
             'password' => 'required|string|min:8',
             'job_title' => 'nullable|sometimes|string|max:255',
         ];

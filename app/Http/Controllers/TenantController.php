@@ -29,7 +29,7 @@ class TenantController extends Controller
         
         return Inertia::render(Str::studly("Tenant").'/Index', [
             "headers" => Tenant::headers(),
-            "items" => Tenant::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Tenant::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

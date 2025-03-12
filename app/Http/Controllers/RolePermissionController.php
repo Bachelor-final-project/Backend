@@ -30,7 +30,7 @@ class RolePermissionController extends Controller
         
         return Inertia::render(Str::studly("RolePermission").'/Index', [
             "headers" => RolePermission::headers(),
-            "items" => RolePermission::search($request)->sort($request)->paginate($this->pagination),
+            "items" => RolePermission::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

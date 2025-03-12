@@ -30,7 +30,7 @@ class ProposalBeneficiaryController extends Controller
         
         return Inertia::render(Str::studly("ProposalBeneficiary").'/Index', [
             "headers" => ProposalBeneficiary::headers(),
-            "items" => ProposalBeneficiary::search($request)->sort($request)->paginate($this->pagination),
+            "items" => ProposalBeneficiary::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

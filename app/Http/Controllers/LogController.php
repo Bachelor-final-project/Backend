@@ -30,7 +30,7 @@ class LogController extends Controller
         
         return Inertia::render(Str::studly("Log").'/Index', [
             "headers" => Log::headers(),
-            "items" => Log::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Log::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

@@ -18,7 +18,7 @@ class Proposal extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar',  'currency_name', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount'];
+    protected $appends = ['status_str_ar',  'currency_name',  'currency_code',  'one_unit_price', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount'];
     protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
@@ -71,6 +71,12 @@ class Proposal extends BaseModel
     }
     public function getCurrencyNameAttribute(){
         return $this->currency->name;   
+    }
+    public function getCurrencyCodeAttribute(){
+        return $this->currency->code;   
+    }
+    public function getOneUnitPriceAttribute(){
+        return (int)($this->cost / $this->expected_benificiaries_count);   
     }
 
     //authorization
@@ -128,7 +134,11 @@ class Proposal extends BaseModel
     // Scopes
 
     public function scopePublic($query){
-        $query->where('status', 1)->where('publishing_date', '<=', Carbon::now()->format('Y-m-d'));
+        $query
+        ->where('status', 1)
+        ->where('publishing_date', '<=', Carbon::now()->format('Y-m-d'))
+        ->whereRaw('(cost - COALESCE((SELECT SUM(amount) FROM donations WHERE donations.proposal_id = proposals.id AND donations.status = 2), 0)) >= 0');
+        ;
     }
     public function scopeSearch($query, $request){
 
@@ -186,13 +196,13 @@ class Proposal extends BaseModel
             ['sortable' => true, 'value' => 'share cost', 'key' => 'share_cost'],
             ['sortable' => true, 'value' => 'expected benificiaries count', 'key' => 'expected_benificiaries_count'],
             ['sortable' => true, 'value' => 'execution date', 'key' => 'execution_date'],
-            ['sortable' => true, 'value' => 'Complete Donating Status Date', 'key' => 'complete_donating_status_date'],
+            ['sortable' => true, 'sortBy' => 'calc_complete_donating_status_date', 'value' => 'Complete Donating Status Date', 'key' => 'complete_donating_status_date'],
             // ['sortable' => true, 'value' => 'publishing date', 'key' => 'publishing_date'],
             ['sortable' => true, 'sortBy' => 'entity.name', 'value' => 'entity name', 'key' => 'entity_name'],
             ['sortable' => true, 'sortBy' => 'proposalType.type_' . App::currentLocale(), 'value' => 'proposal type', 'key' => 'proposal_type_type_ar'],
             ['sortable' => true, 'sortBy' => 'entity.name', 'value' => 'area name', 'key' => 'area_name'],
             // ['sortable' => true, 'value' => 'payable online', 'key' => 'isPayableOnline', 'translate' => 'true'],
-            ['sortable' => true, 'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true, 'details_key' => 'status_details'],
+            ['sortable' => true, 'sortBy' => 'status' ,'value' => 'status', 'key' => 'status_str_ar', 'class_value_name' => 'status', 'has_class' => true, 'details_key' => 'status_details'],
 
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];

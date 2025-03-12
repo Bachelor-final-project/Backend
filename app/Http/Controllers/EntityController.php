@@ -41,7 +41,7 @@ class EntityController extends Controller
         
         return Inertia::render(Str::studly("Entity").'/Index', [
             "headers" => Entity::headers(),
-            "items" => Entity::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Entity::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }
