@@ -31,7 +31,7 @@ class WarehouseController extends Controller
         
         return Inertia::render(Str::studly("Warehouse").'/Index', [
             "headers" => Warehouse::headers(),
-            "items" => Warehouse::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Warehouse::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

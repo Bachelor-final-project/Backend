@@ -30,7 +30,7 @@ class RoleController extends Controller
         
         return Inertia::render(Str::studly("Role").'/Index', [
             "headers" => Role::headers(),
-            "items" => Role::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Role::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

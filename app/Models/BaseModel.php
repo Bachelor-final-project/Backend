@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
@@ -25,8 +26,18 @@ class BaseModel extends Model
         return with(new static)->getTable();
     }
 
+    // public function getCreatedAtAttribute($old){
+    //     return $this->created_at->setTimezone(auth()->user()->country? auth()->user()->country->time_zone: 'Etc/UTC');
+    // }
+    // public function getUpdatedAtAttribute($old){
+    //     return $this->updated_at->setTimezone(auth()->user()->country? auth()->user()->country->time_zone: 'Etc/UTC');
+    // }
+
     public function getCreatedAtDateTimeAttribute(){
-        return date('Y-m-d - H:i', strtotime($this->created_at));
+        
+        return date('Y-m-d - H:i', strtotime($this->created_at->setTimezone(auth()->user()->country? auth()->user()->country->time_zone: 'Etc/UTC')));
+        // return date('Y-m-d - H:i', strtotime($this->created_at->setTimezone('Asia/Gaza')));
+        // return Carbon::createFromFormat('Y-m-d H:i', $this->created_at)->timezone('Asia/Gaza');
     }
     public function scopeSearch($query, $request)
     {
@@ -64,10 +75,11 @@ class BaseModel extends Model
     }
     public function scopeSort($query, $request)
     {
-         $defaultSortColumn = 'id';
-         $defaultSortDirection = 'desc';
-         // Get sorting parameters
-         $sortBy = $request->input('sortBy', $defaultSortColumn);
+        $defaultSortColumn = 'id';
+        $defaultSortDirection = 'desc';
+        // Get sorting parameters
+        $sortBy = $request->input('sortBy', $defaultSortColumn);
+        // dd($sortBy);
          $sortDirection = $request->input('sortDesc', $defaultSortDirection);
         //  dd($request->input('sortDesc', [$defaultSortDesc])[0] === 'true'? 'desc':'asc');
         //  $sortDirection = strtolower($request->input('sort_direction', $defaultSortDesc));
@@ -91,13 +103,20 @@ class BaseModel extends Model
                       WHERE donations.proposal_id = proposals.id 
                       AND donations.status = 2))";
             },
+            'calc_complete_donating_status_date' => function () {
+                return "(SELECT logs.created_at
+                         FROM logs 
+                         WHERE logs.loggable_id = proposals.id 
+                         AND logs.log_type = 1 
+                         ORDER BY logs.created_at ASC 
+                         LIMIT 1)";
+            }
         ];
     
         if (isset($sortableComputedAttributes[$sortBy])) {
             // Apply sorting using raw expression
             return $query->orderByRaw($sortableComputedAttributes[$sortBy]($query) . " $sortDirection");
         }
- 
          if (str_contains($sortBy, '.')) {
              // Handle sorting by related table
              [$relation, $relatedColumn] = explode('.', $sortBy, 2);

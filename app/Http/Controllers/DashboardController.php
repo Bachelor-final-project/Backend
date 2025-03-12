@@ -41,7 +41,7 @@ class DashboardController extends Controller
                 "completedProposalsLast30Days"     => Proposal::getCompletedProposalsLast30DaysChartData(),
                 "benefitsLast30Days"     => ProposalBeneficiary::getBenefitsLast30DaysChartData(),
                 "donatingStatusProposalsStackedGroup"     => Proposal::getDonatingStatusProposalsStackedGroup(),
-                "proposals_overview"     => Proposal::where('status', 1)->search($request)->sort($request)->paginate($this->pagination),
+                "proposals_overview"     => Proposal::where('status', 1)->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
                 "proposals_overview_headers"     => Proposal::overviewHeaders(),
 
             ]);

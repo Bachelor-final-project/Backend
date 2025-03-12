@@ -29,7 +29,7 @@ class ProposalTypesController extends Controller
         
         return Inertia::render(Str::studly("ProposalTypes").'/Index', [
             "headers" => ProposalTypes::headers(),
-            "items" => ProposalTypes::search($request)->sort($request)->paginate($this->pagination),
+            "items" => ProposalTypes::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

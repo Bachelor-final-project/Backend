@@ -31,6 +31,7 @@ class UpdateUserRequest extends FormRequest
             'email' => 'sometimes|email|unique:users,email,' . $this->user->id,
             'phone' => 'sometimes|string|max:20|unique:users,phone,' . $this->user->id,
             'job_title' => 'nullable|sometimes|string|max:255',
+            'country_id' => 'nullable|exists:countries,id',
             'password' => 'nullable|sometimes|confirmed',
         ];
     }

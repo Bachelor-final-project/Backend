@@ -51,7 +51,7 @@ class ProposalController extends Controller
             'currencies' => Currency::get(),
             'proposalTypes' => ProposalType::get(),
             'areas' => Area::get(),
-            "items" => Proposal::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Proposal::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
             "users" => User::get()
         ]);
     }
@@ -65,7 +65,7 @@ class ProposalController extends Controller
             'currencies' => Currency::get(),
             'proposalTypes' => ProposalType::get(),
             'areas' => Area::get(),
-            "items" => Proposal::where('status', 1)->search($request)->sort($request)->paginate($this->pagination),
+            "items" => Proposal::where('status', 1)->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
             "users" => User::get()
         ]);
     }

@@ -30,7 +30,7 @@ class PermissionController extends Controller
         
         return Inertia::render(Str::studly("Permission").'/Index', [
             "headers" => Permission::headers(),
-            "items" => Permission::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Permission::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

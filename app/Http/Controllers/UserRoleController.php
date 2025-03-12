@@ -30,7 +30,7 @@ class UserRoleController extends Controller
         
         return Inertia::render(Str::studly("UserRole").'/Index', [
             "headers" => UserRole::headers(),
-            "items" => UserRole::search($request)->sort($request)->paginate($this->pagination),
+            "items" => UserRole::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

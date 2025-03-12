@@ -14,6 +14,7 @@ import { ref, watch, computed  } from "vue";
 const props = defineProps({
     status_options: Array,
     type_options: Array,
+    countries: Array,
     user: Array,
 });
 
@@ -31,6 +32,7 @@ const form = useForm({
     name: props.user.name,
     email: props.user.email,
     phone: props.user.phone,
+    country_id: props.user.country_id,
     is_active: props.user.is_active,
     job_title: props.user.job_title,
     password: "",
@@ -154,6 +156,19 @@ const submit = () => {
               autocomplete="new-password"
             />
             <InputError :message="form.errors.type" class="mt-2" />
+          </div>
+          <div>
+            <InputLabel for="country_id" value="Country" />
+            <SelectInput
+              :options="countries"
+              :item_name="`name_${i18n_locale}`"
+              id="country_id"
+              v-model="form.country_id"
+              class="mt-1 block w-full"
+              autocomplete="country_id"
+              searchable="true"
+            />
+            <InputError :message="form.errors.country_id" class="mt-2" />
           </div>
 
           <div>

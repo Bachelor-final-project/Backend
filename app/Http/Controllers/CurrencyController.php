@@ -29,7 +29,7 @@ class CurrencyController extends Controller
         
         return Inertia::render(Str::studly("Currency").'/Index', [
             "headers" => Currency::headers(),
-            "items" => Currency::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Currency::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
         ]);
     }
 

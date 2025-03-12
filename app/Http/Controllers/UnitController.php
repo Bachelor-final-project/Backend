@@ -30,7 +30,7 @@ class UnitController extends Controller
         
         return Inertia::render(Str::studly("Unit").'/Index', [
             "headers" => Unit::headers(),
-            "items" => Unit::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Unit::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

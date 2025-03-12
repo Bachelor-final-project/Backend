@@ -31,7 +31,7 @@ class ItemController extends Controller
         
         return Inertia::render(Str::studly("Item").'/Index', [
             "headers" => Item::headers(),
-            "items" => Item::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Item::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

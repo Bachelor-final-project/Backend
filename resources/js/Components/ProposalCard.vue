@@ -1,6 +1,15 @@
 <template>
   <div class="p-4 bg-white dark:bg-gray-800 shadow sm:rounded-lg flex flex-col justify-between">
-    <div class="flex flex-col justify-end ">
+    <div class="flex flex-col justify-between w-full">
+      <!-- <div class="my-3 space-y-2">
+        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-blue-600 rounded-full">
+          {{ $t("unit price") }} : {{ proposal.one_unit_price }} {{proposal.currency_symbol}}
+        </span>
+        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-purple-500 rounded-full ">
+          <f-icon icon="users" class="font-lg text-lg" />
+          {{ $t("Beneficiaries") }} : {{ (proposal.expected_benificiaries_count) }}
+        </span>
+      </div> -->
       <img
         :src="imageSrc"
         :alt="proposal.title"
@@ -14,13 +23,13 @@
         <div class="mt-5">
           <p class="font-medium text-gray-900 dark:text-gray-100 py-2"><span class="font-bold ">{{$t('min_documenting_amount')}}: </span>{{ proposal.min_documenting_amount }} {{ proposal['currency_name'] }}</p>
           <InputLabel
-            for="donationAmount"
+            :for="`donationAmount_${proposal.id}`"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
             {{$t("Enter Donation Amount")}} ({{ proposal.currency_name }})
           </InputLabel>
           <TextInput
-            id="donationAmount"
+            :id="`donationAmount_${proposal.id}`"
             type="number"
             v-model="localDonationAmount"
             :placeholder="$t('Enter amount')"
@@ -47,14 +56,14 @@
       </div>
 <!-- Details with Badges -->
     <div class="mt-3 space-y-2">
-        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-blue-600 rounded-full">
-          {{ $t("cost") }} : {{ proposal.cost }} {{proposal.currency_name}}
+        <span class="inline-block py-1 px-3 mx-1 text-xs font-medium text-white bg-blue-600 rounded-full">
+          {{ $t("cost") }} : {{ proposal.cost }} {{proposal.currency_code}}
         </span>
-        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-green-400 rounded-full">
-          {{ $t("paid_amount") }} : {{ proposal.paid_amount }} {{proposal.currency_name}}
+        <span class="inline-block py-1 px-3 mx-1 text-xs font-medium text-white bg-green-400 rounded-full">
+          {{ $t("paid_amount") }} : {{ proposal.paid_amount }} {{proposal.currency_code}}
         </span>
-        <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-amber-300 rounded-full">
-          {{ $t("remaining_amount") }} : {{ (proposal.remaining_amount) }} {{proposal.currency_name}}
+        <span class="inline-block py-1 px-3 mx-1 text-xs font-medium text-white bg-purple-500 rounded-full">
+          {{ $t("remaining_amount") }} : {{ (proposal.remaining_amount) }} {{proposal.currency_code}}
         </span>
       </div>
     </div>

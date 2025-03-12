@@ -29,7 +29,7 @@ class AreaController extends Controller
         
         return Inertia::render(Str::studly("Area").'/Index', [
             "headers" => Area::headers(),
-            "items" => Area::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Area::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

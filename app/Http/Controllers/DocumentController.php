@@ -35,7 +35,7 @@ class DocumentController extends Controller
             'currencies' => Currency::get(),
             'proposals' => Proposal::get(),
             'donors' => Donor::get(),
-            "items" => Document::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Document::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }

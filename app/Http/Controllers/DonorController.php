@@ -34,7 +34,7 @@ class DonorController extends Controller
     {
         return Inertia::render(Str::studly("Donor").'/Index', [
             "headers" => Donor::headers(),
-            "items" => Donor::search($request)->sort($request)->paginate($this->pagination),
+            "items" => Donor::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
 
         ]);
     }
