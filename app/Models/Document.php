@@ -96,7 +96,7 @@ class Document extends BaseModel
         return [
             ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
-            ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'sortBy' => 'donor.name', 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'document_nickname', 'key' => 'document_nickname'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
@@ -144,20 +144,65 @@ class Document extends BaseModel
             ['name' => 'Close', 'id' => '4'],
         ];
     }
-    public static function createDocumentForDonation(Donation $donation){
+    public static function updateOrCreateDocumentForDonation(Donation $donation){
         $proposal = $donation->proposal;
-        if($donation->amount < $proposal->min_documenting_amount) return false;
 
-        $document = new Document();
-        $document->proposal_id = $donation->proposal_id;
-        $document->donor_id = $donation->donor_id;
-        $document->amount = $donation->amount;
-        $document->document_nickname = $donation->document_nickname;
-        $document->currency_id = $proposal->currency_id;
-        $document->save();
+
+        $total_paid = Donation::where('proposal_id', $proposal->id)
+        ->where('donor_id', $donation->donor_id)
+        ->where('currency_id', $donation->currency_id)
+        ->where('status', 2)
+        ->sum('amount');
         
+
+        if($total_paid < $proposal->min_documenting_amount){
+            
+            Document::where('proposal_id', $proposal->id)
+            ->where('donor_id', $donation->donor_id)
+            ->where('currency_id', $donation->currency_id)
+            ->delete();
+            return true;
+        }
+
+
+
+
+         Document::updateOrCreate(
+            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id,'currency_id' =>  $donation->currency_id],
+            [
+                'amount' => $total_paid,
+                'document_nickname' => $donation->document_nickname,
+            ]
+            );
         return true;
         
     }
+    // public static function updateDocumentForDonation(Donation $donation){
+    //     $proposal = $donation->proposal;
+    //     if($donation->amount < $proposal->min_documenting_amount){
+    //         Document::where('donation_id', $donation->id)->delete();
+    //     }
+
+    //     $document = new Document();
+    //     $document->proposal_id = $donation->proposal_id;
+    //     $document->donor_id = $donation->donor_id;
+    //     $document->donation_id = $donation->id;
+    //     $document->amount = $donation->amount;
+    //     $document->document_nickname = $donation->document_nickname;
+    //     $document->currency_id = $proposal->currency_id;
+    //     // $document->save();
+
+    //     Document::where('donation_id', $donation->id)->update([
+    //         'proposal_id' => $donation->proposal_id,
+    //         'donor_id' => $donation->donor_id,
+    //         'donation_id' => $donation->id,
+    //         'amount' => $donation->amount,
+    //         'document_nickname' => $donation->document_nickname,
+    //         'currency_id' => $proposal->currency_id,
+    //     ]);
+        
+    //     return true;
+        
+    // }
 
 }

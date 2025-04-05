@@ -122,18 +122,18 @@ class ProposalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Proposal $proposal)
+    public function show(Request $request, Proposal $proposal)
     {
         return Inertia::render(Str::studly("Proposal").'/Show', [
             //'options' => $regions,
             'proposal' => $proposal->toArray(),
             'currencies' => Currency::all(),
             'proposal_types' => ProposalType::all(),
-            'donations' => $proposal->donations()->paginate($this->pagination),
+            'donations' => $proposal->donations()->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
             'donations_headers' => Donation::headers(),
-            'documents' => $proposal->documents()->paginate($this->pagination),
+            'documents' => $proposal->documents()->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
             'documents_headers' => Document::headers(),
-            'beneficiaries' => $proposal->beneficiaries()->paginate($this->pagination),
+            'beneficiaries' => $proposal->beneficiaries()->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
             'beneficiaries_headers' => Beneficiary::headers(),
         ]);
     }
