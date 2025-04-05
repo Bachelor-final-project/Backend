@@ -64,9 +64,9 @@ class DonationController extends Controller
         // dd($donorPhone);
         $data['donor_id'] = Donor::where('phone', '=', $donorPhone)->first()->id;
         $donation = Donation::create($data);
-        if($data['status'] && $data['status'] == 2){
-            Document::createDocumentForDonation($donation);
-        }
+        // if($data['status'] && $data['status'] == 2){
+            Document::updateOrCreateDocumentForDonation($donation);
+        // }
         
         return to_route($this->routeName() . '.index')->with('res', ['message' => __('Donation Saved Seccessfully'), 'type' => 'success']);
     }
@@ -106,10 +106,10 @@ class DonationController extends Controller
         }
         
         $donation->update($validated);
-        // add Document after approving the donation
-        if($validated['status'] == 2){
-            Document::createDocumentForDonation($donation);
-        }
+
+        // update Document after updating the donation
+        Document::updateOrCreateDocumentForDonation($donation);
+        
 
         return back()->with('res', ['message' => __('Donation Updated Seccessfully'), 'type' => 'success']);
     }
@@ -120,6 +120,7 @@ class DonationController extends Controller
     public function destroy(Donation $donation)
     {
         $donation->delete();
+        Document::updateOrCreateDocumentForDonation($donation);
         return back()->with('res', ['message' => __('Donation Deleted Seccessfully'), 'type' => 'success']);
     }
 }
