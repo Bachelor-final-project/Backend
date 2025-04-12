@@ -159,7 +159,7 @@ const bulkActions = [
     s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* ${e.title}`;
     last_s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* `;
     if(idx != array.length - 1){
-      s += "+";
+      s += " + ";
       last_s += "+";
     }else{
       last_s += ` = ${Intl.NumberFormat().format(total)} ${e.currency_name}`;

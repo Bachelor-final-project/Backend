@@ -150,11 +150,14 @@ class Document extends BaseModel
             ['name' => 'Close', 'id' => '4'],
         ];
     }
-    public static function updateOrCreateDocumentForDonation(Donation $donation, $old_proposal_id = null){
+    public static function updateOrCreateDocumentForDonation(Donation $donation, $old_proposal_id = null, $old_donor_id = null){
 
         // check if the proposal has been changed
-        if($old_proposal_id != null && $old_proposal_id != $donation->proposal_id){
-            self::updateOrCreateDocumentForDonationOldPropsal($donation, $old_proposal_id);
+        if(
+            $old_proposal_id != null && $old_proposal_id != $donation->proposal_id ||
+            $old_donor_id != null && $old_donor_id != $donation->donor_id
+            ){
+            self::updateOrCreateDocumentForDonationOldProposalAndDonor($donation, $old_proposal_id, $old_donor_id);
         }
 
         $proposal = $donation->proposal;
@@ -219,32 +222,37 @@ class Document extends BaseModel
         return true;
         
     }
-    // public static function updateDocumentForDonation(Donation $donation){
-    //     $proposal = $donation->proposal;
-    //     if($donation->amount < $proposal->min_documenting_amount){
-    //         Document::where('donation_id', $donation->id)->delete();
-    //     }
+    public static function updateOrCreateDocumentForDonationOldProposalAndDonor(Donation $donation, $old_proposal_id = null, $old_donor_id = null){
 
-    //     $document = new Document();
-    //     $document->proposal_id = $donation->proposal_id;
-    //     $document->donor_id = $donation->donor_id;
-    //     $document->donation_id = $donation->id;
-    //     $document->amount = $donation->amount;
-    //     $document->document_nickname = $donation->document_nickname;
-    //     $document->currency_id = $proposal->currency_id;
-    //     // $document->save();
 
-    //     Document::where('donation_id', $donation->id)->update([
-    //         'proposal_id' => $donation->proposal_id,
-    //         'donor_id' => $donation->donor_id,
-    //         'donation_id' => $donation->id,
-    //         'amount' => $donation->amount,
-    //         'document_nickname' => $donation->document_nickname,
-    //         'currency_id' => $proposal->currency_id,
-    //     ]);
+        $donor = ($old_donor_id == null)? $donation->donor : Donor::where('id', $old_donor_id)->first();
+        $proposal = ($old_proposal_id == null)? $donation->proposal : Proposal::where('id', $old_proposal_id)->first();
+
+        $total_paid = Donation::where('proposal_id', $proposal->id)
+        ->where('donor_id', $donor->id)
+        ->where('currency_id', $donation->currency_id)
+        ->where('status', 2)
+        ->sum('amount');
         
-    //     return true;
+
+        if($total_paid < $proposal->min_documenting_amount){
+            
+            Document::where('proposal_id', $proposal->id)
+            ->where('donor_id', $donor->id)
+            ->where('currency_id', $donation->currency_id)
+            ->delete();
+            return true;
+        }
+
+         Document::updateOrCreate(
+            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donor->id,'currency_id' =>  $donation->currency_id],
+            [
+                'amount' => $total_paid,
+                'document_nickname' => $donation->document_nickname,
+            ]
+            );
+        return true;
         
-    // }
+    }
 
 }
