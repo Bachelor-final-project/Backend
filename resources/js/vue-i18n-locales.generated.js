@@ -1,5 +1,8 @@
 export default {
     "ar": {
+        "copy" : "نسخ",
+        "count of select items: " : "عدد العناصر المحددة: ",
+        "copied to clipboard" : "تم النسخ إلى الحافظة",
         "Complete Donating Status" : "إكمال مرحلة التبرع",
         "Complete Execution Status" : "إكمال مرحلة التنفيذ",
         "Complete Archiving Status" : "إكمال مرحلة الأرشفة",

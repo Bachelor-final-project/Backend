@@ -35,7 +35,8 @@ import {
     faLaptopFile,
     faCashRegister,
     faEye,
-    faCircleCheck
+    faCircleCheck,
+    faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -73,7 +74,8 @@ library.add(
     faLaptopFile,
     faCashRegister,
     faEye,
-    faCircleCheck
+    faCircleCheck,
+    faCopy,
 );
 
 export default FontAwesomeIcon;

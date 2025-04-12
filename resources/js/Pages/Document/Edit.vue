@@ -17,6 +17,7 @@ import NationalIDInput from "@/Components/NationalIDInput.vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import '@vuepic/vue-datepicker/dist/main.css'
 import { isValidPalestinianID } from '@/utils/validators';
+import { computed } from "vue";
 const props = defineProps({
   proposals: Array,
   donors: Array,
@@ -40,6 +41,7 @@ const form = useForm({
   amount: props.document.amount,
   note: props.document.note,
   expected_date: props.document.expected_date,
+  document_nickname: props.document.document_nickname,
 });
 
 const submit = () => {
@@ -71,6 +73,7 @@ const datePickerFormat = (date) => {
     return formattedDate ;
   }
 }
+const hasDocument = computed(() => props.document.proposal.min_documenting_amount <= form.amount);
 
 // function selectDate() {
 //   // console.log("Hello, Close");
@@ -107,7 +110,6 @@ const datePickerFormat = (date) => {
             id="proposal_id"
             v-model="form.proposal_id"
             class="mt-1 block w-full"
-            autocomplete="new-password"
           />
           <InputError :message="form.errors.proposal_id" class="mt-2" />
         </div>
@@ -120,9 +122,22 @@ const datePickerFormat = (date) => {
             id="donor_id"
             v-model="form.donor_id"
             class="mt-1 block w-full"
-            autocomplete="new-password"
           />
           <InputError :message="form.errors.donor_id" class="mt-2" />
+        </div>
+        <div
+            v-show="hasDocument"
+        >
+          <InputLabel for="document_nickname" value="document_nickname" />
+          <TextInput
+            id="document_nickname"
+            type="text"
+            v-model="form.document_nickname"
+            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
+            
+          />
+          <InputError :message="form.errors.document_nickname" class="mt-2" />
+
         </div>
         <div>
           <InputLabel for="amount" value="Amount" />
