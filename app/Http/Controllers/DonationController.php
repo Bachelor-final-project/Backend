@@ -105,11 +105,12 @@ class DonationController extends Controller
             $validated['donor_id'] = Donor::where('phone', '=', $donorPhone)->first()->id;
         }
         $old_proposal_id = $donation->proposal_id;
+        $old_donor_id = $donation->donor_id;
         
         $donation->update($validated);
 
         // update Document after updating the donation
-        Document::updateOrCreateDocumentForDonation($donation, $old_proposal_id);
+        Document::updateOrCreateDocumentForDonation($donation, $old_proposal_id, $old_donor_id);
         
 
         return back()->with('res', ['message' => __('Donation Updated Seccessfully'), 'type' => 'success']);
