@@ -18,7 +18,7 @@ class Proposal extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar',  'currency_name',  'currency_code',  'one_unit_price', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount'];
+    protected $appends = ['status_str_ar',  'currency_name',  'currency_code',  'one_unit_price', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount', 'test'];
     protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
@@ -137,8 +137,22 @@ class Proposal extends BaseModel
         $query
         ->where('status', 1)
         ->where('publishing_date', '<=', Carbon::now()->format('Y-m-d'))
-        ->whereRaw('(cost - COALESCE((SELECT SUM(amount) FROM donations WHERE donations.proposal_id = proposals.id AND donations.status = 2), 0)) >= 0');
+        ->whereRaw('(cost - COALESCE((SELECT SUM(amount) FROM donations WHERE donations.proposal_id = proposals.id AND donations.status = 2), 0)) > 0');
         ;
+    }
+    public function getTestAttribute(){
+        return '';
+        return Proposal::selectRaw('
+                id, (cost - COALESCE((
+                    SELECT SUM(amount)
+                    FROM donations
+                    WHERE donations.proposal_id = proposals.id
+                    AND donations.status = 2
+                ), 0)) as test'
+            )
+            ->where('id', $this->id)
+            ->first()
+            ?->test;
     }
     public function scopeSearch($query, $request){
 

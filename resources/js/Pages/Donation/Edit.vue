@@ -12,6 +12,7 @@ import TopRightLayout from "@/Layouts/TopRightLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
 import PhoneInput from "@/Components/PhoneInput.vue";
+import { computed } from "vue";
 const props = defineProps({
   status_options: Array,
   currencies: Array,
@@ -30,6 +31,7 @@ const props = defineProps({
 const form = useForm({
   phone: props.donation.donor_phone,
   proposal_id: props.donation.proposal_id,
+  document_nickname: props.donation.document_nickname,
   currency_id: props.donation.currency_id,
   amount: props.donation.amount,
   status: props.donation.status
@@ -46,6 +48,7 @@ const submit = () => {
     },
   });
 };
+const hasDocument = computed(() => props.donation.proposal.min_documenting_amount <= form.amount);
 </script>
 <template>
   <Head :title="$t('Edit Donation')" />
@@ -77,9 +80,22 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
+        <div
+              v-show="hasDocument"
+          >
+            <InputLabel for="document_nickname" value="document_nickname" />
+            <TextInput
+              id="document_nickname"
+              type="text"
+              v-model="form.document_nickname"
+              class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
+              
+            />
+            <InputError :message="form.errors.document_nickname" class="mt-2" />
 
+          </div>
         <div>
-          <InputLabel for="proposal_id" value="Project" />
+          <InputLabel for="proposal_id" value="Proposal" />
           <SelectInput
             :options="proposals"
             :item_name="`title`"

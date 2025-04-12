@@ -12,7 +12,7 @@ use App\Traits\TenantScoped;
 class Document extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
-    protected $appends = ['proposal_name', 'donor_name', 'currency_name', 'is_attached', 'document_file_url', 'document_file_name'];
+    protected $appends = ['proposal_name', 'donor_name', 'donor_phone', 'currency_name', 'is_attached', 'document_file_url', 'document_file_name'];
 
     protected $with = ['proposal', 'donor', 'currency', 'attachments'];
     public static $controllable = true;
@@ -53,6 +53,11 @@ class Document extends BaseModel
     public function getDonorNameAttribute()
     {
         return $this->donor?->name;
+    }
+
+    public function getDonorPhoneAttribute()
+    {
+        return $this->donor?->phone;
     }
 
     public function getCurrencyNameAttribute()
@@ -97,6 +102,7 @@ class Document extends BaseModel
             ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             ['sortable' => true, 'value' => 'proposal', 'key' => 'proposal_name'],
             ['sortable' => true, 'sortBy' => 'donor.name', 'value' => 'donor name', 'key' => 'donor_name'],
+            ['sortable' => true, 'sortBy' => 'donor.phone', 'value' => 'donor phone', 'key' => 'donor_phone'],
             ['sortable' => true, 'value' => 'document_nickname', 'key' => 'document_nickname'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'currency', 'key' => 'currency_name'],
@@ -144,7 +150,13 @@ class Document extends BaseModel
             ['name' => 'Close', 'id' => '4'],
         ];
     }
-    public static function updateOrCreateDocumentForDonation(Donation $donation){
+    public static function updateOrCreateDocumentForDonation(Donation $donation, $old_proposal_id = null){
+
+        // check if the proposal has been changed
+        if($old_proposal_id != null && $old_proposal_id != $donation->proposal_id){
+            self::updateOrCreateDocumentForDonationOldPropsal($donation, $old_proposal_id);
+        }
+
         $proposal = $donation->proposal;
 
 
@@ -166,6 +178,36 @@ class Document extends BaseModel
 
 
 
+
+         Document::updateOrCreate(
+            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id,'currency_id' =>  $donation->currency_id],
+            [
+                'amount' => $total_paid,
+                'document_nickname' => $donation->document_nickname,
+            ]
+            );
+        return true;
+        
+    }
+    public static function updateOrCreateDocumentForDonationOldPropsal(Donation $donation, $old_proposal_id = null){
+
+        $proposal = Proposal::where('id', $old_proposal_id)->first();
+
+        $total_paid = Donation::where('proposal_id', $proposal->id)
+        ->where('donor_id', $donation->donor_id)
+        ->where('currency_id', $donation->currency_id)
+        ->where('status', 2)
+        ->sum('amount');
+        
+
+        if($total_paid < $proposal->min_documenting_amount){
+            
+            Document::where('proposal_id', $proposal->id)
+            ->where('donor_id', $donation->donor_id)
+            ->where('currency_id', $donation->currency_id)
+            ->delete();
+            return true;
+        }
 
          Document::updateOrCreate(
             ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id,'currency_id' =>  $donation->currency_id],

@@ -27,6 +27,7 @@ class UpdateDocumentRequest extends FormRequest
             'proposal_id' => 'sometimes|exists:proposals,id',
             'donor_id' => 'sometimes|exists:donors,id',
             'amount' => 'sometimes|numeric|min:0',
+            'document_nickname' => 'sometimes',
             'currency_id' => 'sometimes|exists:currencies,id',
             'note' => 'sometimes|nullable|string|max:1024',
             'expected_date' => 'sometimes|nullable|date_format:Y-m-d|after_or_equal:today',

@@ -10,6 +10,17 @@
       :table_filters="table_filters"
       import_url="import-proposals-overview"
       :users="users"
+      :selectable="true"
+      :bulk-actions="[
+  {
+    name: 'copy',
+    icon: 'copy',
+    onClick: (selected) => {
+      // Your logic, e.g. emit event or call API
+      copySelected(selected);
+    }
+  },
+]"
     />
   </div>
 </template>
@@ -31,6 +42,9 @@ const props = defineProps({
   users: Array,
 });
 import { useI18n } from "vue-i18n";
+import { usePage } from "@inertiajs/vue3";
+
+const page = usePage();
 
 const { t } = useI18n();
 
@@ -48,7 +62,39 @@ const { t } = useI18n();
 // ];
 
 
-function save() {
-  console.log(user);
+const copySelected = async (selected) => {
+  let s = "الحملات الجديدة المطلوبة:\n\n";
+  let last_s = "المجموع الكلي= ";
+  let total = 0;
+  selected.forEach((e, idx, array) => {
+    console.log("idx: " + idx)
+    total += parseInt(e.paid_amount);
+    
+    s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* ${e.title}`;
+    last_s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* `;
+    if(idx != array.length - 1){
+      s += "+";
+      last_s += "+";
+    }else{
+      last_s += ` = ${Intl.NumberFormat().format(total)} ${e.currency_name}`;
+    }
+    s += "\n";
+
+
+  });
+  const msg = t("copied to clipboard");
+  const text = `${s}\n\n\n*************\n\n${last_s}`;
+  console.log(msg);
+  navigator.clipboard.writeText(text)
+  .then(() => {
+    console.log("Text copied to clipboard!");
+    page.props.flash = {
+      message: msg,
+      type: "success"
+    };
+  })
+  .catch(err => {
+    console.error("Failed to copy text: ", err);
+  });
 }
 </script>

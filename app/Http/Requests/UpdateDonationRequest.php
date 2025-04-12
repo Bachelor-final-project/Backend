@@ -36,6 +36,7 @@ class UpdateDonationRequest extends FormRequest
             'phone' => 'sometimes|exists:donors,phone',
             'proposal_id' => 'sometimes|exists:proposals,id',
             'currency_id' => 'sometimes|exists:currencies,id',
+            'document_nickname' => 'sometimes',
             'amount' => 'sometimes|numeric|min:0',
             'status' => 'sometimes|integer|between:0,3',
         ];

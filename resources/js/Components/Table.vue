@@ -381,6 +381,10 @@
         class="border-b-2 text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
       >
         <tr>
+          <th v-if="selectable" class="px-4 py-3">
+            <input type="checkbox" :checked="allSelected" @change="toggleSelectAll" class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-blue-600 checked:border-blue-600" />
+          </th>
+
           <th
             :key="index"
             v-for="(head, index) in headers"
@@ -422,6 +426,14 @@
           class="cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 items-center"
           :class="rowClass(item)"
         >
+        <td v-if="selectable" class="px-4 py-2">
+          <input
+            type="checkbox"
+            :checked="isSelected(item)"
+            @change="toggleSelectRow(item)"
+            class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-blue-600 checked:border-blue-600"
+          />
+        </td>
           <td
             :key="index"
             v-for="(head, index) in headers"
@@ -480,6 +492,17 @@
         </tr>
       </tbody>
     </table>
+    <div v-if="selectable && selectedRows.length" class="p-4 bg-gray-50 dark:bg-gray-700 border-t flex gap-4 items-center justify-between">
+      <template v-for="(action, i) in bulkActions" :key="i">
+        <PrimaryButton
+        @click="() => action.onClick(selectedRows)"
+        class="flex items-center gap-1 px-3 py-1"
+        >
+        <f-icon v-if="action.icon" :icon="action.icon" />
+        {{$t(action.name)}}</PrimaryButton>
+      </template>
+        <span class="text-sm font-medium dark:text-white">{{$t("count of select items: ")}}{{ selectedRows.length }}</span>
+    </div>
     </div>
     <Paginator :params="route().params" :links="items.links" />
   </div>
@@ -490,7 +513,7 @@ import Paginator from "@/Components/Paginator.vue";
 import TableAction from "@/Components/TableAction.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { reactive, watch, ref, onMounted } from "vue";
+import { reactive, watch, ref, onMounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import FileInput from "@/Components/FileInput.vue";
@@ -552,6 +575,14 @@ const props = defineProps({
   users: {
     type: Array,
     default: ""
+  },
+  selectable: {
+  type: Boolean,
+  default: false
+  },
+  bulkActions: {
+    type: Array,
+    default: () => []
   }
 });
 
@@ -575,10 +606,21 @@ const complete_donating_status_user = ref(page.props.auth.user.id);
 const hasDonatingAmount = ref(0);
 const donatingAmount = ref(0);
 
+
+
 const isUploading = ref(false);
 const progress = ref(0);
 
 const modal_item = ref();
+
+const selectedRows = ref([]);
+// const allSelected = ref(false);
+// const allSelected = computed(() => props.items.data && props.items.data.length > 0 && selectedRows.value.length === items.data.length);
+const allSelected = computed(() => {
+  console.log(props)
+  return props.items.data.length > 0 &&
+         selectedRows.value.length === props.items.data.length;
+});
 
 const statuses = {
   user: {
@@ -619,6 +661,11 @@ if(!isEmpty(props.table_filters)){
   }
   console.log(params.get("proposal_type_id_filter"))
 });*/
+
+
+
+
+
 
 
 const debouncedReload = debounce((newValue) => {
@@ -902,6 +949,30 @@ function modal_function(funcName, item) {
 function urlParams() {
   return (props.import_url.includes("?")? "&": "?") + new URLSearchParams(filters).toString();
 }
+
+
+function toggleSelectAll() {
+  if (allSelected.value) {
+    selectedRows.value = [];
+  } else {
+    // selectedRows.value = [...props.items.data.map(i => i.id)];
+    selectedRows.value = [...props.items.data];
+  }
+  allSelected.value = !allSelected.value;
+}
+
+function toggleSelectRow(row) {
+  const index = selectedRows.value.findIndex(r => r.id === row.id);
+  if (index > -1) {
+    selectedRows.value.splice(index, 1);
+  } else {
+    selectedRows.value.push(row);
+  }
+}
+function isSelected(item) {
+  return selectedRows.value.some(r => r.id === item.id);
+}
+
 </script>
 <style>
 ._2_user_status {

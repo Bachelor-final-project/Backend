@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import BasicColumn from "@/Components/Dashboard/Charts/BasicColumn.vue";
 import BasicStackedBars from "@/Components/Dashboard/Charts/BasicStackedBars.vue";
 import BasicSparkLines from "@/Components/Dashboard/Charts/BasicSparkLines.vue";
@@ -8,6 +8,7 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { useI18n } from "vue-i18n";
 
 import Table from "@/Components/Table.vue";
+const page = usePage();
 const { t } = useI18n();
 
 const props = defineProps({
@@ -47,13 +48,54 @@ onMounted(() => {
   let counter = 0;
   document.querySelectorAll('#proposals_overview table tbody tr').forEach((tr) => {
     tr.querySelector('td:nth-child(1)').style.backgroundColor = colors[counter];
-    tr.querySelector('td:nth-child(2)').style.backgroundColor = colors[counter++];
-    tr.querySelector('td:nth-child(3)').style.backgroundColor = '#c9daf8';
-    tr.querySelector('td:nth-child(4)').style.backgroundColor = '#fff2cc';
+    tr.querySelector('td:nth-child(2)').style.backgroundColor = colors[counter];
+    tr.querySelector('td:nth-child(3)').style.backgroundColor = colors[counter++];
+    tr.querySelector('td:nth-child(4)').style.backgroundColor = '#c9daf8';
+    tr.querySelector('td:nth-child(5)').style.backgroundColor = '#fff2cc';
     // tr.querySelector('td:nth-child(3) div').classList.add("bg-[#fff2cc]-100", "!text-[#fff2cc]-800", "me-2", "px-2.5", "py-0.5", "rounded-full", "dark:bg-gray-700", "dark:text-blue-400", "border", "border-[#fff2cc]-400");
     console.log(tr);
   });
 });
+
+
+
+
+const copySelected = async (selected) => {
+  let s = "الحملات الجديدة المطلوبة:\n\n";
+  let last_s = "المجموع الكلي= ";
+  let total = 0;
+  selected.forEach((e, idx, array) => {
+    console.log("idx: " + idx)
+    total += parseInt(e.paid_amount);
+    
+    s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* ${e.title}`;
+    last_s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* `;
+    if(idx != array.length - 1){
+      s += "+";
+      last_s += "+";
+    }else{
+      last_s += ` = ${Intl.NumberFormat().format(total)} ${e.currency_name}`;
+    }
+    s += "\n";
+
+
+  });
+  const msg = t("copied to clipboard");
+  const text = `${s}\n\n\n*************\n\n${last_s}`;
+  console.log(msg);
+  navigator.clipboard.writeText(text)
+  .then(() => {
+    console.log("Text copied to clipboard!");
+    page.props.flash = {
+      message: msg,
+      type: "success"
+    };
+  })
+  .catch(err => {
+    console.error("Failed to copy text: ", err);
+  });
+}
+
 
 
 </script>
@@ -96,6 +138,17 @@ onMounted(() => {
             :items="proposals_overview"
             :headers="proposals_overview_headers"
             import_url="import-proposals-overview"
+            :selectable="true"
+            :bulk-actions="[
+              {
+                name: 'copy',
+                icon: 'copy',
+                onClick: (selected) => {
+                  // Your logic, e.g. emit event or call API
+                  copySelected(selected);
+                }
+              }
+            ]"
             
           />
         </div>
@@ -153,7 +206,9 @@ onMounted(() => {
   border-color: #333;
   border-width: 1px;
 }
-#proposals_overview table td:first-child {
+/*#proposals_overview table td:first-child*/
+#proposals_overview table td:nth-child(2)
+ {
   width: 100%;
   /* white-space: nowrap; */
 }
