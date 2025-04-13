@@ -137,7 +137,6 @@ const submit = () => {
           <InputLabel for="cost" value="cost" />
           <TextInput
             id="cost"
-            type="number"
             class="mt-1 block w-full"
             v-model="form.cost"
             required
@@ -150,7 +149,6 @@ const submit = () => {
           <InputLabel for="share_cost" value="share cost" />
           <TextInput
             id="share_cost"
-            type="number"
             class="mt-1 block w-full"
             v-model="form.share_cost"
             required
@@ -163,7 +161,6 @@ const submit = () => {
           <InputLabel for="min_documenting_amount" value="min documenting amount" />
           <TextInput
             id="min_documenting_amount"
-            type="number"
             class="mt-1 block w-full"
             v-model="form.min_documenting_amount"
             required
