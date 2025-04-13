@@ -150,14 +150,15 @@ class Document extends BaseModel
             ['name' => 'Close', 'id' => '4'],
         ];
     }
-    public static function updateOrCreateDocumentForDonation(Donation $donation, $old_proposal_id = null, $old_donor_id = null){
+    public static function updateOrCreateDocumentForDonation(Donation $donation, $old_proposal_id = null, $old_donor_id = null, $old_document_nickname = null){
 
-        // check if the proposal has been changed
+        // check if the proposal, donor or document_nickname have been changed
         if(
             $old_proposal_id != null && $old_proposal_id != $donation->proposal_id ||
-            $old_donor_id != null && $old_donor_id != $donation->donor_id
+            $old_donor_id != null && $old_donor_id != $donation->donor_id ||
+            $old_document_nickname != null && $old_document_nickname != $donation->document_nickname 
             ){
-            self::updateOrCreateDocumentForDonationOldProposalAndDonor($donation, $old_proposal_id, $old_donor_id);
+            self::updateOrCreateDocumentForDonationOldProposalAndDonor($donation, $old_proposal_id, $old_donor_id, $old_document_nickname);
         }
 
         $proposal = $donation->proposal;
@@ -166,6 +167,7 @@ class Document extends BaseModel
         $total_paid = Donation::where('proposal_id', $proposal->id)
         ->where('donor_id', $donation->donor_id)
         ->where('currency_id', $donation->currency_id)
+        ->where('document_nickname', $donation->document_nickname)
         ->where('status', 2)
         ->sum('amount');
         
@@ -175,6 +177,7 @@ class Document extends BaseModel
             Document::where('proposal_id', $proposal->id)
             ->where('donor_id', $donation->donor_id)
             ->where('currency_id', $donation->currency_id)
+            ->where('document_nickname', $donation->document_nickname)
             ->delete();
             return true;
         }
@@ -183,54 +186,55 @@ class Document extends BaseModel
 
 
          Document::updateOrCreate(
-            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id,'currency_id' =>  $donation->currency_id],
+            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id, 'document_nickname' => $donation->document_nickname, 'currency_id' =>  $donation->currency_id],
             [
                 'amount' => $total_paid,
-                'document_nickname' => $donation->document_nickname,
             ]
             );
         return true;
         
     }
-    public static function updateOrCreateDocumentForDonationOldPropsal(Donation $donation, $old_proposal_id = null){
+    // public static function updateOrCreateDocumentForDonationOldPropsal(Donation $donation, $old_proposal_id = null){
 
-        $proposal = Proposal::where('id', $old_proposal_id)->first();
+    //     $proposal = Proposal::where('id', $old_proposal_id)->first();
 
-        $total_paid = Donation::where('proposal_id', $proposal->id)
-        ->where('donor_id', $donation->donor_id)
-        ->where('currency_id', $donation->currency_id)
-        ->where('status', 2)
-        ->sum('amount');
+    //     $total_paid = Donation::where('proposal_id', $proposal->id)
+    //     ->where('donor_id', $donation->donor_id)
+    //     ->where('currency_id', $donation->currency_id)
+    //     ->where('status', 2)
+    //     ->sum('amount');
         
 
-        if($total_paid < $proposal->min_documenting_amount){
+    //     if($total_paid < $proposal->min_documenting_amount){
             
-            Document::where('proposal_id', $proposal->id)
-            ->where('donor_id', $donation->donor_id)
-            ->where('currency_id', $donation->currency_id)
-            ->delete();
-            return true;
-        }
+    //         Document::where('proposal_id', $proposal->id)
+    //         ->where('donor_id', $donation->donor_id)
+    //         ->where('currency_id', $donation->currency_id)
+    //         ->delete();
+    //         return true;
+    //     }
 
-         Document::updateOrCreate(
-            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id,'currency_id' =>  $donation->currency_id],
-            [
-                'amount' => $total_paid,
-                'document_nickname' => $donation->document_nickname,
-            ]
-            );
-        return true;
+    //      Document::updateOrCreate(
+    //         ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id,'currency_id' =>  $donation->currency_id],
+    //         [
+    //             'amount' => $total_paid,
+    //             'document_nickname' => $donation->document_nickname,
+    //         ]
+    //         );
+    //     return true;
         
-    }
-    public static function updateOrCreateDocumentForDonationOldProposalAndDonor(Donation $donation, $old_proposal_id = null, $old_donor_id = null){
+    // }
+    public static function updateOrCreateDocumentForDonationOldProposalAndDonor(Donation $donation, $old_proposal_id = null, $old_donor_id = null, $old_document_nickname = null){
 
 
         $donor = ($old_donor_id == null)? $donation->donor : Donor::where('id', $old_donor_id)->first();
         $proposal = ($old_proposal_id == null)? $donation->proposal : Proposal::where('id', $old_proposal_id)->first();
+        $document_nickname = ($old_document_nickname == null)? $donation->document_nickname : $old_document_nickname;
 
         $total_paid = Donation::where('proposal_id', $proposal->id)
         ->where('donor_id', $donor->id)
         ->where('currency_id', $donation->currency_id)
+        ->where('document_nickname', $document_nickname)
         ->where('status', 2)
         ->sum('amount');
         
@@ -239,16 +243,16 @@ class Document extends BaseModel
             
             Document::where('proposal_id', $proposal->id)
             ->where('donor_id', $donor->id)
+            ->where('document_nickname', $document_nickname)
             ->where('currency_id', $donation->currency_id)
             ->delete();
             return true;
         }
 
          Document::updateOrCreate(
-            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donor->id,'currency_id' =>  $donation->currency_id],
+            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donor->id,'document_nickname' => $document_nickname,'currency_id' =>  $donation->currency_id],
             [
                 'amount' => $total_paid,
-                'document_nickname' => $donation->document_nickname,
             ]
             );
         return true;

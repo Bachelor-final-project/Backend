@@ -106,11 +106,12 @@ class DonationController extends Controller
         }
         $old_proposal_id = $donation->proposal_id;
         $old_donor_id = $donation->donor_id;
+        $old_document_nickname = $donation->document_nickname;
         
         $donation->update($validated);
 
         // update Document after updating the donation
-        Document::updateOrCreateDocumentForDonation($donation, $old_proposal_id, $old_donor_id);
+        Document::updateOrCreateDocumentForDonation($donation, $old_proposal_id, $old_donor_id, $old_document_nickname);
         
 
         return back()->with('res', ['message' => __('Donation Updated Seccessfully'), 'type' => 'success']);

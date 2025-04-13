@@ -57,6 +57,9 @@ class Proposal extends BaseModel
     public function getPaidAmountAttribute(){
         return  round($this->donations()->where('status', 2)->sum('amount'), 2);
     }
+    public function getCostAttribute($cost){
+        return  round($cost, 2);
+    }
     public function getRemainingAmountAttribute(){
         return  max(round($this->cost - $this->paid_amount, 2), 0);
     }
