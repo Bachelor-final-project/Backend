@@ -1,6 +1,8 @@
 export default {
     "ar": {
+        "Are you sure you want to clone?" : "هل أنت متأكد من التكرار؟ ",
         "copy" : "نسخ",
+        "clone" : "تكرار",
         "copy documents" : "نسخ التوثيقات",
         "count of select items: " : "عدد العناصر المحددة: ",
         "copied to clipboard" : "تم النسخ إلى الحافظة",
@@ -510,7 +512,7 @@ export default {
         "Local Environmental Committees Platform": "منصة اللجان البيئية المجتمعية",
         "All Types": "جميع الانواع",
         "delayed": "متأخرة",
-        "Are you sure you want to delete ?": "هل انت متأكد من الحذف ؟",
+        "Are you sure you want to delete ?": "هل أنت متأكد من الحذف ؟",
         "Once your accept, all of its data will be permanently deleted.": "عند الحذف لن تستطيع استرجاع البيانات",
         "Select Form Type": "إختر نوع استبيان",
         "mail settings": "الرسائل الالية",

@@ -61,6 +61,9 @@ export default {
       // this.$emit('deleting', this.item.id);
       // this.delete_dialog = true;
     },
+    cloning() {
+      this.$emit('modal_function', 'cloning', this.item);
+    },
     uploadingDocumentFile() {
       this.$emit('modal_function', 'uploadingDocumentFile', this.item);
       // this.complete_donating_status = true;
