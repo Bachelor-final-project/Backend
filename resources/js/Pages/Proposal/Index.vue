@@ -203,7 +203,8 @@ const copyDocumentsSelected = async (selected) => {
         
         s += `${document.document_nickname || document.donor_name}\n`;
       });
-      s += `\nالمجموع: *${Intl.NumberFormat().format(total)} ${e.currency_name}*`;
+      s += `من *${e.entity_name}*`;
+      s += `\n\nالمجموع: *${Intl.NumberFormat().format(total)} ${e.currency_name}*`;
       s += `\n*************\n`;
       allTotal += total;
 
