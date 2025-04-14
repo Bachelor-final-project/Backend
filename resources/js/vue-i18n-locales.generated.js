@@ -1,6 +1,7 @@
 export default {
     "ar": {
         "copy" : "نسخ",
+        "copy documents" : "نسخ التوثيقات",
         "count of select items: " : "عدد العناصر المحددة: ",
         "copied to clipboard" : "تم النسخ إلى الحافظة",
         "Complete Donating Status" : "إكمال مرحلة التبرع",
