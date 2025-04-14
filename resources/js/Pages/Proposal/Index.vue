@@ -86,6 +86,17 @@ const actions =
   },
   {
     type: "btn",
+    icon: "clone",
+    icon_color: "orange",
+    funcName: "cloning",
+    model: "proposal",
+    tooltip: "clone proposal",
+    showFunc: function(item){
+        return page.props.auth.user.type === 1;
+    }
+  },
+  {
+    type: "btn",
     icon: "edit",
     icon_color: "grey",
     funcName: "editing",

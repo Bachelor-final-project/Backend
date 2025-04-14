@@ -62,6 +62,23 @@
       </div>
     </div>
   </Modal>
+  <Modal :show="clone_dialog" @close="modalFunctions['closeCloneModal']">
+    <div class="p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 ">
+        {{ $t("Are you sure you want to clone?") }}
+      </h2>
+
+      <div class="mt-6 flex justify-end">
+        <SecondaryButton @click="modalFunctions['closeCloneModal']">
+          {{ $t("Cancel") }}
+        </SecondaryButton>
+
+        <PrimaryButton class="ml-3" @click="modalFunctions['confirmClone']">
+          {{ $t("clone") }}
+        </PrimaryButton>
+      </div>
+    </div>
+  </Modal>
   <Modal :show="block_dialog" @close="modalFunctions['closeBlockModal']">
     <div class="p-6">
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -475,12 +492,12 @@
           <td v-if="actions" class="px-6 py-4">
             <template v-for="(action, i) in actions" >
               <TableAction
-              @modal_function="modal_function"
-              :item="item"
-              :action="action"
-              :key="i"
-              v-if="action.showFunc? action.showFunc(item): true"
-            />
+                @modal_function="modal_function"
+                :item="item"
+                :action="action"
+                :key="i"
+                v-if="action.showFunc? action.showFunc(item): true"
+              />
             </template>
             
           </td>
@@ -592,6 +609,7 @@ const table_key = ref(0);
 const upload_document_file = ref(false);
 const edit_dialog = ref(false);
 const delete_dialog = ref(false);
+const clone_dialog = ref(false);
 const block_dialog = ref(false);
 const fileuploadInputTrigger = ref(0);
 const isFileInputLoading = ref(false);
@@ -789,6 +807,9 @@ const modalFunctions = {
   closeDeleteModal: function (item) {
     delete_dialog.value = false;
   },
+  closeCloneModal: function (item) {
+    clone_dialog.value = false;
+  },
   closeBlockModal: function (item) {
     block_dialog.value = false;
   },
@@ -799,6 +820,10 @@ const modalFunctions = {
   deleting: function (item) {
     modal_item.value = item;
     delete_dialog.value = true;
+  },
+  cloning: function (item) {
+    modal_item.value = item;
+    clone_dialog.value = true;
   },
   blocking: function (item) {
     modal_item.value = item;
@@ -811,6 +836,10 @@ const modalFunctions = {
   confirmDelete: function (item) {
     router.delete(route(`${props.model}.destroy`, modal_item.value.id));
     modalFunctions['closeDeleteModal'](item);
+  },
+  confirmClone: function (item) {
+    router.post(route(`${props.model}.clone`, modal_item.value.id));
+    modalFunctions['closeCloneModal'](item);
   },
   confirmBlock: function (item) {
     console.log("Item Status: " + statuses[props.model]['blocked'] + " " + statuses[props.model]['open'] + " " + modal_item.value.status)

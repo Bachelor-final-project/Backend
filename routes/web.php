@@ -76,7 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/import-documents', [GeneralController::class, 'importDocuments'])->name('import-documents');
     Route::get('/import-proposals-overview', [GeneralController::class, 'importProposalsOverview'])->name('import-proposals-overview');
     Route::get('ExportPDF/proposal/{id}', [ExportPDFController::class, 'proposal'])->name('export-pdf-proposal');
-    Route::post('proposal/get-short-details', [ProposalController::class, 'getShortDetails'])->name('proposal-get-short-details');
+    Route::post('proposal/{proposal}/clone', [ProposalController::class, 'clone'])->name('proposal.clone');
 });
 Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 Route::post('/test', [StripeController::class, 'test']);

@@ -20,8 +20,10 @@ use App\Models\Country;
 use App\Models\Document;
 use App\Models\Donation;
 use App\Models\Log;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -217,5 +219,60 @@ class ProposalController extends Controller
     {
         $proposal->delete();
         return back()->with('res', ['message' => __('Proposal Deleted Seccessfully'), 'type' => 'success']);
+    }
+    /**
+     * Clone the specified resource.
+     */
+    public function clone(Proposal $proposal)
+    {
+        DB::beginTransaction();
+        try {
+            // Clone the model (excluding the ID and timestamps)
+            $clone = $proposal->replicate();
+
+            // Change specific fields
+            $clone->status = 1;
+            $clone->title = $this->incrementAllHashNumbers($proposal->title);
+            
+            // Set new publishing date to today
+            $newPublishingDate = Carbon::today();
+            $clone->publishing_date = $newPublishingDate;
+
+            // Calculate the date difference (in days) and apply it
+            $diffInDays = Carbon::parse($proposal->execution_date)
+                            ->diffInDays(Carbon::parse($proposal->publishing_date), true);
+
+            $clone->execution_date = $newPublishingDate->copy()->addDays($diffInDays);
+            // Save it to the database
+            $clone->save();
+
+            // clone the attachments
+            foreach ($proposal->attachments as $attachment) {
+                $newAttachment = $attachment->replicate();
+                $newAttachment->attachable_id = $clone->id;
+                $newAttachment->save();
+            }
+            DB::commit();
+            return back()->with('res', ['message' => __('Proposal Cloned Seccessfully'), 'type' => 'success']);
+        } catch (\Throwable $th) {
+            return back()->with('res', ['message' => __('Proposal has not Cloned Seccessfully'), 'type' => 'fail']);
+            DB::rollBack();
+        }
+    }
+
+    private function incrementAllHashNumbers($string) {
+        $count = 0;
+    
+        $newString = preg_replace_callback('/#(\d+)/u', function ($matches) use (&$count) {
+            $count++;
+            return '#' . ($matches[1] + 1);
+        }, $string);
+    
+        // If no hash-number was found, append #2
+        if ($count === 0) {
+            $newString = rtrim($string) . ' #2';
+        }
+    
+        return $newString;
     }
 }
