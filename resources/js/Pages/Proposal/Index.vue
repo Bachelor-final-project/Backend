@@ -206,18 +206,17 @@ const copyDocumentsSelected = async (selected) => {
     let allTotal = 0;
     selected.forEach((e, idx, array) => {
       s += `*توثيق حملة ${e.title}* \n\n`;
-
-      let total = 0;
+      e.documents.sort(function(a, b){
+        return b.amount - a.amount;
+      });
       e.documents.forEach((document, idx, array) => {
-        total += parseInt(document.amount);
-        
         
         s += `${document.document_nickname || document.donor_name}\n`;
       });
       s += `من *${e.entity_name}*`;
-      s += `\n\nالمجموع: *${Intl.NumberFormat().format(total)} ${e.currency_name}*`;
+      s += `\n\nالمجموع: *${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}*`;
       s += `\n*************\n`;
-      allTotal += total;
+      allTotal += e.paid_amount;
 
     });
     const last_s =  `المجموع: *${Intl.NumberFormat().format(allTotal)} ${selected[0].currency_name}*`;
