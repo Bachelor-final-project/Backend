@@ -48,6 +48,10 @@ class Proposal extends BaseModel
     public function getStatusDetailsAttribute(){
         return 'hi how are you';
     }
+    // public function documentsArray(){
+    //     return $this->hasMany(Document::class, 'proposal_id','id')
+    //                 ->select(['id', 'document_nickname', 'amount']);
+    // }
     public function getCoverImageAttribute(){
         return  $this->attachments()->where('attachment_type', 1)->first()?->url;
     }

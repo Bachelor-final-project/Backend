@@ -493,14 +493,16 @@
       </tbody>
     </table>
     <div v-if="selectable && selectedRows.length" class="p-4 bg-gray-50 dark:bg-gray-700 border-t flex gap-4 items-center justify-between">
-      <template v-for="(action, i) in bulkActions" :key="i">
-        <PrimaryButton
-        @click="() => action.onClick(selectedRows)"
-        class="flex items-center gap-1 px-3 py-1"
-        >
-        <f-icon v-if="action.icon" :icon="action.icon" />
-        {{$t(action.name)}}</PrimaryButton>
-      </template>
+        <div  class="flex  gap-1">
+          <template v-for="(action, i) in bulkActions" :key="i">
+            <PrimaryButton
+            @click="() => action.onClick(selectedRows)"
+            class="flex items-center gap-1 px-3 py-1"
+            >
+            <f-icon v-if="action.icon" :icon="action.icon" />
+            {{$t(action.name)}}</PrimaryButton>
+          </template>
+        </div>
         <span class="text-sm font-medium dark:text-white">{{$t("count of select items: ")}}{{ selectedRows.length }}</span>
     </div>
     </div>

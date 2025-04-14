@@ -144,44 +144,85 @@ const bulkActions = [
             // Your logic, e.g. emit event or call API
             copySelected(selected);
           }
+        },
+        {
+          name: 'copy documents',
+          icon: 'copy',
+          onClick: (selected) => {
+            // Your logic, e.g. emit event or call API
+            copyDocumentsSelected(selected);
+          }
         }
-      ]
+      ];
 
 
-      const copySelected = async (selected) => {
-  let s = "الحملات الجديدة المطلوبة:\n\n";
-  let last_s = "المجموع الكلي= ";
-  let total = 0;
-  selected.forEach((e, idx, array) => {
-    console.log("idx: " + idx)
-    total += parseInt(e.paid_amount);
+const copySelected = async (selected) => {
+    let s = "الحملات الجديدة المطلوبة:\n\n";
+    let last_s = "المجموع الكلي= ";
+    let total = 0;
+    selected.forEach((e, idx, array) => {
+            total += parseInt(e.paid_amount);
+      
+      s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* ${e.title}`;
+      last_s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* `;
+      if(idx != array.length - 1){
+        s += " + ";
+        last_s += "+";
+      }else{
+        last_s += ` = ${Intl.NumberFormat().format(total)} ${e.currency_name}`;
+      }
+      s += "\n";
+
+
+    });
+    const msg = t("copied to clipboard");
+    const text = `${s}\n\n\n*************\n\n${last_s}`;
     
-    s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* ${e.title}`;
-    last_s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* `;
-    if(idx != array.length - 1){
-      s += " + ";
-      last_s += "+";
-    }else{
-      last_s += ` = ${Intl.NumberFormat().format(total)} ${e.currency_name}`;
-    }
-    s += "\n";
+    navigator.clipboard.writeText(text)
+    .then(() => {
+      
+      page.props.flash = {
+        message: msg,
+        type: "success"
+      };
+    })
+    .catch(err => {
+      console.error("Failed to copy text: ", err);
+    });
+}
+const copyDocumentsSelected = async (selected) => {
+    let s = "";
+    let allTotal = 0;
+    selected.forEach((e, idx, array) => {
+      s += `*توثيق حملة ${e.title}* \n\n`;
 
+      let total = 0;
+      e.documents.forEach((document, idx, array) => {
+        total += parseInt(document.amount);
+        
+        
+        s += `${document.document_nickname || document.donor_name}\n`;
+      });
+      s += `\nالمجموع: *${Intl.NumberFormat().format(total)} ${e.currency_name}*`;
+      s += `\n*************\n`;
+      allTotal += total;
 
-  });
-  const msg = t("copied to clipboard");
-  const text = `${s}\n\n\n*************\n\n${last_s}`;
-  console.log(msg);
-  navigator.clipboard.writeText(text)
-  .then(() => {
-    console.log("Text copied to clipboard!");
-    page.props.flash = {
-      message: msg,
-      type: "success"
-    };
-  })
-  .catch(err => {
-    console.error("Failed to copy text: ", err);
-  });
+    });
+    const last_s =  `المجموع: *${Intl.NumberFormat().format(allTotal)} ${selected[0].currency_name}*`;
+    const msg = t("copied to clipboard");
+    const text = `${s}\n${last_s}`;
+    
+    navigator.clipboard.writeText(text)
+    .then(() => {
+      
+      page.props.flash = {
+        message: msg,
+        type: "success"
+      };
+    })
+    .catch(err => {
+      console.error("Failed to copy text: ", err);
+    });
 }
 
 </script>
