@@ -205,6 +205,11 @@ class ProposalController extends Controller
             Excel::import(new BeneficiaryImport($proposal->id), $file);
             $logType = 3;
         }
+        if($request->coverImageFile){
+            $file = $validated['coverImageFile'][0];
+            unset($validated['coverImageFile']);
+            Attachment::storeAttachment([$file], $proposal->id, 'proposal', 1);
+        }
         
         $proposal->update($validated);
         Log::storeLog( $proposal->id, 'proposal', $logType);
