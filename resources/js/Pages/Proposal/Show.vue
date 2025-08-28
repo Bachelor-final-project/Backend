@@ -61,7 +61,9 @@ const donations_table_actions = [
 <template>
   <Head :title="$t('View Proposal')" />
   <ShowFullSizeLayout>
+        
     <section class=" bg-white dark:bg-gray-800 my-4 px-6 py-4 shadow-md rounded-lg">
+          
       <header>
         <h2 class="capitalize text-3xl text-center  font-medium text-gray-900 dark:text-gray-100">
           {{ $t("proposal details") }}

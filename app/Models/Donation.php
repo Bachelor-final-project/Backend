@@ -123,14 +123,14 @@ class Donation extends BaseModel
         return [
             ['sortable' => true, 'value' => 'id', 'key' => 'id'],
             // ['sortable' => true, 'value' => 'Proposal id', 'key' => 'proposal_id'],
-            ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
             ['sortable' => true, 'value' => 'donor name', 'key' => 'donor_name'],
             ['sortable' => true, 'value' => 'donor phone', 'key' => 'donor_phone'],
             ['sortable' => true, 'value' => 'document_nickname', 'key' => 'document_nickname'],
-            ['sortable' => true, 'value' => 'payment method', 'key' => 'payment_method_name'],
-            ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
+            ['sortable' => true, 'value' => 'Proposal Title', 'key' => 'proposal_title'],
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'sortBy' => 'created_at', 'value' => 'created at', 'key' => 'created_at_date_time'],
+            ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
+            ['sortable' => true, 'value' => 'payment method', 'key' => 'payment_method_name'],
             ['sortable' => true, 'sortBy' => 'status', 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];

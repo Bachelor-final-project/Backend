@@ -20,10 +20,10 @@
     </button>
 
     <a
+      v-else-if="action.type == 'href'"
       :href="action.includeId? generateUrl(action.route, action.queryParams, item.id): generateUrl(action.route, action.queryParams)"
       class="text-white px-1 py-[0.75rem] hover:bg-gray-100"
       :title="action.tooltip"
-      v-else-if="action.type == 'href'"
     >
       <f-icon
         v-if="action.icon"
@@ -32,6 +32,22 @@
         class="text-2xl solid tex"
       ></f-icon>
     </a>
+
+    <Link
+    v-else-if="action.type === 'link'"
+    :href="action.includeId 
+              ? route(action.route, item.id) 
+              : route(action.route)"
+    class="text-white px-1 py-[0.75rem] hover:bg-gray-100"
+    :title="action.tooltip"
+  >
+    <f-icon
+      v-if="action.icon"
+      :color="action.icon_color || ''"
+      :icon="action.icon"
+      class="text-2xl solid tex"
+    />
+  </Link>
   </span>
 </template>
 
