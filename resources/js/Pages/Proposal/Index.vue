@@ -92,7 +92,7 @@ const actions =
     model: "proposal",
     tooltip: "clone proposal",
     showFunc: function(item){
-        return page.props.auth.user.type === 1;
+        return item.can_complete_donating_status;
     }
   },
   {
@@ -135,16 +135,19 @@ const actions =
     showFunc: function(item){
         return item.can_complete_archiving_status;
     }
+    
   },
   {
-    type: "href",
+    type: "link",
     icon: "eye",
     icon_color: "blue",
     model: "proposal",
     tooltip: "show proposal",
     route: "proposal.show",  // Define the route here
     includeId: true
-  }
+  },
+  
+  
 ];
 
 const bulkActions = [
@@ -175,7 +178,7 @@ const copySelected = async (selected) => {
             total += parseInt(e.paid_amount);
       
       s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* ${e.title}`;
-      last_s += `*${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* `;
+      last_s += ` *${Intl.NumberFormat().format(e.paid_amount)} ${e.currency_name}* `;
       if(idx != array.length - 1){
         s += " + ";
         last_s += "+";

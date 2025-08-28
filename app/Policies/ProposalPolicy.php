@@ -92,14 +92,14 @@ class ProposalPolicy
         // ->exists();
         // if(!$proposalAttachableOfType2) return false;
 
-        // Check if all related documents have at least one attachable record
-        $documentsWithoutAttachable = $proposal->documents()
-            ->whereDoesntHave('attachments') // Check for documents without attachments
-            ->exists();
+        // // Check if all related documents have at least one attachable record
+        // $documentsWithoutAttachable = $proposal->documents()
+        //     ->whereDoesntHave('attachments') // Check for documents without attachments
+        //     ->exists();
 
-        if ($documentsWithoutAttachable) {
-            return false;
-        }
+        // if ($documentsWithoutAttachable) {
+        //     return false;
+        // }
 
         return true;
 

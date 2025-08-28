@@ -200,7 +200,7 @@ export default {
         "cover photo": "صورة غلاف",
         "can be payed online": "يمكن الدفع اونلاين",
         "payable online": "يدفع اونلاين",
-
+        "Go Back": "عودة",
         "Entities": "الجهات والمبادرات",
         "entity": "الجهة",
         "entity name": "اسم الجهة",
