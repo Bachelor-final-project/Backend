@@ -18,7 +18,7 @@ class Proposal extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar',  'currency_name',  'currency_code',  'one_unit_price', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount', 'test'];
+    protected $appends = ['status_str_ar',  'currency_name',  'currency_code',  'one_unit_price', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount', 'test', 'can_clone'];
     protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
     protected $casts = [
         'isPayableOnline' => 'boolean'
@@ -83,7 +83,8 @@ class Proposal extends BaseModel
         return $this->currency->code;   
     }
     public function getOneUnitPriceAttribute(){
-        return (int)($this->cost / $this->expected_benificiaries_count);   
+        $expected_benificiaries_count = $this->expected_benificiaries_count ?: 1;
+        return (int)($this->cost / $expected_benificiaries_count);   
     }
 
     //authorization
@@ -96,6 +97,9 @@ class Proposal extends BaseModel
     }
     public function getCanCompleteArchivingStatusAttribute(){
         return Gate::allows('completeArchivingStatus', $this);   
+    }
+    public function getCanCloneAttribute(){
+        return Gate::allows('canClone', $this);   
     }
 
 

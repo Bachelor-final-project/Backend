@@ -92,7 +92,7 @@ const actions =
     model: "proposal",
     tooltip: "clone proposal",
     showFunc: function(item){
-        return item.can_complete_donating_status;
+        return item.can_clone;
     }
   },
   {
