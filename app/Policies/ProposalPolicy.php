@@ -112,6 +112,13 @@ class ProposalPolicy
         return true;
 
     }
+    public function canClone(User $user, Proposal $proposal)
+    {
+        // return true;
+        if(!in_array($user->type, [1, 2, 3])) return false;
+        return true;
+
+    }
 
     /**
      * Determine whether the user can delete the model.
