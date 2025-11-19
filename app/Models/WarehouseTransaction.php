@@ -11,7 +11,7 @@ class WarehouseTransaction extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
 
-    protected $fillable = ['warehouse_id', 'item_id', 'amount', 'transaction_type', 'warehouse_stakeholder_id'];
+    protected $fillable = ['warehouse_id', 'item_id', 'amount', 'transaction_type', 'warehouse_stakeholder_id', 'recipient_name'];
     protected $appends = ['item_name', 'unit_name', 'transaction_type_str', 'warehouse_name', 'stakeholder_name'];
     protected $with = ['item', 'warehouse', 'warehouseStakeholder'];
     public static $controllable = true;
@@ -161,6 +161,7 @@ class WarehouseTransaction extends BaseModel
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'value' => 'transaction type', 'key' => 'transaction_type_str', 'class_value_name' => 'transaction_type', 'has_class' => true],
             ['sortable' => true, 'value' => 'stakeholder', 'key' => 'stakeholder_name'],
+            ['sortable' => true, 'value' => 'recipient name', 'key' => 'recipient_name'],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];
     }

@@ -36,6 +36,7 @@ const defaultTransaction = {
   amount: "",
   transaction_type: "",
   warehouse_stakeholder_id: "",
+  recipient_name: "",
 };
 
 const form = useForm({
@@ -92,6 +93,7 @@ const submit = () => {
                 <th class="px-4 py-2 text-left rtl:text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ $t('Quantity') }}</th>
                 <th class="px-4 py-2 text-left rtl:text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ $t('Type') }}</th>
                 <th class="px-4 py-2 text-left rtl:text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ $t('Stakeholder') }}</th>
+                <th class="px-4 py-2 text-left rtl:text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ $t('Recipient Name') }}</th>
                 <th class="px-4 py-2 text-left rtl:text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ $t('Action') }}</th>
               </tr>
             </thead>
@@ -147,6 +149,16 @@ const submit = () => {
                     style="z-index: 1000;"
                   />
                   <InputError :message="form.errors[`transactions.${index}.warehouse_stakeholder_id`]" class="mt-1" />
+                </td>
+                <td class="px-4 py-2">
+                  <TextInput
+                    v-if="transaction.transaction_type == 2"
+                    type="text"
+                    class="w-full"
+                    v-model="transaction.recipient_name"
+                    :placeholder="$t('Enter recipient name')"
+                  />
+                  <InputError :message="form.errors[`transactions.${index}.recipient_name`]" class="mt-1" />
                 </td>
                 <td class="px-4 py-2">
                   <button

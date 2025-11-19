@@ -30,6 +30,7 @@ class StoreWarehouseTransactionRequest extends FormRequest
             'transactions.*.amount' => 'required|integer|min:0',
             'transactions.*.transaction_type' => 'required|integer|between:1,3',
             'transactions.*.warehouse_stakeholder_id' => 'nullable|exists:warehouse_stakeholders,id',
+            'transactions.*.recipient_name' => 'nullable|string|max:255',
         ];
     }
 }
