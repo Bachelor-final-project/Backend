@@ -24,8 +24,8 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required|integer|between:1,2',
-            'status' => 'required|integer|between:1,3',
+            'type' => 'required|integer|between:1,5',
+            'status' => 'nullable|integer|between:1,3',
             'is_active' => 'required|boolean',
             'name' => 'required|string|max:255',
             'email' => 'sometimes|email|unique:users,email,NULL,id,deleted_at,NULL',
