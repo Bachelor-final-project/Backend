@@ -29,6 +29,7 @@ class UpdateWarehouseTransactionRequest extends FormRequest
             'amount' => 'sometimes|integer|min:0',
             'transaction_type' => 'sometimes|integer|between:1,3',
             'warehouse_stakeholder_id' => 'nullable|exists:warehouse_stakeholders,id',
+            'recipient_name' => 'nullable|string|max:255',
         ];
     }
 }

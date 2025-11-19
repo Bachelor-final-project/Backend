@@ -1,5 +1,7 @@
 {
     "Inbound Trnasaction" : "وارد",
+    "stakeholder" : "صاحب المصلحة",
+    "recipient name" : "اسم المستلم",
     "Outbound Transaction" : "صارد",
     "Deprecated" : "اتلاف",
     "Complete Donating Status" : "إكمال مرحلة التبرع",

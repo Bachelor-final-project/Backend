@@ -1,6 +1,10 @@
 export default {
     "ar": {
         "Choose an option...": "اختر إحدى الخيارات",
+        "Recipient Name": "اسم المستلم",
+        "stakeholder": "صاحب المصلحة",
+        "recipient name": "اسم المستلم",
+        "Enter recipient name": "أدخل اسم المستلم",
     "Warehouse Stakeholders": "أصحاب المصلحة في المخازن",
     "warehouse stakeholders": "أصحاب المصلحة في المخازن",
     "Add Warehouse Stakeholder": "إضافة صاحب مصلحة في المخزن",

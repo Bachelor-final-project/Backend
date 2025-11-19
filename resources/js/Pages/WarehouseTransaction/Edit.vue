@@ -37,6 +37,7 @@ const form = useForm({
   amount: props.warehouse_transaction.amount,
   transaction_type: props.warehouse_transaction.transaction_type,
   warehouse_stakeholder_id: props.warehouse_transaction.warehouse_stakeholder_id || "",
+  recipient_name: props.warehouse_transaction.recipient_name || "",
 });
 
 const filteredStakeholders = computed(() => {
@@ -137,6 +138,18 @@ const submit = () => {
             autocomplete="new-password"
           />
           <InputError :message="form.errors.warehouse_stakeholder_id" class="mt-2" />
+        </div>
+
+        <div v-if="form.transaction_type == 2">
+          <InputLabel for="recipient_name" value="Recipient Name" />
+          <TextInput
+            id="recipient_name"
+            type="text"
+            class="mt-1 block w-full"
+            v-model="form.recipient_name"
+            :placeholder="$t('Enter recipient name')"
+          />
+          <InputError :message="form.errors.recipient_name" class="mt-2" />
         </div>
 
         <div class="flex items-center gap-4">
