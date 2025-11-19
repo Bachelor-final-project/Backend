@@ -49,6 +49,7 @@ class Warehouse extends BaseModel
             ['value' => 'item name', 'key' => 'item_name'],
             ['value' => 'unit name', 'key' => 'unit_name'],
             ['value' => 'quantity', 'key' => 'item_quantity'],
+            // ['value' => 'actions', 'key' => 'actions'],
         ];
     }
 
@@ -61,7 +62,7 @@ class Warehouse extends BaseModel
         ];
     }
 
-    public static function getWarehouseItems($warehouse_id) {
+    public static function getWarehouseItems($warehouse_id, $item_id = null) {
         // $sql = "
         //     WITH warehouses_items AS (
         //         SELECT 
@@ -105,6 +106,7 @@ class Warehouse extends BaseModel
             ->select([
                 'w.name as warehouse_name',
                 'i.name as item_name',
+                'i.id as item_id',
                 'u.name as unit_name',
                 DB::raw('SUM(CASE WHEN wt.transaction_type = 1 THEN wt.amount ELSE -wt.amount END) as item_quantity'),
                 'w.id as warehouse_id'
@@ -117,6 +119,9 @@ class Warehouse extends BaseModel
         // Add conditional WHERE clause for warehouse_id
         if ($warehouse_id > 0) {
             $query->where('w.id', '=', $warehouse_id);
+        }
+        if ($item_id > 0) {
+            $query->where('i.id', '=', $item_id);
         }
 
         // Get the results

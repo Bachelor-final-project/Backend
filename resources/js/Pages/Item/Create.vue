@@ -82,7 +82,6 @@ const submit = () => {
             type="number"
             class="mt-1 block w-full"
             v-model="form.estimated_price"
-            required
             autofocus
             autocomplete="name"
           />

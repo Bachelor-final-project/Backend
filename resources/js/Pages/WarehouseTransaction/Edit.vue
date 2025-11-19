@@ -10,12 +10,16 @@ import { Link, useForm, usePage } from "@inertiajs/vue3";
 import CenterLayout from "@/Layouts/CenterLayout.vue";
 import TopRightLayout from "@/Layouts/TopRightLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t: $t } = useI18n();
 import PhoneInput from "@/Components/PhoneInput.vue";
 const props = defineProps({
   warehouses: Array,
   items: Array,
   transaction_types: Array,
+  stakeholders: Array,
   warehouse_transaction: Array,
 });
 
@@ -32,6 +36,12 @@ const form = useForm({
   item_id: props.warehouse_transaction.item_id,
   amount: props.warehouse_transaction.amount,
   transaction_type: props.warehouse_transaction.transaction_type,
+  warehouse_stakeholder_id: props.warehouse_transaction.warehouse_stakeholder_id || "",
+});
+
+const filteredStakeholders = computed(() => {
+  if (!form.transaction_type) return props.stakeholders;
+  return props.stakeholders.filter(stakeholder => stakeholder.type == form.transaction_type);
 });
 const submit = () => {
   // form
@@ -114,6 +124,19 @@ const submit = () => {
             autocomplete="new-password"
           />
           <InputError :message="form.errors.transaction_type" class="mt-2" />
+        </div>
+
+        <div>
+          <InputLabel for="warehouse_stakeholder_id" value="Stakeholder" />
+          <SelectInput
+            :options="filteredStakeholders"
+            :item_name="`name`"
+            id="warehouse_stakeholder_id"
+            v-model="form.warehouse_stakeholder_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+          />
+          <InputError :message="form.errors.warehouse_stakeholder_id" class="mt-2" />
         </div>
 
         <div class="flex items-center gap-4">

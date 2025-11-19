@@ -35,4 +35,20 @@
       -webkit-appearance: none;
       margin: 0;
     }
-  }
+}
+
+/* Fix vue-search-select dropdown z-index */
+.vue-search-select .dropdown {
+    z-index: 99999 !important;
+    position: fixed !important;
+}
+
+.vue-search-select .dropdown .menu {
+    z-index: 99999 !important;
+    position: fixed !important;
+}
+
+.vue-search-select .dropdown-menu {
+    z-index: 99999 !important;
+    position: fixed !important;
+}

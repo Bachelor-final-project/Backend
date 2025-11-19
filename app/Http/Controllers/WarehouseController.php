@@ -7,6 +7,7 @@ use App\Models\WarehouseTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWarehouseRequest;
 use App\Http\Requests\UpdateWarehouseRequest;
+use App\Models\Item;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -42,11 +43,12 @@ class WarehouseController extends Controller
     {
 
         $warehouse_id = $request?->warehouse_id ?? 0;
+        $item_id = $request?->item_id ?? 0;
         $perPage = $request->input('per_page', 10); // Items per page (default 10)
         $page = $request->input('page', 1); // Current page (default 1)
 
         // Execute the query
-        $results = Warehouse::getWarehouseItems($warehouse_id);
+        $results = Warehouse::getWarehouseItems($warehouse_id, $item_id);
         $resultsCollection = collect($results);
         $paginatedResults = new LengthAwarePaginator(
             $resultsCollection->forPage($page, $perPage), // Items for the current page
@@ -60,6 +62,7 @@ class WarehouseController extends Controller
         return Inertia::render(Str::studly("Warehouse").'/Items', [
             "headers" => Warehouse::availableItemsHeaders(),
             "items" => $paginatedResults,
+            "products" => Item::select('id', 'name')->get(),
             'warehouses' => Warehouse::select('id', 'name')->get(),
         ]);
     }

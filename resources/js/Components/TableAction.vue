@@ -23,7 +23,7 @@
       v-else-if="action.type == 'href'"
       :href="action.includeId? generateUrl(action.route, action.queryParams, item.id): generateUrl(action.route, action.queryParams)"
       class="text-white px-1 py-[0.75rem] hover:bg-gray-100"
-      :title="action.tooltip"
+      :title="$t(action.tooltip)"
     >
       <f-icon
         v-if="action.icon"

@@ -5,6 +5,7 @@
       title="Warehouses Items"
       :items="items"
       :headers="headers"
+      :actions="actions"
       model="warehouse"
       :table_filters="warehouse_transactions_table_filters"
     />
@@ -18,41 +19,23 @@ import Card from "@/Components/Card.vue";
 import Table from "@/Components/Table.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import { useI18n } from "vue-i18n";
 
+const { t: $t } = useI18n();
 const actions = [
   {
-    type: "btn",
-    icon: "trash",
-    icon_color: "#656565",
-    funcName: "deleting",
-    model: "warehouse",
-    tooltip: "delete warehouse",
-  },
-  {
-    type: "btn",
-    icon: "ban",
-    icon_color: "#f5425a",
-    funcName: "blocking",
-    model: "warehouse",
-    tooltip: "close warehouse",
-  },
-  {
-    type: "btn",
-    icon: "edit",
-    icon_color: "grey",
-    funcName: "editing",
-    model: "warehouse",
-    tooltip: "edit warehouse",
-  },
-  {
     type: "href",
-    icon: "items",
-    icon_color: "green",
-    funcName: () => {},
+    icon: "exchange",
+    icon_color: "#00cc66",
+    funcName: () => { },
     model: "warehouse",
-    tooltip: "show warehouse items",
-    route: route('warehouse.items')
-  },
+    tooltip: "show item transactions",
+    route: "warehouse_transaction.index",  // Define the route here
+    queryParams: {            // Define the query parameters here
+      warehouse_id: 'warehouse_id',
+      item_id: 'item_id',
+    },
+  }
   // {
   //   type: "btn",
   //   icon: "ban",
@@ -68,7 +51,8 @@ const props = defineProps({
   items: Array,
   headers: Array,
   name: String,
-  warehouses: Array
+  warehouses: Array,
+  products: Array
 });
 
 const warehouse_transactions_table_filters = [
@@ -76,6 +60,11 @@ const warehouse_transactions_table_filters = [
     name: "All Warehouses",
     model: "warehouse_id",
     options: [...props.warehouses],
+  },
+  {
+    name: "All Items",
+    model: "item_id",
+    options: [{name : $t("All Items"), id:0}, ...props.products?? []],
   },
 ];
 

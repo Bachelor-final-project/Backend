@@ -24,10 +24,12 @@ class StoreWarehouseTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'warehouse_id' => 'required|exists:warehouses,id',
-            'item_id' => 'required|exists:items,id',
-            'amount' => 'required|integer|min:0',
-            'transaction_type' => 'required|integer|between:1,3',
+            'transactions' => 'required|array|min:1',
+            'transactions.*.warehouse_id' => 'required|exists:warehouses,id',
+            'transactions.*.item_id' => 'required|exists:items,id',
+            'transactions.*.amount' => 'required|integer|min:0',
+            'transactions.*.transaction_type' => 'required|integer|between:1,3',
+            'transactions.*.warehouse_stakeholder_id' => 'nullable|exists:warehouse_stakeholders,id',
         ];
     }
 }

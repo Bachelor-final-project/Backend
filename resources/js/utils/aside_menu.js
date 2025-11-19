@@ -8,7 +8,7 @@ const menus = [
      {
         title: "general settings",
         icon: "gear",
-        allowedUserTypes: [1,4],
+        allowedUserTypes: [1,],
         items: [
             {
                 title: "Entities",
@@ -54,7 +54,7 @@ const menus = [
                     title: "new proposal",
                     icon: "laptop-file",
                     to: "proposal.create",
-                    allowedUserTypes: [1,5],
+                    allowedUserTypes: [1,2, 5],
                 },
             ]
         },
@@ -74,7 +74,7 @@ const menus = [
             title: "Documentations",
             icon: "photo-film",
             to: "document.index",
-            allowedUserTypes: [1,2,4],
+            allowedUserTypes: [1,2],
         },
 
         // {
@@ -110,6 +110,12 @@ const menus = [
                     title: "Items",
                     icon: "basket-shopping",
                     to: "item.index",
+                    allowedUserTypes: [1,4],
+                },
+                {
+                    title: "Warehouse Stakeholders",
+                    icon: "basket-shopping",
+                    to: "warehouse_stakeholder.index",
                     allowedUserTypes: [1,4],
                 },
                 {
