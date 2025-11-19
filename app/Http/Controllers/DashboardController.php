@@ -17,6 +17,7 @@ use App\Models\Document;
 use App\Models\Donation;
 use App\Models\Proposal;
 use App\Models\ProposalBeneficiary;
+use App\Models\WarehouseTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -31,8 +32,11 @@ class DashboardController extends Controller
      */
     public function index(Request $request)
     {
-
-            return Inertia::render('Dashboard', [
+        $userType = auth()->user()->type;
+        $arrays = [];
+        
+        if (in_array($userType, [1, 2])) {
+           $arrays =  array_merge($arrays, [
                 "proposalsByStatus"     => Proposal::getProposalsByStatusChartData(),
                 "proposalsByTypes"     => Proposal::getProposalsByTypesChartData(),
                 "donationsByStatues"     => Donation::getDonationsByStatuesChartData(),
@@ -43,8 +47,21 @@ class DashboardController extends Controller
                 "donatingStatusProposalsStackedGroup"     => Proposal::getDonatingStatusProposalsStackedGroup(),
                 "proposals_overview"     => Proposal::where('status', 1)->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
                 "proposals_overview_headers"     => Proposal::overviewHeaders(),
-
             ]);
+        }
+        
+        // For warehouse directors (type 4) and admins (type 1)
+        if (in_array($userType, [1, 4])) {
+           $arrays = array_merge($arrays, [
+                "allTransactionsLast30Days" => WarehouseTransaction::getAllTransactionsLast30DaysChartData(),
+                "inboundTransactionsLast30Days" => WarehouseTransaction::getInboundTransactionsLast30DaysChartData(),
+                "outboundTransactionsLast30Days" => WarehouseTransaction::getOutboundTransactionsLast30DaysChartData(),
+                "transactionsByType" => WarehouseTransaction::getTransactionsByTypeChartData(),
+                "transactionsByWarehouse" => WarehouseTransaction::getTransactionsByWarehouseChartData(),
+            ]);
+        }
+        // For other user types
+        return Inertia::render('Dashboard', $arrays);
     }
 
     /**

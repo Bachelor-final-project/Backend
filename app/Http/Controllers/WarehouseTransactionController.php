@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\WarehouseTransaction;
 use App\Models\Warehouse;
 use App\Models\Item;
+use App\Models\WarehouseStakeholder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWarehouseTransactionRequest;
 use App\Http\Requests\UpdateWarehouseTransactionRequest;
@@ -34,6 +35,8 @@ class WarehouseTransactionController extends Controller
             "headers" => WarehouseTransaction::headers(),
             "items" => WarehouseTransaction::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
             "warehouses" => Warehouse::select('id', 'name')->get(),
+            "products" => Item::select('id', 'name')->get(),
+            "stakeholders" => WarehouseStakeholder::select('id', 'name', 'type')->get(),
         ]);
     }
 
@@ -46,6 +49,7 @@ class WarehouseTransactionController extends Controller
             "items" => Item::select('id', 'name')->get(),
             "warehouses" => Warehouse::select('id', 'name')->get(),
             "transaction_types" => WarehouseTransaction::transactionTypes(),
+            "stakeholders" => WarehouseStakeholder::select('id', 'name', 'type')->get(),
         ]);
     }
 
@@ -55,9 +59,12 @@ class WarehouseTransactionController extends Controller
     public function store(StoreWarehouseTransactionRequest $request)
     {
         $data = $request->validated();
-        WarehouseTransaction::create($data);
         
-        return to_route($this->routeName() . '.index')->with('res', ['message' => __('WarehouseTransaction Saved Seccessfully'), 'type' => 'success']);
+        foreach ($data['transactions'] as $transaction) {
+            WarehouseTransaction::create($transaction);
+        }
+        
+        return to_route($this->routeName() . '.index')->with('res', ['message' => __('WarehouseTransactions Saved Successfully'), 'type' => 'success']);
     }
 
     /**
@@ -79,6 +86,7 @@ class WarehouseTransactionController extends Controller
             "items" => Item::select('id', 'name')->get(),
             "warehouses" => Warehouse::select('id', 'name')->get(),
             "transaction_types" => WarehouseTransaction::transactionTypes(),
+            "stakeholders" => WarehouseStakeholder::select('id', 'name', 'type')->get(),
 
         ]);
     }

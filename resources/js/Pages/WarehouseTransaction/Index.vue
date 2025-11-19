@@ -30,6 +30,7 @@ const props = defineProps({
   items: Array,
   headers: Array,
   warehouses: Array,
+  products: Array,
   name: String,
 });
 
@@ -48,6 +49,11 @@ const warehouse_transactions_table_filters = [
     name: "All Warehouses",
     model: "warehouse_id",
     options: [{ id: 0, name: t("All Warehouses") }, ...props.warehouses],
+  },
+  {
+    name: "All Items",
+    model: "item_id",
+    options: [{ id: 0, name: t("All Items") }, ...props.products],
   },
 ];
 

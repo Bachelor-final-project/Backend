@@ -38,6 +38,7 @@ import {
     faCircleCheck,
     faCopy,
     faClone,
+    faExchange,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -78,6 +79,7 @@ library.add(
     faCircleCheck,
     faCopy,
     faClone,
+    faExchange,
 );
 
 export default FontAwesomeIcon;
