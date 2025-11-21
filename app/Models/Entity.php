@@ -17,7 +17,7 @@ class Entity extends BaseModel
     public static $controllable = true;
 
     public function getSupervisorNameAttribute(){
-        return $this->supervisor->name;
+        return $this->supervisor?->name;
     }
     public function getDonatingFormLinkAttribute(){
         return url("/donating-form/{$this->donating_form_path}");

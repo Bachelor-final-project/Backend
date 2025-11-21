@@ -2,6 +2,7 @@ export default {
     "ar": {
         "Choose an option...": "اختر إحدى الخيارات",
         "Recipient Name": "اسم المستلم",
+        "transaction_created_at": "تاريخ الحركة",
         "stakeholder": "صاحب المصلحة",
         "recipient name": "اسم المستلم",
         "Enter recipient name": "أدخل اسم المستلم",

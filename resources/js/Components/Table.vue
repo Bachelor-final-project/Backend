@@ -367,7 +367,7 @@
           <f-icon class="text-blue" icon="file-import"></f-icon>
         </a>
         <a
-          :href="route(add_item_route)"
+          :href="route(add_item_route, getFilterParams())"
           v-if="add_item_route"
           color="green"
           class="absolute left-4 text-center w-4 h-4 text-blue-500 clickable"
@@ -1002,6 +1002,16 @@ function toggleSelectRow(row) {
 }
 function isSelected(item) {
   return selectedRows.value.some(r => r.id === item.id);
+}
+
+function getFilterParams() {
+  const params = {};
+  Object.keys(filters).forEach(key => {
+    if (filters[key] && filters[key] !== 0) {
+      params[key] = filters[key];
+    }
+  });
+  return params;
 }
 
 </script>
