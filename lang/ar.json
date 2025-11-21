@@ -565,5 +565,6 @@
     "Outbound Transactions last 30 days": "المعاملات الصادرة آخر 30 يوماً",
     "Transactions by Type": "المعاملات حسب النوع",
     "Transactions by Warehouse": "المعاملات حسب المخزن",
+    "Insufficient quantity. Available: :available, Requested: :requested": "الكمية غير كافية. المتاح: :available، المطلوب: :requested",
     "": ""
 }

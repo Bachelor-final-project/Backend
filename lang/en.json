@@ -41,5 +41,6 @@
     "Inbound Transactions last 30 days": "Inbound Transactions last 30 days",
     "Outbound Transactions last 30 days": "Outbound Transactions last 30 days",
     "Transactions by Type": "Transactions by Type",
-    "Transactions by Warehouse": "Transactions by Warehouse"
+    "Transactions by Warehouse": "Transactions by Warehouse",
+    "Insufficient quantity. Available: :available, Requested: :requested": "Insufficient quantity. Available: :available, Requested: :requested"
 }

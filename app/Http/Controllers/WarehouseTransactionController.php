@@ -43,13 +43,16 @@ class WarehouseTransactionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        // dd(Item::select('id', 'name')->first()->available_quantities);
          return Inertia::render(Str::studly("WarehouseTransaction").'/Create', [
             "items" => Item::select('id', 'name')->get(),
             "warehouses" => Warehouse::select('id', 'name')->get(),
             "transaction_types" => WarehouseTransaction::transactionTypes(),
             "stakeholders" => WarehouseStakeholder::select('id', 'name', 'type')->get(),
+            "warehouse_id" => $request->warehouse_id,
+            "item_id" => $request->item_id,
         ]);
     }
 

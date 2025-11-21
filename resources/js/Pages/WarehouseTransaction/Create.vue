@@ -20,6 +20,8 @@ const props = defineProps({
   items: Array,
   transaction_types: Array,
   stakeholders: Array,
+  warehouse_id: [String, Number],
+  item_id: [String, Number],
 });
 
 // const isAdminChecked = ref(false);
@@ -31,8 +33,8 @@ const props = defineProps({
 // });
 
 const defaultTransaction = {
-  warehouse_id: "",
-  item_id: "",
+  warehouse_id: props.warehouse_id || "",
+  item_id: props.item_id || "",
   amount: "",
   transaction_type: "",
   warehouse_stakeholder_id: "",
@@ -46,6 +48,24 @@ const form = useForm({
 const getFilteredStakeholders = (transactionType) => {
   if (!transactionType) return props.stakeholders;
   return props.stakeholders.filter(stakeholder => stakeholder.type == transactionType);
+};
+
+const getItemsWithQuantity = (warehouseId) => {
+  if (!warehouseId) return props.items;
+  
+  return props.items
+    .map(item => {
+      const warehouseQuantity = item.available_quantities?.find(
+        qty => qty.warehouse_id == warehouseId
+      );
+      const quantity = warehouseQuantity ? warehouseQuantity.quantity : 0
+      return {
+        ...item,
+        name: item.name + " (" + quantity + ")",
+        available_quantity: quantity
+      };
+    })
+    .filter(item => item.available_quantity > 0);
 };
 
 const addTransaction = () => {
@@ -112,9 +132,10 @@ const submit = () => {
                 </td>
                 <td class="px-4 py-2">
                   <SelectInput
-                    :options="items"
-                    :item_name="`name_${i18n_locale}`"
+                    :options="getItemsWithQuantity(transaction.warehouse_id)"
+                    :item_name="`name`"
                     v-model="transaction.item_id"
+                    :show_count="!!transaction.warehouse_id"
                     class="w-full"
                     required
                   />
