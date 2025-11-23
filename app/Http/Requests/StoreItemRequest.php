@@ -26,6 +26,7 @@ class StoreItemRequest extends FormRequest
             'estimated_price' => 'nullable|integer|min:0',
             'unit_id' => 'required|exists:units,id',
             'description' => 'nullable|string|max:512',
+            'quantity_limit' => 'nullable|integer|min:0',
         ];
     }
 }

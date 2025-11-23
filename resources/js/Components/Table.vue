@@ -764,7 +764,7 @@ const rowClass = (item) => {
   }
 };
 let sortBy = 'id';
-let sortDesc = 'desc';
+let sortDesc = 'asc';
 const handleSort = (head) => {
     sortBy = head;
     sortDesc = sortDesc == 'desc'? 'asc': 'desc'; //toggle the sortDirection

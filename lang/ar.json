@@ -566,5 +566,8 @@
     "Transactions by Type": "المعاملات حسب النوع",
     "Transactions by Warehouse": "المعاملات حسب المخزن",
     "Insufficient quantity. Available: :available, Requested: :requested": "الكمية غير كافية. المتاح: :available، المطلوب: :requested",
+    "Out of Stock": "نفد المخزون",
+    "Low Stock": "مخزون منخفض",
+    "In Stock": "متوفر",
     "": ""
 }

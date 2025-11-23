@@ -29,7 +29,8 @@ const form = useForm({
   name: props.item.name,
   estimated_price: props.item.estimated_price,
   description: props.item.description,
-  unit_id: props.item.unit_id
+  unit_id: props.item.unit_id,
+  quantity_limit: props.item.quantity_limit
 });
 const submit = () => {
   // form
@@ -117,6 +118,19 @@ const submit = () => {
             autocomplete="name"
           />
           <InputError class="mt-2" :message="form.errors.description" />
+        </div>
+
+        <div>
+          <InputLabel for="quantity_limit" value="Quantity Limit" />
+          <TextInput
+            id="quantity_limit"
+            type="number"
+            class="mt-1 block w-full"
+            v-model="form.quantity_limit"
+            autofocus
+            autocomplete="name"
+          />
+          <InputError class="mt-2" :message="form.errors.quantity_limit" />
         </div>
 
         <div class="flex items-center gap-4">
