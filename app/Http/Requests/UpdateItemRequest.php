@@ -26,6 +26,7 @@ class UpdateItemRequest extends FormRequest
             'estimated_price' => 'sometimes|integer|min:0',
             'unit_id' => 'sometimes|exists:units,id',
             'description' => 'nullable|string|max:512',
+            'quantity_limit' => 'nullable|integer|min:0',
         ];
     }
 }

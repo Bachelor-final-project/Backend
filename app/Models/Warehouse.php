@@ -48,6 +48,7 @@ class Warehouse extends BaseModel
             ['value' => 'warehouse name', 'key' => 'warehouse_name'],
             ['value' => 'item name', 'key' => 'item_name'],
             ['value' => 'unit name', 'key' => 'unit_name'],
+            ['sortable' => true, 'value' => 'status', 'key' => 'item_status_str', 'class_value_name' => 'item_status', 'has_class' => true],
             ['value' => 'quantity', 'key' => 'item_quantity'],
             // ['value' => 'actions', 'key' => 'actions'],
         ];
@@ -62,61 +63,31 @@ class Warehouse extends BaseModel
         ];
     }
 
-    public static function getWarehouseItems($warehouse_id, $item_id = null) {
-        // $sql = "
-        //     WITH warehouses_items AS (
-        //         SELECT 
-        //             w.name AS warehouse_name, 
-        //             i.name AS item_name, 
-        //             u.name AS unit_name, 
-        //             SUM(
-        //                 CASE 
-        //                     WHEN wt.transaction_type = 1 THEN wt.amount 
-        //                     ELSE -wt.amount 
-        //                 END
-        //             ) AS item_quantity, 
-        //             w.id AS warehouse_id
-        //         FROM 
-        //             warehouse_transactions wt
-        //         LEFT JOIN 
-        //             items i ON wt.item_id = i.id
-        //         LEFT JOIN 
-        //             units u ON i.unit_id = u.id
-        //         LEFT JOIN 
-        //             warehouses w ON wt.warehouse_id = w.id
-        //         GROUP BY 
-        //             wt.item_id, w.id, w.name
-        //     )
-        //     SELECT * 
-        //     FROM warehouses_items
-        //     WHERE item_quantity > 0
-        // ";
+    public static function getItemStatusStr($status) {
+        return [4 => __('Out of Stock'), 2 => __('Low Stock'), 1 => __('In Stock')][$status] ?? '';
+    }
 
-        // // Add conditional WHERE clause for warehouse_id
-        // if ($warehouse_id > 0) {
-        //     $sql .= " AND warehouse_id = ?";
-        //     $bindings = [$warehouse_id];
-        // } else {
-        //     $bindings = [];
-        // }
-        // $results = DB::select($sql, $bindings);
-        // return $results;
-        // Start the query builder for warehouse transactions
+    public static function getWarehouseItems($warehouse_id, $item_id = null) {
         $query = DB::table('warehouse_transactions as wt')
             ->select([
                 'w.name as warehouse_name',
                 'i.name as item_name',
                 'i.id as item_id',
                 'u.name as unit_name',
+                'i.quantity_limit',
                 DB::raw('SUM(CASE WHEN wt.transaction_type = 1 THEN wt.amount ELSE -wt.amount END) as item_quantity'),
+                DB::raw('CASE 
+                    WHEN SUM(CASE WHEN wt.transaction_type = 1 THEN wt.amount ELSE -wt.amount END) <= 0 THEN 4
+                    WHEN i.quantity_limit IS NOT NULL AND SUM(CASE WHEN wt.transaction_type = 1 THEN wt.amount ELSE -wt.amount END) <= i.quantity_limit THEN 2
+                    ELSE 1
+                END as item_status'),
                 'w.id as warehouse_id'
             ])
             ->leftJoin('items as i', 'wt.item_id', '=', 'i.id')
             ->leftJoin('units as u', 'i.unit_id', '=', 'u.id')
             ->leftJoin('warehouses as w', 'wt.warehouse_id', '=', 'w.id')
-            ->groupBy('wt.item_id', 'w.id', 'w.name');
+            ->groupBy('wt.item_id', 'w.id', 'w.name', 'i.quantity_limit');
 
-        // Add conditional WHERE clause for warehouse_id
         if ($warehouse_id > 0) {
             $query->where('w.id', '=', $warehouse_id);
         }
@@ -124,8 +95,11 @@ class Warehouse extends BaseModel
             $query->where('i.id', '=', $item_id);
         }
 
-        // Get the results
-        $results = $query->havingRaw('item_quantity > 0')->get();
+        $results = $query->get();
+
+        foreach ($results as $result) {
+            $result->item_status_str = self::getItemStatusStr($result->item_status);
+        }
 
         return $results;
     }
