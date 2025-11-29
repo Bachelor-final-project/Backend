@@ -64,8 +64,8 @@ const getItemsWithQuantity = (warehouseId) => {
         name: item.name + " (" + quantity + ")",
         available_quantity: quantity
       };
-    })
-    .filter(item => item.available_quantity > 0);
+    });
+    // .filter(item => item.available_quantity > 0);
 };
 
 const addTransaction = () => {
