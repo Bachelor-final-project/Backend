@@ -61,28 +61,29 @@ class WarehouseCommand extends BaseCommand
         }
         
         $itemsText = '';
-        $keyboard = [];
         foreach ($items as $item) {
             if($item->item_quantity <= 0) continue;
+            $botUsername = config('telegram.bot_username', 'YourBotUsername');
+            $itemLink = "<a href=\"https://t.me/{$botUsername}?start=item_{$warehouseId}_{$item->item_id}\">{$item->item_name}</a>";
+            
             $itemsText .= __('telegram.item_format', [
-                'name' => $item->item_name,
+                'name' => $itemLink,
                 'unit' => $item->unit_name,
                 'quantity' => $item->item_quantity,
                 'status' => $item->item_status_str
             ]);
-            
-            $keyboard[] = [[
-                'text' => $item->item_name . ' (' . $item->unit_name . ')',
-                'callback_data' => 'item_' . $warehouseId . '_' . $item->item_id
-            ]];
         }
         
-        return $this->sendMessage($chatId, __('telegram.warehouse_items', [
-            'name' => $warehouse->name,
-            'items' => $itemsText
-        ]), [
-            'inline_keyboard' => $keyboard
-        ]);
+        $params = [
+            'chat_id' => $chatId,
+            'text' => __('telegram.warehouse_items', [
+                'name' => $warehouse->name,
+                'items' => $itemsText
+            ]),
+            'parse_mode' => 'HTML'
+        ];
+        
+        return $this->telegram->sendMessage($params);
     }
     
     private function showItemTransactions($chatId, $warehouseId, $itemId)

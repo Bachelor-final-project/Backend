@@ -45,18 +45,12 @@ class AuthenticatedHandler
             return $this->executeCommand('search', $chatId, $user, ['query' => $searchQuery]);
         }
         
-        // Handle callback queries (item selection)
-        if (str_starts_with($text, 'item_')) {
+        // Handle item transaction queries
+        if (str_starts_with($text, '/item_')) {
             $parts = explode('_', $text);
             $warehouseId = $parts[1] ?? null;
             $itemId = $parts[2] ?? null;
             return $this->executeCommand('/warehouses', $chatId, $user, ['warehouse_id' => $warehouseId, 'item_id' => $itemId]);
-        }
-        
-        // Handle callback queries (warehouse selection)
-        if (str_starts_with($text, 'warehouse_')) {
-            $warehouseId = str_replace('warehouse_', '', $text);
-            return $this->executeCommand('/warehouses', $chatId, $user, ['warehouse_id' => $warehouseId]);
         }
         
         // Handle commands

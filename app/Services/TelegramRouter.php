@@ -56,6 +56,15 @@ class TelegramRouter
     
     protected function handleCommand($command, $chatId, $conversation)
     {
+        // Handle /start with parameters
+        if (str_starts_with($command, '/start ')) {
+            $param = trim(substr($command, 7));
+            if (str_starts_with($param, 'item_')) {
+                return app(AuthenticatedHandler::class)->handle($chatId, '/' . $param, $conversation);
+            }
+            return app(EmailHandler::class)->start($chatId, $conversation);
+        }
+        
         return match($command) {
             '/start', '/login' => app(EmailHandler::class)->start($chatId, $conversation),
             '/profile', '/help', '/logout', '/warehouses' => app(AuthenticatedHandler::class)->handle($chatId, $command, $conversation),
