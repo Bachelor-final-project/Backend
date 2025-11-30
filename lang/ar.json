@@ -589,7 +589,7 @@
     "telegram.warehouse_items": "📦 العناصر المتاحة في مخزن :name:\n\n:items",
     "telegram.no_warehouses": "لا توجد مخازن متاحة.",
     "telegram.no_items": "لا توجد عناصر في هذا المخزن.",
-    "telegram.item_format": "• :name (:unit)\n  الكمية: :quantity - :status\n",
+    "telegram.item_format": "• :name: (:quantity :unit)\n",
     "telegram.unauthorized": "غير مصرح لك باستخدام هذا الأمر.",
     "telegram.search_results": "🔍 نتائج البحث عن ':query':\n\n:results",
     "telegram.no_search_results": "لم يتم العثور على عناصر تحتوي على ':query'.",
