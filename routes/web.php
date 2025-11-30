@@ -18,6 +18,16 @@ use Illuminate\Http\Request;
 //    return 'hi';
 // });
 
+// Telegram Bot Routes (outside web middleware to avoid CSRF)
+Route::post('/telegram/webhook', [App\Http\Controllers\TelegramController::class, 'webhook'])
+    ->name('telegram.webhook');
+
+// Debug route for testing
+Route::get('/telegram/test', function() {
+    \Log::info('Telegram test route accessed');
+    return response()->json(['status' => 'ok', 'timestamp' => now()]);
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -25,16 +35,6 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
-// Telegram Bot Routes
-Route::post('/telegram/webhook', [App\Http\Controllers\TelegramController::class, 'webhook'])
-    ->middleware(['telegram.auth'])
-    ->name('telegram.webhook');
-
-// Debug route for testing
-Route::get('/telegram/test', function() {
-    \Log::info('Telegram test route accessed');
-    return response()->json(['status' => 'ok', 'timestamp' => now()]);
 });
 
 
