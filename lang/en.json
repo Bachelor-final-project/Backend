@@ -58,7 +58,7 @@
     "telegram.welcome_linked": "Welcome, :name! Your Telegram account has been successfully linked. You can now use this bot to access your account.",
     "telegram.hello_user": "Hello :name! Use /help to see available commands.",
     "telegram.profile_info": "👤 Profile Information:\n\nName: :name\nEmail: :email\nType: :type\nStatus: :status",
-    "telegram.available_commands": "🤖 Available Commands:\n\n/profile - View your profile\n/warehouses - View warehouses list\n/help - Show this help message\n/logout - Unlink your Telegram account",
+    "telegram.available_commands": "🤖 Available Commands:\n\n/profile - View your profile\n/warehouses - View warehouses list (managers only)\nبحث [item name] - Search for items\n/help - Show this help message\n/logout - Unlink your Telegram account",
     "telegram.account_unlinked": "Your Telegram account has been unlinked. Use /login to link again.",
     "telegram.start_with_login": "Please start with /login",
     "telegram.unknown_command": "Unknown command. Use /login to start.",
@@ -66,5 +66,10 @@
     "telegram.warehouse_items": "📦 Available items in :name warehouse:\n\n:items",
     "telegram.no_warehouses": "No warehouses available.",
     "telegram.no_items": "No items found in this warehouse.",
-    "telegram.item_format": "• :name (:unit)\n  Quantity: :quantity - :status\n"
+    "telegram.item_format": "• :name (:unit)\n  Quantity: :quantity - :status\n",
+    "telegram.unauthorized": "You are not authorized to use this command.",
+    "telegram.search_results": "🔍 Search results for ':query':\n\n:results",
+    "telegram.no_search_results": "No items found containing ':query'.",
+    "telegram.item_search_format": "• :name (:unit)\n:warehouses\n",
+    "telegram.warehouse_quantity": "  • :warehouse: :quantity\n"
 }
