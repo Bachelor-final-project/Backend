@@ -21,6 +21,13 @@ class TelegramController extends Controller
         
         try {
             $update = $request->all();
+            
+            // Basic validation
+            if (empty($update)) {
+                \Log::warning('Empty update received');
+                return response('OK', Response::HTTP_OK);
+            }
+            
             \Log::info('Processing Telegram update', ['update' => $update]);
             
             $this->router->dispatch($update);
@@ -33,7 +40,7 @@ class TelegramController extends Controller
                 'trace' => $e->getTraceAsString(),
                 'request_data' => $request->all()
             ]);
-            return response('Error', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response('OK', Response::HTTP_OK); // Always return OK to Telegram
         }
     }
 }
