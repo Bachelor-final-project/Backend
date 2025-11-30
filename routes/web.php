@@ -63,6 +63,11 @@ Route::post('/donating-form/', [EntityController::class, 'storeDonatingForm'])->
 Route::get('/change-language/{locale}', [GeneralController::class, 'changeLanguage'])->name('change-language');
 
 require __DIR__.'/auth.php';
+
+// Telegram Bot Routes
+Route::post('/telegram/webhook', [App\Http\Controllers\TelegramController::class, 'webhook'])
+    ->middleware(['telegram.auth'])
+    ->name('telegram.webhook');
 Route::middleware('auth')->group(function () {
     Route::get('/import-users', [GeneralController::class, 'importUsers'])->name('import-users');
     Route::get('/import-warehouses', [GeneralController::class, 'importWarehouses'])->name('import-warehouses');

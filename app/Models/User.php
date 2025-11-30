@@ -42,7 +42,10 @@ class User extends Authenticatable
         5 => 'media_director',
     ];
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name', 'email', 'password', 'telegram_chat_id', 'type', 'status', 'is_active',
+        'phone', 'job_title', 'country_id'
+    ];
 
     public static $datatableHeaders = ['id', 'name', 'type', 'actions'];
 
