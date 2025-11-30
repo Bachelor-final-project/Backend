@@ -18,6 +18,12 @@ use Illuminate\Http\Request;
 //    return 'hi';
 // });
 
+// Debug route for testing
+Route::get('/telegram/test', function() {
+    \Log::info('Telegram test route accessed');
+    return response()->json(['status' => 'ok', 'timestamp' => now()]);
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -33,7 +39,8 @@ $controllers = require base_path('vendor/composer/autoload_classmap.php');
 $controllers = array_keys($controllers);
 $controllers = array_filter($controllers, function ($controller) {
     return strpos($controller, 'App\Http\Controllers') === 0 && strpos($controller, '\Auth') === false && $controller != 'App\Http\Controllers\Controller' 
-    && $controller != 'App\Http\Controllers\StripeController';
+    && $controller != 'App\Http\Controllers\StripeController'
+    && $controller != 'App\Http\Controllers\TelegramController';
 });
 
 Route::group(['middleware' => 'auth'], function () use ($controllers) {
@@ -63,6 +70,8 @@ Route::post('/donating-form/', [EntityController::class, 'storeDonatingForm'])->
 Route::get('/change-language/{locale}', [GeneralController::class, 'changeLanguage'])->name('change-language');
 
 require __DIR__.'/auth.php';
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/import-users', [GeneralController::class, 'importUsers'])->name('import-users');
     Route::get('/import-warehouses', [GeneralController::class, 'importWarehouses'])->name('import-warehouses');
@@ -81,4 +90,3 @@ Route::middleware('auth')->group(function () {
 Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 Route::post('/test', [StripeController::class, 'test']);
 Route::get('/success', [StripeController::class, 'success'])->name('success');
-
