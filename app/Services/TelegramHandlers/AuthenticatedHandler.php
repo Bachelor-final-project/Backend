@@ -52,6 +52,11 @@ class AuthenticatedHandler
             $itemId = $parts[2] ?? null;
             return $this->executeCommand('/warehouses', $chatId, $user, ['warehouse_id' => $warehouseId, 'item_id' => $itemId]);
         }
+        if (str_starts_with($text, 'warehouse_')) {
+            $parts = explode('_', $text);
+            $warehouseId = $parts[1] ?? null;
+            return $this->executeCommand('/warehouses', $chatId, $user, ['warehouse_id' => $warehouseId]);
+        }
         
         // Handle commands
         $command = strtolower($text);
