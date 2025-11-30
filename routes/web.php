@@ -68,6 +68,13 @@ require __DIR__.'/auth.php';
 Route::post('/telegram/webhook', [App\Http\Controllers\TelegramController::class, 'webhook'])
     ->middleware(['telegram.auth'])
     ->name('telegram.webhook');
+
+// Debug route for testing
+Route::get('/telegram/test', function() {
+    \Log::info('Telegram test route accessed');
+    return response()->json(['status' => 'ok', 'timestamp' => now()]);
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/import-users', [GeneralController::class, 'importUsers'])->name('import-users');
     Route::get('/import-warehouses', [GeneralController::class, 'importWarehouses'])->name('import-warehouses');
@@ -86,4 +93,3 @@ Route::middleware('auth')->group(function () {
 Route::get('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 Route::post('/test', [StripeController::class, 'test']);
 Route::get('/success', [StripeController::class, 'success'])->name('success');
-

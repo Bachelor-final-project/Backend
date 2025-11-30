@@ -17,9 +17,12 @@ class EmailHandler
     
     public function start($chatId, TelegramConversation $conversation)
     {
+        \Log::info('EmailHandler start', ['chat_id' => $chatId]);
+        
         // Check if user is already linked
         $user = User::where('telegram_chat_id', $chatId)->first();
         if ($user) {
+            \Log::info('User already linked', ['user_id' => $user->id, 'chat_id' => $chatId]);
             $conversation->update(['state' => 'authenticated']);
             return $this->telegram->sendMessage([
                 'chat_id' => $chatId,
@@ -27,6 +30,7 @@ class EmailHandler
             ]);
         }
         
+        \Log::info('Starting new login flow', ['chat_id' => $chatId]);
         $conversation->update(['state' => 'awaiting_email']);
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
