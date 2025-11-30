@@ -18,10 +18,6 @@ use Illuminate\Http\Request;
 //    return 'hi';
 // });
 
-// Telegram Bot Routes (outside web middleware to avoid CSRF)
-Route::post('/telegram/webhook', [App\Http\Controllers\TelegramController::class, 'webhook'])
-    ->name('telegram.webhook');
-
 // Debug route for testing
 Route::get('/telegram/test', function() {
     \Log::info('Telegram test route accessed');
