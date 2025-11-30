@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             \App\Http\Middleware\LocaleMiddleware::class,
         ]);
+        
+        $middleware->alias([
+            'telegram.auth' => \App\Http\Middleware\TelegramAuth::class,
+        ]);
 
         //
     })
