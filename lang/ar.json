@@ -595,5 +595,8 @@
     "telegram.no_search_results": "لم يتم العثور على عناصر تحتوي على ':query'.",
     "telegram.item_search_format": "• :name (:unit)\n:warehouses\n",
     "telegram.warehouse_quantity": "  • :warehouse: :quantity\n",
+    "telegram.item_transactions": "📋✨ **حركات :item** ✨\n│ 🏢 **المخزن:** :warehouse\n:transactions",
+    "telegram.transaction_format": "│ :type_icon **:type** - :amount :unit\n│   📅 :date\n│   👥 :stakeholder\n│\n",
+    "telegram.no_transactions": "😔 **لا توجد حركات**\n\n📋 لا توجد حركات لهذا العنصر",
     "": ""
 }
