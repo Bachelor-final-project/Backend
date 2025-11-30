@@ -22,7 +22,7 @@ class AuthenticatedHandler
             $conversation->update(['state' => 'awaiting_email']);
             return $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => 'Account not linked. Please enter your email address:'
+                'text' => __('telegram.account_not_linked')
             ]);
         }
         
@@ -33,35 +33,29 @@ class AuthenticatedHandler
             '/logout' => $this->logout($chatId, $user, $conversation),
             default => $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Hello {$user->name}! Use /help to see available commands."
+                'text' => __('telegram.hello_user', ['name' => $user->name])
             ])
         };
     }
     
     protected function showProfile($chatId, User $user)
     {
-        $profile = "👤 Profile Information:\n\n";
-        $profile .= "Name: {$user->name}\n";
-        $profile .= "Email: {$user->email}\n";
-        $profile .= "Type: {$user->type_str}\n";
-        $profile .= "Status: {$user->status_str}";
-        
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => $profile
+            'text' => __('telegram.profile_info', [
+                'name' => $user->name,
+                'email' => $user->email,
+                'type' => $user->type_str,
+                'status' => $user->status_str
+            ])
         ]);
     }
     
     protected function showHelp($chatId)
     {
-        $help = "🤖 Available Commands:\n\n";
-        $help .= "/profile - View your profile\n";
-        $help .= "/help - Show this help message\n";
-        $help .= "/logout - Unlink your Telegram account";
-        
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => $help
+            'text' => __('telegram.available_commands')
         ]);
     }
     
@@ -72,7 +66,7 @@ class AuthenticatedHandler
         
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => 'Your Telegram account has been unlinked. Use /login to link again.'
+            'text' => __('telegram.account_unlinked')
         ]);
     }
 }
