@@ -63,7 +63,7 @@ class WarehouseCommand extends BaseCommand
         $itemsText = '';
         foreach ($items as $item) {
             if($item->item_quantity <= 0) continue;
-            $botUsername = config('telegram.bot_username', 'YourBotUsername');
+            $botUsername = config('telegram.bot_username', 'GazaReliefGeneral');
             $itemLink = "<a href=\"https://t.me/{$botUsername}?start=item_{$warehouseId}_{$item->item_id}\">{$item->item_name}</a>";
             
             $itemsText .= __('telegram.item_format', [
@@ -99,7 +99,7 @@ class WarehouseCommand extends BaseCommand
             return $this->sendMessage($chatId, __('telegram.no_transactions'));
         }
         
-        $transactionsText = '';
+        $transactionsText = '\n';
         foreach ($transactions as $transaction) {
             $typeIcon = $transaction->transaction_type == 1 ? '📥' : '📤';
             $transactionsText .= __('telegram.transaction_format', [
