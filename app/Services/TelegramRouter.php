@@ -58,7 +58,7 @@ class TelegramRouter
     {
         return match($command) {
             '/start', '/login' => app(EmailHandler::class)->start($chatId, $conversation),
-            '/profile', '/help', '/logout' => app(AuthenticatedHandler::class)->handle($chatId, $command, $conversation),
+            '/profile', '/help', '/logout', '/warehouses' => app(AuthenticatedHandler::class)->handle($chatId, $command, $conversation),
             default => $this->sendMessage($chatId, __('telegram.unknown_command'))
         };
     }
