@@ -99,7 +99,7 @@ class WarehouseCommand extends BaseCommand
             return $this->sendMessage($chatId, __('telegram.no_transactions'));
         }
         
-        $transactionsText = '\n';
+        $transactionsText = '';
         foreach ($transactions as $transaction) {
             $typeIcon = $transaction->transaction_type == 1 ? '📥' : '📤';
             $transactionsText .= __('telegram.transaction_format', [
