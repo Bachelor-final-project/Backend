@@ -50,7 +50,7 @@ class TelegramRouter
             'awaiting_email' => app(EmailHandler::class)->handle($chatId, $text, $conversation),
             'awaiting_password' => app(PasswordHandler::class)->handle($chatId, $text, $conversation),
             'authenticated' => app(AuthenticatedHandler::class)->handle($chatId, $text, $conversation),
-            default => $this->sendMessage($chatId, 'Please start with /login')
+            default => $this->sendMessage($chatId, __('telegram.start_with_login'))
         };
     }
     
@@ -58,7 +58,8 @@ class TelegramRouter
     {
         return match($command) {
             '/start', '/login' => app(EmailHandler::class)->start($chatId, $conversation),
-            default => $this->sendMessage($chatId, 'Unknown command. Use /login to start.')
+            '/profile', '/help', '/logout' => app(AuthenticatedHandler::class)->handle($chatId, $command, $conversation),
+            default => $this->sendMessage($chatId, __('telegram.unknown_command'))
         };
     }
     

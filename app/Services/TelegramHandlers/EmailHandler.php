@@ -26,7 +26,7 @@ class EmailHandler
             $conversation->update(['state' => 'authenticated']);
             return $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Welcome back, {$user->name}! You are already logged in."
+                'text' => __('telegram.welcome_back', ['name' => $user->name])
             ]);
         }
         
@@ -34,7 +34,7 @@ class EmailHandler
         $conversation->update(['state' => 'awaiting_email']);
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => 'Please enter your email address:'
+            'text' => __('telegram.enter_email')
         ]);
     }
     
@@ -43,7 +43,7 @@ class EmailHandler
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => 'Invalid email format. Please enter a valid email address:'
+                'text' => __('telegram.invalid_email')
             ]);
         }
         
@@ -51,7 +51,7 @@ class EmailHandler
         if (!$user) {
             return $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => 'Email not found. Please enter a valid email address:'
+                'text' => __('telegram.email_not_found')
             ]);
         }
         
@@ -62,7 +62,7 @@ class EmailHandler
         
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => 'Please enter your password:'
+            'text' => __('telegram.enter_password')
         ]);
     }
 }

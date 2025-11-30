@@ -23,7 +23,7 @@ class PasswordHandler
             $conversation->update(['state' => 'awaiting_email']);
             return $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => 'Session expired. Please enter your email address:'
+                'text' => __('telegram.session_expired')
             ]);
         }
         
@@ -31,7 +31,7 @@ class PasswordHandler
         if (!$user || !Hash::check($password, $user->password)) {
             return $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => 'Invalid password. Please try again:'
+                'text' => __('telegram.invalid_password')
             ]);
         }
         
@@ -45,7 +45,7 @@ class PasswordHandler
         
         return $this->telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => "Welcome, {$user->name}! Your Telegram account has been successfully linked. You can now use this bot to access your account."
+            'text' => __('telegram.welcome_linked', ['name' => $user->name])
         ]);
     }
 }
