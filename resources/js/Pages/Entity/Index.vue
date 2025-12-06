@@ -8,6 +8,7 @@
       :headers="headers"
       import_url="import-entitys"
       add_item_route="entity.create"
+      model="entity"
 
     />
   </div>

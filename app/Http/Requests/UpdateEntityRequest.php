@@ -13,7 +13,7 @@ class UpdateEntityRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ class UpdateEntityRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'donating_form_path' => 'required|string|max:255',
+            'supervisor_id' => 'required|int|exists:users,id',
+            'country_id' => 'nullable|int|exists:countries,id',
+            'home_title' => 'nullable|array',
+            'home_title.ar' => 'nullable|string|max:255',
+            'home_title.en' => 'nullable|string|max:255',
+            'home_description' => 'nullable|array',
+            'home_description.ar' => 'nullable|string',
+            'home_description.en' => 'nullable|string',
+            'whatsapp_number' => 'nullable|string|max:20',
+            'initial_completed_projects' => 'nullable|integer|min:0',
         ];
     }
 }

@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth'], function () use ($controllers) {
     }, $controllers);
 });
 
+Route::get('/home/{donating_form_path}', [EntityController::class, 'homeView'])->name('entity-home');
 Route::get('/donating-form/{donating_form_path}', [EntityController::class, 'donatingForm'])->name('donating-form');
 Route::get('/completed-donating-form', [EntityController::class, 'completedDonatingForm'])->name('completed-donating-form');
 Route::post('/donating-form/', [EntityController::class, 'storeDonatingForm'])->name('store-donating-form');

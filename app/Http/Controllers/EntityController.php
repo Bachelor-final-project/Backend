@@ -45,9 +45,16 @@ class EntityController extends Controller
 
         ]);
     }
+    public function homeView(Request $request, string $donating_form_path)
+    {
+        $entity = Entity::withoutGlobalScope(ForUserScope::class)->where('donating_form_path', $donating_form_path)->firstOrFail();
+        return Inertia::render(Str::studly("Entity").'/HomeView', [
+            "entity" => $entity,
+        ]);
+    }
+
     public function donatingForm(Request $request, string $donating_form_path)
     {
-        // dd('hi');
         $entity = Entity::withoutGlobalScope(ForUserScope::class)->where('donating_form_path', $donating_form_path)->firstOrFail();
         $proposals = Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->where('status', Proposal::STATUSES['donatable'])->get();
         $showPayOnlineButton = false;
@@ -61,7 +68,7 @@ class EntityController extends Controller
             "headers" => Proposal::guestHeaders(),
             "entity" => $entity,
             "proposals" => Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->public()->get(),
-            'countries' => Country::select('id', 'name')->get(),
+            'countries' => Country::select('id', 'name', 'calling_code')->get(),
             'genders' => Donor::genders(),
             'payment_methods' => $entity->payment_methods,
             'show_payonline_button' => $showPayOnlineButton,
@@ -119,7 +126,8 @@ class EntityController extends Controller
     public function create()
     {
          return Inertia::render(Str::studly("Entity").'/Create', [
-            'supervisors' => User::all()
+            'supervisors' => User::all(),
+            'countries' => Country::all()
         ]);
     }
 
@@ -148,8 +156,9 @@ class EntityController extends Controller
     public function edit(Entity $entity)
     {
         return Inertia::render(Str::studly("Entity").'/Update', [
-            //'options' => $regions,
-            'entity' => $entity->toArray()
+            'entity' => $entity->toArray(),
+            'supervisors' => User::all(),
+            'countries' => Country::all()
         ]);
     }
 

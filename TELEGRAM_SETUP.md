@@ -20,9 +20,9 @@ php artisan migrate
 Use a tool like ngrok for local development or set up your production webhook:
 
 ```bash
-curl -X POST "https://api.telegram.org/bot{YOUR_BOT_TOKEN}/setWebhook" \
+curl -X POST "https://api.telegram.org/bot{8455853469:AAHAqKj6ss0zKBVU4UJDzLre1zQzhtoN0Fs}/setWebhook" \
      -H "Content-Type: application/json" \
-     -d '{"url": "https://yourdomain.com/telegram/webhook"}'
+     -d '{"url": "https://dev.gazarelief.daralquran.ps/telegram/webhook"}'
 ```
 
 ## 4. Bot Commands
