@@ -24,7 +24,7 @@ const user = computed(() => page.props.auth.user);
       class="h-full px-3 pb-4 overflow-y-auto block bg-gray-800 dark:bg-gray-800"
     >
       <Link :href="route('dashboard')">
-        <ApplicationLogo class="fill-current text-gray-500" />
+        <ApplicationLogo class="fill-current text-gray-500  my-10" />
       </Link>
       <ul class="space-y-3 mt-5 font-medium">
         <li :key="index" v-for="(menu_item, index) in menu">

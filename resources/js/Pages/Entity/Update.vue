@@ -5,73 +5,44 @@ import Textaerea from "@/Components/Textaera.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
-// import CheckBox from "@/Components/Checkbox.vue";
-import SwitchInput from "@/Components/SwitchInput.vue";
-import { Link, useForm, usePage } from "@inertiajs/vue3";
-import CenterLayout from "@/Layouts/CenterLayout.vue";
-import SiteLayout from "@/Layouts/SiteLayout.vue";
-import CreateFullSizeLayout from "@/Layouts/CreateFullSizeLayout.vue";
+import { useForm } from "@inertiajs/vue3";
+import TopRightLayout from "@/Layouts/TopRightLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
-import PhoneInput from "@/Components/PhoneInput.vue";
-import NationalIDInput from "@/Components/NationalIDInput.vue";
-import VueDatePicker from "@vuepic/vue-datepicker";
-import '@vuepic/vue-datepicker/dist/main.css'
-import { isValidPalestinianID } from '@/utils/validators';
-import AddingItemsTable from "@/Components/AddingItemsTable.vue";
-import { useI18n } from "vue-i18n";
-    
-const i18nLocale = useI18n();
-// const i18n_locale = i18nLocale.locale.value
-// console.log(i18n_locale)
+
 const props = defineProps({
+  entity: Object,
   supervisors: Array,
   countries: Array,
 });
 
-
-
 const form = useForm({
-  name: "",
-  supervisor_id: "",
-  donating_form_path: "",
-  country_id: "",
-  home_title: { ar: "", en: "" },
-  home_description: { ar: "", en: "" },
-  whatsapp_number: "",
-  initial_completed_projects: 0,
+  name: props.entity.name || "",
+  supervisor_id: props.entity.supervisor_id || "",
+  donating_form_path: props.entity.donating_form_path || "",
+  country_id: props.entity.country_id || "",
+  home_title: props.entity.home_title || { ar: "", en: "" },
+  home_description: props.entity.home_description || { ar: "", en: "" },
+  whatsapp_number: props.entity.whatsapp_number || "",
+  initial_completed_projects: props.entity.initial_completed_projects || 0,
 });
 
 const submit = () => {
-
-
-  
-
-  form.post(route("entity.store"), {
+  form.put(route("entity.update", props.entity.id), {
     onFinish: () => {
       form.defaults();
     },
   });
 };
-
-
-
-
 </script>
+
 <template>
-  <Head :title="$t('Add Entity')" />
-  <CreateFullSizeLayout >
+  <Head :title="$t('Edit Entity')" />
+  <TopRightLayout>
     <section>
       <header>
-        <h2
-          class="capitalize text-lg font-medium text-gray-900 dark:text-gray-100"
-        >
-          {{ $t("add new entity") }}
+        <h2 class="capitalize text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ $t("update entity") }}
         </h2>
-
-        <!-- <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          {{ $t("New user can review forms depens on his/her region.") }}
-        </p> -->
       </header>
 
       <form @submit.prevent="submit" class="mt-6 space-y-6">
@@ -181,8 +152,6 @@ const submit = () => {
             id="home_description_ar"
             class="mt-1 block w-full"
             v-model="form.home_description.ar"
-            
-            :placeholder="$t('Home Description (English)')"
             rows="4"
           />
           <InputError class="mt-2" :message="form.errors['home_description.ar']" />
@@ -193,15 +162,12 @@ const submit = () => {
             id="home_description_en"
             class="mt-1 block w-full"
             v-model="form.home_description.en"
-            :placeholder="$t('Home Description (English)')"
             rows="4"
           />
           <InputError class="mt-2" :message="form.errors['home_description.en']" />
         </div>
         </div>
 
-       
-        
         <div class="flex items-center gap-4">
           <PrimaryButton :disabled="form.processing">{{
             $t("Save")
@@ -222,5 +188,5 @@ const submit = () => {
         </div>
       </form>
     </section>
-  </CreateFullSizeLayout>
+  </TopRightLayout>
 </template>

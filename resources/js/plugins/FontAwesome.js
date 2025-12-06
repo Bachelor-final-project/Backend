@@ -39,6 +39,9 @@ import {
     faCopy,
     faClone,
     faExchange,
+    faSpinner,
+    faHeart,
+    faHandshake,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -80,6 +83,9 @@ library.add(
     faCopy,
     faClone,
     faExchange,
+    faSpinner,
+    faHeart,
+    faHandshake,
 );
 
 export default FontAwesomeIcon;
