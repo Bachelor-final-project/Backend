@@ -235,7 +235,7 @@ class WarehouseCommand extends BaseCommand
         $transaction->amount = $amount;
         $transaction->warehouse_stakeholder_id = $context['stakeholder_id'];
         $transaction->recipient_name = $params['recipient_name'] ?? null;
-        $transaction->user_id = $user->id;
+        // $transaction->user_id = $user->id;
         $transaction->save();
         
         cache()->forget('transaction_context_' . $chatId);
