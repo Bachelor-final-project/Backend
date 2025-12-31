@@ -196,7 +196,7 @@ class WarehouseCommand extends BaseCommand
         $message = __('telegram.enter_amount');
         if ($transactionType == 2) {
             $message .= "\n" . __('telegram.available_quantity', ['quantity' => $item->item_quantity, 'unit' => $item->unit_name]);
-            $message .= "\n" . __('telegram.enter_recipient_optional');
+            // $message .= "\n" . __('telegram.enter_recipient_optional');
         }
         
         cache()->put('transaction_context_' . $chatId, [
