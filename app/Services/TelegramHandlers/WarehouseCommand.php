@@ -19,13 +19,13 @@ class WarehouseCommand extends BaseCommand
     {
         if (isset($params['action'])) {
             switch ($params['action']) {
-                case 'add_transaction':
+                case 'addtransaction':
                     return $this->showTransactionTypes($chatId, $params['warehouse_id'], $params['item_id']);
-                case 'select_stakeholder':
+                case 'selectstakeholder':
                     return $this->showStakeholders($chatId, $params['warehouse_id'], $params['item_id'], $params['transaction_type']);
-                case 'enter_amount':
+                case 'enteramount':
                     return $this->requestAmount($chatId, $params['warehouse_id'], $params['item_id'], $params['transaction_type'], $params['stakeholder_id']);
-                case 'store_transaction':
+                case 'storetransaction':
                     return $this->storeTransaction($chatId, $user, $params);
             }
         }
@@ -130,11 +130,11 @@ class WarehouseCommand extends BaseCommand
         $keyboard = [
             [[
                 'text' => __('telegram.add_income'),
-                'callback_data' => 'warehouse_action_add_transaction_' . $warehouseId . '_' . $itemId . '_1'
+                'callback_data' => 'warehouse_action_addtransaction_' . $warehouseId . '_' . $itemId . '_1'
             ]],
             [[
                 'text' => __('telegram.add_outcome'),
-                'callback_data' => 'warehouse_action_add_transaction_' . $warehouseId . '_' . $itemId . '_2'
+                'callback_data' => 'warehouse_action_addtransaction_' . $warehouseId . '_' . $itemId . '_2'
             ]]
         ];
         
@@ -150,11 +150,11 @@ class WarehouseCommand extends BaseCommand
         $keyboard = [
             [[
                 'text' => __('telegram.add_income'),
-                'callback_data' => 'warehouse_action_select_stakeholder_' . $warehouseId . '_' . $itemId . '_1'
+                'callback_data' => 'warehouse_action_selectstakeholder_' . $warehouseId . '_' . $itemId . '_1'
             ]],
             [[
                 'text' => __('telegram.add_outcome'),
-                'callback_data' => 'warehouse_action_select_stakeholder_' . $warehouseId . '_' . $itemId . '_2'
+                'callback_data' => 'warehouse_action_selectstakeholder_' . $warehouseId . '_' . $itemId . '_2'
             ]]
         ];
         
@@ -176,7 +176,7 @@ class WarehouseCommand extends BaseCommand
         foreach ($stakeholders as $stakeholder) {
             $keyboard[] = [[
                 'text' => $stakeholder->name,
-                'callback_data' => 'warehouse_action_enter_amount_' . $warehouseId . '_' . $itemId . '_' . $transactionType . '_' . $stakeholder->id
+                'callback_data' => 'warehouse_action_enteramount_' . $warehouseId . '_' . $itemId . '_' . $transactionType . '_' . $stakeholder->id
             ]];
         }
         

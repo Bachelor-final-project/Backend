@@ -93,20 +93,53 @@ class AuthenticatedHandler
             ]);
         }
         
-        $warehouseId = $parts[1] ?? null;
-        $action = $parts[2] ?? null;
-        
-        $params = ['warehouse_id' => $warehouseId];
-        
-        if ($action === 'action') {
-            $params['action'] = $parts[3] ?? null;
-            $params['warehouse_id'] = $parts[4] ?? null;
-            $params['item_id'] = $parts[5] ?? null;
-            $params['transaction_type'] = $parts[6] ?? null;
-            $params['stakeholder_id'] = $parts[7] ?? null;
+        // Handle warehouse_id format (warehouse_123)
+        if (count($parts) == 2) {
+            return $this->executeCommand('/warehouses', $chatId, $user, [
+                'warehouse_id' => $parts[1]
+            ]);
         }
         
-        return $this->executeCommand('/warehouses', $chatId, $user, $params);
+        // Handle action format (warehouse_action_...)
+        if ($parts[1] === 'action') {
+            $action = $parts[2];
+            
+            if ($action === 'addtransaction') {
+                // warehouse_action_addtransaction_warehouseId_itemId_transactionType
+                return $this->executeCommand('/warehouses', $chatId, $user, [
+                    'action' => 'select_stakeholder',
+                    'warehouse_id' => $parts[3],
+                    'item_id' => $parts[4],
+                    'transaction_type' => $parts[5]
+                ]);
+            }
+            
+            if ($action === 'selectstakeholder') {
+                // warehouse_action_selectstakeholder_warehouseId_itemId_transactionType
+                return $this->executeCommand('/warehouses', $chatId, $user, [
+                    'action' => 'select_stakeholder',
+                    'warehouse_id' => $parts[3],
+                    'item_id' => $parts[4],
+                    'transaction_type' => $parts[5]
+                ]);
+            }
+            
+            if ($action === 'enteramount') {
+                // warehouse_action_enteramount_warehouseId_itemId_transactionType_stakeholderId
+                return $this->executeCommand('/warehouses', $chatId, $user, [
+                    'action' => 'enter_amount',
+                    'warehouse_id' => $parts[3],
+                    'item_id' => $parts[4],
+                    'transaction_type' => $parts[5],
+                    'stakeholder_id' => $parts[6]
+                ]);
+            }
+        }
+        
+        return $this->telegram->sendMessage([
+            'chat_id' => $chatId,
+            'text' => __('telegram.unknown_command')
+        ]);
     }
     
     private function executeCommand($commandKey, $chatId, $user, $params = [])
