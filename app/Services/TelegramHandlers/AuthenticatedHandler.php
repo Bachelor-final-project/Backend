@@ -107,7 +107,7 @@ class AuthenticatedHandler
             if ($action === 'addtransaction') {
                 // warehouse_action_addtransaction_warehouseId_itemId_transactionType
                 return $this->executeCommand('/warehouses', $chatId, $user, [
-                    'action' => 'select_stakeholder',
+                    'action' => 'addtransaction',
                     'warehouse_id' => $parts[3],
                     'item_id' => $parts[4],
                     'transaction_type' => $parts[5]
@@ -117,7 +117,7 @@ class AuthenticatedHandler
             if ($action === 'selectstakeholder') {
                 // warehouse_action_selectstakeholder_warehouseId_itemId_transactionType
                 return $this->executeCommand('/warehouses', $chatId, $user, [
-                    'action' => 'select_stakeholder',
+                    'action' => 'selectstakeholder',
                     'warehouse_id' => $parts[3],
                     'item_id' => $parts[4],
                     'transaction_type' => $parts[5]
@@ -127,7 +127,7 @@ class AuthenticatedHandler
             if ($action === 'enteramount') {
                 // warehouse_action_enteramount_warehouseId_itemId_transactionType_stakeholderId
                 return $this->executeCommand('/warehouses', $chatId, $user, [
-                    'action' => 'enter_amount',
+                    'action' => 'enteramount',
                     'warehouse_id' => $parts[3],
                     'item_id' => $parts[4],
                     'transaction_type' => $parts[5],
