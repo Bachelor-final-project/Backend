@@ -130,11 +130,11 @@ class WarehouseCommand extends BaseCommand
         $keyboard = [
             [[
                 'text' => __('telegram.add_income'),
-                'callback_data' => 'warehouse_action_addtransaction_' . $warehouseId . '_' . $itemId . '_1'
+                'callback_data' => 'warehouse_action_selectstakeholder_' . $warehouseId . '_' . $itemId . '_1'
             ]],
             [[
                 'text' => __('telegram.add_outcome'),
-                'callback_data' => 'warehouse_action_addtransaction_' . $warehouseId . '_' . $itemId . '_2'
+                'callback_data' => 'warehouse_action_selectstakeholder_' . $warehouseId . '_' . $itemId . '_2'
             ]]
         ];
         
