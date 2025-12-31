@@ -44,7 +44,7 @@ class AuthenticatedHandler
         if ($context && is_numeric($text)) {
             $warehouseCommand = new WarehouseCommand();
             return $warehouseCommand->handle($chatId, $user, [
-                'action' => 'store_transaction',
+                'action' => 'storetransaction',
                 'amount' => $text
             ]);
         }
