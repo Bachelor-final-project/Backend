@@ -39,6 +39,21 @@ class AuthenticatedHandler
             ]);
         }
         
+        // Handle transaction amount input
+        $context = cache()->get('transaction_context_' . $chatId);
+        if ($context && is_numeric($text)) {
+            $warehouseCommand = new WarehouseCommand();
+            return $warehouseCommand->handle($chatId, $user, [
+                'action' => 'store_transaction',
+                'amount' => $text
+            ]);
+        }
+        
+        // Handle callback data from inline keyboards
+        if (str_starts_with($text, 'warehouse_')) {
+            return $this->handleWarehouseCallback($chatId, $user, $text);
+        }
+        
         // Handle search queries
         if (str_starts_with($text, 'بحث ')) {
             $searchQuery = trim(mb_substr($text, 4));
@@ -51,11 +66,6 @@ class AuthenticatedHandler
             $warehouseId = $parts[1] ?? null;
             $itemId = $parts[2] ?? null;
             return $this->executeCommand('/warehouses', $chatId, $user, ['warehouse_id' => $warehouseId, 'item_id' => $itemId]);
-        }
-        if (str_starts_with($text, 'warehouse_')) {
-            $parts = explode('_', $text);
-            $warehouseId = $parts[1] ?? null;
-            return $this->executeCommand('/warehouses', $chatId, $user, ['warehouse_id' => $warehouseId]);
         }
         
         // Handle commands
@@ -70,6 +80,33 @@ class AuthenticatedHandler
             'chat_id' => $chatId,
             'text' => __('telegram.hello_user', ['name' => $user->name])
         ]);
+    }
+    
+    private function handleWarehouseCallback($chatId, $user, $callbackData)
+    {
+        $parts = explode('_', $callbackData);
+        
+        if (count($parts) < 2) {
+            return $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => __('telegram.unknown_command')
+            ]);
+        }
+        
+        $warehouseId = $parts[1] ?? null;
+        $action = $parts[2] ?? null;
+        
+        $params = ['warehouse_id' => $warehouseId];
+        
+        if ($action === 'action') {
+            $params['action'] = $parts[3] ?? null;
+            $params['warehouse_id'] = $parts[4] ?? null;
+            $params['item_id'] = $parts[5] ?? null;
+            $params['transaction_type'] = $parts[6] ?? null;
+            $params['stakeholder_id'] = $parts[7] ?? null;
+        }
+        
+        return $this->executeCommand('/warehouses', $chatId, $user, $params);
     }
     
     private function executeCommand($commandKey, $chatId, $user, $params = [])
