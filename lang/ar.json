@@ -598,5 +598,17 @@
     "telegram.item_transactions": "📋✨ **حركات :item** ✨\n\n│ 🏢 **المخزن:** :warehouse\n\n:transactions",
     "telegram.transaction_format": "│ :type_icon **:type** - :amount :unit\n│   📅 :date\n│   👥 :stakeholder\n│\n",
     "telegram.no_transactions": "😔 **لا توجد حركات**\n\n📋 لا توجد حركات لهذا العنصر",
+    "telegram.add_income": "إضافة وارد",
+    "telegram.add_outcome": "إضافة صادر",
+    "telegram.select_transaction_type": "اختر نوع المعاملة:",
+    "telegram.select_stakeholder": "اختر صاحب المصلحة:",
+    "telegram.no_stakeholders": "لا يوجد أصحاب مصلحة متاحون لهذا النوع.",
+    "telegram.enter_amount": "يرجى إدخال الكمية:",
+    "telegram.available_quantity": "الكمية المتاحة: :quantity :unit",
+    "telegram.enter_recipient_optional": "يرجى إدخال اسم المستلم (اختياري):",
+    "telegram.item_not_found": "العنصر غير موجود.",
+    "telegram.invalid_amount": "كمية غير صحيحة. يرجى إدخال رقم صحيح.",
+    "telegram.insufficient_quantity": "الكمية غير كافية. الكمية المتاحة أقل من المطلوب.",
+    "telegram.transaction_saved": "تم حفظ المعاملة بنجاح! ✅",
     "": ""
 }

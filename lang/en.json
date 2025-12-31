@@ -64,5 +64,17 @@
     "telegram.unknown_command": "Unknown command. Use /login to start.",
     "telegram.item_transactions": "📋✨ **:item Transactions** ✨\n┌──────────────────────────────┐\n│ 🏢 **Warehouse:** :warehouse\n├──────────────────────────────┤\n:transactions└──────────────────────────────┘",
     "telegram.transaction_format": "│ :type_icon **:type** - :amount :unit\n│   📅 :date\n│   👥 :stakeholder\n│\n",
-    "telegram.no_transactions": "😔 **No Transactions**\n\n📋 No transactions found for this item"
+    "telegram.no_transactions": "😔 **No Transactions**\n\n📋 No transactions found for this item",
+    "telegram.add_income": "Add Income",
+    "telegram.add_outcome": "Add Outcome",
+    "telegram.select_transaction_type": "Select transaction type:",
+    "telegram.select_stakeholder": "Select stakeholder:",
+    "telegram.no_stakeholders": "No stakeholders available for this type.",
+    "telegram.enter_amount": "Please enter the amount:",
+    "telegram.available_quantity": "Available quantity: :quantity :unit",
+    "telegram.enter_recipient_optional": "Please enter recipient name (optional):",
+    "telegram.item_not_found": "Item not found.",
+    "telegram.invalid_amount": "Invalid amount. Please enter a valid number.",
+    "telegram.insufficient_quantity": "Insufficient quantity. Available quantity is less than requested.",
+    "telegram.transaction_saved": "Transaction saved successfully! ✅"
 }
