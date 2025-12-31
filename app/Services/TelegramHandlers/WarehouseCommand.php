@@ -240,7 +240,7 @@ class WarehouseCommand extends BaseCommand
         
         cache()->forget('transaction_context_' . $chatId);
         
-        return $this->sendMessage($chatId, __('telegram.transaction_saved'));
+        $this->sendMessage($chatId, __('telegram.transaction_saved'));
         return $this->showItemTransactions($chatId, $context['warehouse_id'], $context['item_id']);
     }
 }
