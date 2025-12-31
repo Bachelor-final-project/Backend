@@ -39,6 +39,8 @@ class AuthenticatedHandler
             ]);
         }
         
+        auth()->login($user);
+        
         // Handle transaction amount input
         $context = cache()->get('transaction_context_' . $chatId);
         if ($context && is_numeric($text)) {
