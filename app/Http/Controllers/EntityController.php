@@ -130,6 +130,7 @@ class EntityController extends Controller
             return Inertia::render(Str::studly("Entity").'/CompletedDonatingForm', [
                 "donor" => $donor,
                 "donations" => $data['donations'],
+                "entity" => $entity,
             ]);
 
         $backUrl = back()->getTargetUrl();

@@ -4,6 +4,12 @@
     <div class="container m-auto px-4 h-full">
       <h1 class="text-4xl font-bold text-center text-gray-800 mb-10 text-gray-900 dark:text-gray-100">{{ $t('Donating form is saved successfully') }}</h1>
       
+      <div class="text-center mt-8">
+        <PrimaryButton @click="goBack">
+          {{ $t('Create Another Donation') }}
+        </PrimaryButton>
+      </div>
+      
   </div>
   </div>
 </template>
@@ -16,6 +22,9 @@ import Table from "@/Components/Table.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import DonatingPageLayout from '@/Layouts/DonatingPageLayout.vue';
+function goBack() {
+  window.history.back();
+}
 defineOptions({ layout: DonatingPageLayout });
 const props = defineProps({
     donor: Array,
