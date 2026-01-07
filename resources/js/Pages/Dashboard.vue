@@ -17,6 +17,7 @@ const props = defineProps({
   donationsByStatues: Array,
   documentsByStatues: Array,
   approvedDonationLast30Days: Array,
+  totalApprovedDonationLast30Days: Array,
   completedProposalsLast30Days: Array,
   benefitsLast30Days: Array,
   donatingStatusProposalsStackedGroup: Array,
@@ -112,7 +113,7 @@ const copySelected = async (selected) => {
   <div>
     <AdminLayout>
       <div id="EntityDirectorStatistics">
-        <div v-if="approvedDonationLast30Days || completedProposalsLast30Days || benefitsLast30Days || allTransactionsLast30Days || inboundTransactionsLast30Days || outboundTransactionsLast30Days" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div v-if="approvedDonationLast30Days || completedProposalsLast30Days || totalApprovedDonationLast30Days || allTransactionsLast30Days || inboundTransactionsLast30Days || outboundTransactionsLast30Days" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           <BasicSparkLines
             v-if="approvedDonationLast30Days"
             :data="approvedDonationLast30Days"
@@ -130,11 +131,11 @@ const copySelected = async (selected) => {
             :subtitle="$t('Completed proposals last 30 days')"
           />
           <BasicSparkLines
-            v-if="benefitsLast30Days"
-            :data="benefitsLast30Days"
+            v-if="totalApprovedDonationLast30Days"
+            :data="totalApprovedDonationLast30Days"
             :color_theme="color_theme"
             :show_filter="true"
-            :subtitle="$t('Total Benefits last 30 days')"
+            :subtitle="$t('Total Donations last 30 days')"
           />
           <BasicSparkLines
             v-if="allTransactionsLast30Days"

@@ -42,6 +42,7 @@ class DashboardController extends Controller
                 "donationsByStatues"     => Donation::getDonationsByStatuesChartData(),
                 "documentsByStatues"     => Document::getDocumentsByStatuesChartData(),
                 "approvedDonationLast30Days"     => Donation::getApprovedDonationLast30DaysChartData(),
+                "totalApprovedDonationLast30Days"     => Donation::getTotalApprovedDonationLast30DaysChartData(),
                 "completedProposalsLast30Days"     => Proposal::getCompletedProposalsLast30DaysChartData(),
                 "benefitsLast30Days"     => ProposalBeneficiary::getBenefitsLast30DaysChartData(),
                 "donatingStatusProposalsStackedGroup"     => Proposal::getDonatingStatusProposalsStackedGroup(),

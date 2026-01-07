@@ -303,7 +303,7 @@ class Proposal extends BaseModel
     public static function getCompletedProposalsLast30DaysChartData(){
         $proposals = Proposal::selectRaw('status, COUNT(*) as count, date(created_at) as date')
         ->where('created_at', '>', now()->subDays(30)->endOfDay())
-        ->where('status', 8)
+        ->where('status', 2)
         ->groupByRaw('status, date(created_at)')
         ->get();
 
