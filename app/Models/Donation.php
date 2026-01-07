@@ -57,6 +57,19 @@ class Donation extends BaseModel
 
         return $result;
     }
+    public static function getTotalApprovedDonationLast30DaysChartData(){
+        $donations = Donation::selectRaw('status, sum(amount) as sum, date(created_at) as date')
+        ->where('created_at', '>', now()->subDays(30)->endOfDay())
+        ->where('status', 2)
+        ->groupByRaw('status, date(created_at)')
+        ->get();
+
+            $result = [
+                "data" => $donations->pluck('sum')->toArray()
+            ];
+
+        return $result;
+    }
     public function proposal(){
         return $this->belongsTo(Proposal::class, 'proposal_id');
     }

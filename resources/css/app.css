@@ -13,7 +13,8 @@
 @font-face {
     font-family: "reg";
     /* src: url("../fonts/Tajawal-Medium.ttf") format("opentype"); */
-    src: url("../fonts/beinFont/beINNewArabicFont2017-Light.ttf") format("opentype");
+    src: url("../fonts/Almarai/Almarai-Regular.ttf") format("opentype");
+    size-adjust: 105%;
 }
 
 *:not(i) {

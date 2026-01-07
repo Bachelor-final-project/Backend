@@ -19,6 +19,7 @@ export default {
     "Stakeholder Type": "نوع صاحب المصلحة",
     "Warehouse": "المخزن",
     "Item": "العنصر",
+    "Total Donations last 30 days": "إجمالي التبرعات آخر 30 يوما",
     "Quantity": "الكمية",
     "quantity": "الكمية",
     "quantity_limit": "الحد الأدنى للكمية",
