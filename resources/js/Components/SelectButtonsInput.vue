@@ -32,7 +32,7 @@ const handleSelect = (optionId) => {
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-2 sm:gap-3">
+  <div class="flex justify-content gap-2 sm:gap-3">
     <button
       v-for="option in options"
       :key="option.id"

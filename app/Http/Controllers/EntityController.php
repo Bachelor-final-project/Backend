@@ -74,6 +74,27 @@ class EntityController extends Controller
             'show_payonline_button' => $showPayOnlineButton,
         ]);
     }
+
+    public function newDonatingForm(Request $request, string $donating_form_path)
+    {
+        $entity = Entity::withoutGlobalScope(ForUserScope::class)->where('donating_form_path', $donating_form_path)->firstOrFail();
+        $proposals = Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->where('status', Proposal::STATUSES['donatable'])->get();
+        $showPayOnlineButton = false;
+        foreach($proposals as $p) {
+            if($p->isPayableOnline) {
+                $showPayOnlineButton = true;
+                break;
+            }
+        }
+        return Inertia::render(Str::studly("Entity").'/NewDonatingForm', [
+            "entity" => $entity,
+            "proposals" => Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->public()->get(),
+            'countries' => Country::select('id', 'name', 'calling_code')->get(),
+            'genders' => Donor::genders(),
+            'payment_methods' => $entity->payment_methods,
+            'show_payonline_button' => $showPayOnlineButton,
+        ]);
+    }
     public function storeDonatingForm(StoreDonatingFormRequest $request)
     {
         $data = $request->validated();

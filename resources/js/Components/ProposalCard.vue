@@ -28,14 +28,24 @@
           >
             {{$t("Enter Donation Amount")}} ({{ proposal.currency_name }})
           </InputLabel>
+          <div class="flex items-center justify-between gap-2">
+          <SelectButtonsInput
+            v-model="selectedAmount"
+            :options="amountOptions"
+            @update:modelValue="setAmount"
+            class="flex-1"
+          />
           <TextInput
             :id="`donationAmount_${proposal.id}`"
             type="number"
             v-model="localDonationAmount"
-            :placeholder="$t('Enter amount')"
-            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
+            :placeholder="$t('Other Amount')"
+            class="w-full flex-3  border rounded-lg focus:ring focus:ring-indigo-300"
             @input="emitDonation"
           />
+          
+          
+        </div>
         </div>
         <div class="p-4 mt-3 bg-white rounded-lg shadow-md dark:bg-gray-800">
   
@@ -83,6 +93,7 @@
   import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import Checkbox from './Checkbox.vue';
+import SelectButtonsInput from '@/Components/SelectButtonsInput.vue';
 
 
 const props = defineProps({
@@ -97,10 +108,26 @@ const imageSrc = ref(props.proposal.cover_image || new URL(`@/assets/images/hero
   
   const localDonationAmount = ref('');
   const payonlineChecked = ref(false);
+  const selectedAmount = ref(null);
+  
+  const amountOptions = [
+    { id: 100, name: '100' },
+    { id: 150, name: '150' },
+    { id: 200, name: '200' },
+    { id: 250, name: '250' }
+  ];
+  
+  const setAmount = (amount) => {
+    localDonationAmount.value = amount;
+    selectedAmount.value = amount;
+    emitDonation();
+  };
   
   const emitDonation = () => {
-    localDonationAmount.value = Math.round(localDonationAmount.value)
-      emit('donate', props.proposal.id, localDonationAmount.value, props.proposal.currency_id, payonlineChecked.value, props.proposal.min_documenting_amount);
+    localDonationAmount.value = Math.round(localDonationAmount.value);
+    const matchingOption = amountOptions.find(option => option.id == localDonationAmount.value);
+    selectedAmount.value = matchingOption ? matchingOption.id : null;
+    emit('donate', props.proposal.id, localDonationAmount.value, props.proposal.currency_id, payonlineChecked.value, props.proposal.min_documenting_amount);
   };
   </script>
   
