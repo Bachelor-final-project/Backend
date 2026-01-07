@@ -107,7 +107,7 @@ watch(model, (newValue, oldValue) => {
 <template>
     <input
         type="tel"
-        class="rounded-md w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        class="rounded-md w-full border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 rtl:text-right"
         v-model="model"
         ref="input"
         minlength="10"

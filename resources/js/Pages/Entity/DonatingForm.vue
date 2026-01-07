@@ -57,9 +57,7 @@
             <InputLabel for="phone" value="phone" />
             <PhoneInput
               v-model="form.phone"
-              :countries="countries"
-              :default-country-code="entity.country?.calling_code"
-              placeholder="Enter your phone number"
+              :placeholder="$t('Enter your phone number')"
               required
             />
             <InputError :message="form.errors.phone" class="mt-2" />
@@ -164,7 +162,7 @@
   import InputLabel from "@/Components/InputLabel.vue";
   import SelectInput from "@/Components/SelectInput.vue";
   import SelectButtonsInput from "@/Components/SelectButtonsInput.vue";
-  import { ref, watch, computed } from "vue";
+  import { ref, watch, computed, onMounted } from "vue";
   import { useI18n } from "vue-i18n";
   
   const { locale } = useI18n();
@@ -190,6 +188,72 @@
     document_nickname: '',
     donations: [] 
   });
+
+  // Cookie functions
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  };
+
+  const setCookie = (name, value, days = 365) => {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+  };
+
+  const getSavedProfiles = () => {
+    const saved = getCookie('donorProfiles');
+    return saved ? JSON.parse(decodeURIComponent(saved)) : [];
+  };
+ 
+  const saveProfile = (profileData) => {
+    const profiles = getSavedProfiles();
+    const existingIndex = profiles.findIndex(p => p.name === profileData.name || p.phone === profileData.phone);
+    
+    if (existingIndex >= 0) {
+      profiles[existingIndex] = { ...profiles[existingIndex], ...profileData };
+    } else {
+      profiles.push(profileData);
+    }
+    
+    setCookie('donorProfiles', encodeURIComponent(JSON.stringify(profiles)));
+  };
+
+  const findMatchingProfile = (name, phone) => {
+    const profiles = getSavedProfiles();
+    const matches = profiles.filter(p => 
+      (name && p.name.toLowerCase().includes(name.toLowerCase())) ||
+      (phone && p.phone.includes(phone))
+    );
+    return matches.length === 1 ? matches[0] : null;
+  };
+
+  const fillFormFromProfile = (profile) => {
+    if (profile) {
+      form.name = profile.name || form.name;
+      form.phone = profile.phone || form.phone;
+      form.country_id = profile.country_id || form.country_id;
+      form.gender = profile.gender || form.gender;
+      form.payment_method_id = profile.payment_method_id || form.payment_method_id;
+      form.document_nickname = profile.document_nickname || form.document_nickname;
+    }
+  };
+
+  // Watch for name changes
+  watch(() => form.name, (newName) => {
+    if (newName && newName.length > 2) {
+      const profile = findMatchingProfile(newName, null);
+      fillFormFromProfile(profile);
+    }
+  });
+
+  // Watch for phone changes
+  watch(() => form.phone, (newPhone) => {
+    if (newPhone && newPhone.length > 3) {
+      const profile = findMatchingProfile(null, newPhone);
+      fillFormFromProfile(profile);
+    }
+  });
   const handleDonation = (proposalId, amount,currency_id, pay_online, min_documenting_amount) => {
 
     const existingDonation = form.donations.find(d => d.proposal_id === proposalId);
@@ -210,12 +274,23 @@ function saveWithPayOnline() {
   
 
   const submitDonations = () => {
-  form.phone = form.phone.replace(/(^\+)/g, "00");
-  form.post(route("store-donating-form"), {
-    onFinish: () => {
-      form.defaults();
-    },
-  });
-};
+    // Save profile to cookies before submitting
+    const profileData = {
+      name: form.name,
+      phone: form.phone,
+      country_id: form.country_id,
+      gender: form.gender,
+      payment_method_id: form.payment_method_id,
+      document_nickname: form.document_nickname
+    };
+    saveProfile(profileData);
+    
+    form.phone = form.phone.replace(/(^\+)/g, "00");
+    form.post(route("store-donating-form"), {
+      onFinish: () => {
+        form.defaults();
+      },
+    });
+  };
   </script>
   
