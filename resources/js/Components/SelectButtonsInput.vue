@@ -32,14 +32,14 @@ const handleSelect = (optionId) => {
 </script>
 
 <template>
-  <div class="flex justify-content gap-2 sm:gap-3">
+  <div class="flex gap-2 sm:gap-3 w-full">
     <button
       v-for="option in options"
       :key="option.id"
       type="button"
       @click="handleSelect(option.id)"
       :class="[
-        'px-3 py-2 sm:px-4 sm:py-2 text-sm font-medium rounded-lg border transition-all duration-200',
+        'w-full px-3 py-2 sm:px-4 sm:py-2 text-sm font-medium rounded-lg border transition-all duration-200',
         'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1',
         'hover:scale-105 active:scale-95',
         modelValue == option.id

@@ -213,6 +213,8 @@ export default {
         "min_documenting_amount": "الحد الأدنى للتوثيق",
         "Enter amount": "يرجى ادخال القيمة المراد التبرع بها",
         "cost": "التكلفة",
+        "read more": "قراءة المزيد",
+        "read less": "أقل",
         "Enter Donation Amount": "أدخل أو اختر مبلغ التبرع بعملة:",
         "Donate Now": "تبرع الآن",
         "Contact Us": "تواصل معنا",
