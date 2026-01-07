@@ -301,15 +301,19 @@ class Proposal extends BaseModel
         ];
     }
     public static function getCompletedProposalsLast30DaysChartData(){
-        $proposals = Proposal::selectRaw('status, COUNT(*) as count, date(created_at) as date')
-        ->where('created_at', '>', now()->subDays(30)->endOfDay())
-        ->where('status', 2)
-        ->groupByRaw('status, date(created_at)')
+        $proposals = Proposal::selectRaw('COUNT(*) as count, date(logs.created_at) as date')
+        ->join('logs', function($join) {
+            $join->on('proposals.id', '=', 'logs.loggable_id')
+                 ->where('logs.loggable_type', '=', 'proposal')
+                 ->where('logs.log_type', '=', 1);
+        })
+        ->where('logs.created_at', '>=', now()->subDays(30)->endOfDay())
+        ->groupByRaw('date(logs.created_at)')
         ->get();
 
-            $result = [
-                "data" => $proposals->pluck('count')->toArray()
-            ];
+        $result = [
+            "data" => $proposals->pluck('count')->toArray()
+        ];
 
         return $result;
     }
