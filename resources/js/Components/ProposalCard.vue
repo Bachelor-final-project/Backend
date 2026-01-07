@@ -1,6 +1,6 @@
 <template>
-  <div class="p-4 bg-white dark:bg-gray-800 shadow sm:rounded-lg flex flex-col justify-between">
-    <div class="flex flex-col justify-between w-full">
+  <div class="p-4 bg-white dark:bg-gray-800 shadow sm:rounded-lg  flex flex-col justify-between">
+    <div class="flex flex-col justify-between w-full ">
       <!-- <div class="my-3 space-y-2">
         <span class="inline-block py-1 px-3 text-xs font-medium text-white bg-blue-600 rounded-full">
           {{ $t("unit price") }} : {{ proposal.one_unit_price }} {{proposal.currency_symbol}}
@@ -18,7 +18,18 @@
       <div class="p-4">
         <h3 class="text-lg text-center font-bold text-gray-900 dark:text-gray-100">{{ proposal.title }}</h3>
         <!-- <p class="font-medium text-gray-900 dark:text-gray-100 py-2"><span class="font-bold ">{{$t('cost')}}: </span>{{ proposal.cost }} {{ proposal['currency_name'] }}</p> -->
-        <p class="text-sm font-medium text-gray-900 dark:text-gray-100"><span class="font-bold ">{{$t('proposal details')}}: <br></span>{{ proposal.body }}</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
+          <span class="font-bold">{{$t('proposal details')}}: <br></span>
+          <span v-if="!showFullBody && proposal.body.length > 100" @click="showFullBody = !showFullBody">
+            {{ proposal.body.substring(0, 120) }}...
+            <button @click="showFullBody = true" class="text-blue-600 hover:underline ml-1">
+              {{ $t('read more') }}
+            </button>
+          </span>
+          <span v-else @click="showFullBody = !showFullBody">
+            {{ proposal.body }}
+          </span>
+        </p>
         
         <div class="mt-5">
           <p class="font-medium text-gray-900 dark:text-gray-100 py-2"><span class="font-bold ">{{$t('min_documenting_amount')}}: </span>{{ proposal.min_documenting_amount }} {{ proposal['currency_name'] }}</p>
@@ -28,19 +39,19 @@
           >
             {{$t("Enter Donation Amount")}} ({{ proposal.currency_name }})
           </InputLabel>
-          <div class="flex items-center justify-between gap-2">
+          <div class="flex flex-col mt-4 justify-between gap-2">
           <SelectButtonsInput
             v-model="selectedAmount"
             :options="amountOptions"
             @update:modelValue="setAmount"
-            class="flex-1"
+            class="w-full"
           />
           <TextInput
             :id="`donationAmount_${proposal.id}`"
             type="number"
             v-model="localDonationAmount"
             :placeholder="$t('Other Amount')"
-            class="w-full flex-3  border rounded-lg focus:ring focus:ring-indigo-300"
+            class="w-full  border rounded-lg focus:ring focus:ring-indigo-300"
             @input="emitDonation"
           />
           
@@ -109,12 +120,13 @@ const imageSrc = ref(props.proposal.cover_image || new URL(`@/assets/images/hero
   const localDonationAmount = ref('');
   const payonlineChecked = ref(false);
   const selectedAmount = ref(null);
-  
+  const showFullBody = ref(false);
+  console.log(props.proposal);
   const amountOptions = [
     { id: 100, name: '100' },
-    { id: 150, name: '150' },
-    { id: 200, name: '200' },
-    { id: 250, name: '250' }
+    { id: 150, name:'150' },
+    { id: 200, name:'200' },
+    { id: 250, name:'250' }
   ];
   
   const setAmount = (amount) => {
