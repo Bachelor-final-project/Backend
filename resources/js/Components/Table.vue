@@ -690,18 +690,22 @@ if(!isEmpty(props.table_filters)){
 
 const debouncedReload = debounce((newValue) => {
   isFilterLoading.value = true;
-  router.reload({
-    only: [props.refresh_only],
-    data: { ...newValue, forms_page: 1 },
-    onStart: () => {
-      isFilterLoading.value = true
-    },
-    onFinish: () => {
-      isFilterLoading.value = false
+  router.get(route(route().current()), 
+    { ...newValue, forms_page: 1 },
+    {
+      only: [props.refresh_only],
+      preserveState: true,
+      preserveScroll: true,
+      onStart: () => {
+        isFilterLoading.value = true
+      },
+      onFinish: () => {
+        isFilterLoading.value = false
+      }
     }
-  });
+  );
   table_key.value++;
-}, 300); // Adjust debounce time in milliseconds (200ms here)
+}, 300);
 watch(filters, (newValue, old) => {
   debouncedReload(newValue);
 });

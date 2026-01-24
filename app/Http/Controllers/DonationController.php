@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDonationRequest;
 use App\Http\Requests\UpdateDonationRequest;
+use App\Http\Resources\DonationIndexResource;
+use App\Http\Resources\ShortDonorResource;
+use App\Http\Resources\ShortProposalResource;
 use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Currency;
@@ -30,14 +33,17 @@ class DonationController extends Controller
      */
     public function index(Request $request)
     {
+        // $dd = ShortProposalResource::collection(Proposal::without(['entity', 'area', 'proposalType', 'currency', 'files'])->select('id', 'title')->latest()->take(100)->get());
+        // dd($dd->toArray($request));
+
         
         return Inertia::render(Str::studly("Donation").'/Index', [
             "headers" => Donation::headers(),
             'currencies' => Currency::get(),
-            'proposals' => Proposal::without(['entity', 'area', 'proposalType', 'currency', 'files'])->select('id', 'title')->latest()->take(100)->get()->each->setAppends([]),
+            'proposals' => ShortProposalResource::collection(Proposal::without(['entity', 'area', 'proposalType', 'currency', 'files'])->select('id', 'title')->latest()->take(100)->get())->toArray($request),
             'statuses' => Donation::statuses(),
-            'donors' => Donor::without(['country'])->select('id', 'name')->get(['id', 'name']),
-            "items" => Donation::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+            'donors' => ShortDonorResource::collection(Donor::without(['country'])->select('id', 'name')->get())->toArray($request),
+            "items" => (Donation::search($request)->sort($request)->paginate($request->per_page?? $this->pagination)),
         ]);
     }
 
