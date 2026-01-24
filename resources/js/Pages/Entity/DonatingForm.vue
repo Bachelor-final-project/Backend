@@ -208,7 +208,7 @@
  
   const saveProfile = (profileData) => {
     const profiles = getSavedProfiles();
-    const existingIndex = profiles.findIndex(p => p.name === profileData.name || p.phone === profileData.phone);
+    const existingIndex = profiles.findIndex(p => p.name === profileData.name);
     
     if (existingIndex >= 0) {
       profiles[existingIndex] = { ...profiles[existingIndex], ...profileData };
@@ -248,12 +248,12 @@
   });
 
   // Watch for phone changes
-  watch(() => form.phone, (newPhone) => {
-    if (newPhone && newPhone.length > 3) {
-      const profile = findMatchingProfile(null, newPhone);
-      fillFormFromProfile(profile);
-    }
-  });
+  // watch(() => form.phone, (newPhone) => {
+  //   if (newPhone && newPhone.length > 3) {
+  //     const profile = findMatchingProfile(null, newPhone);
+  //     fillFormFromProfile(profile);
+  //   }
+  // });
   const handleDonation = (proposalId, amount,currency_id, pay_online, min_documenting_amount) => {
 
     const existingDonation = form.donations.find(d => d.proposal_id === proposalId);

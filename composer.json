@@ -14,9 +14,7 @@
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "maatwebsite/excel": "^3.1",
         "madbob/larastrap": "^0.9.6",
-        "phpoffice/phpspreadsheet": "^1.29",
         "spatie/laravel-pdf": "^1.5",
         "stripe/stripe-php": "^16.4",
         "tightenco/ziggy": "^1.0"

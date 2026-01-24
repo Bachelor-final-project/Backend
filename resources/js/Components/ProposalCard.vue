@@ -22,7 +22,7 @@
           <span class="font-bold">{{$t('proposal details')}}: <br></span>
           <span v-if="!showFullBody && proposal.body.length > 100" @click="showFullBody = !showFullBody">
             {{ proposal.body.substring(0, 120) }}...
-            <button @click="showFullBody = true" class="text-blue-600 hover:underline ml-1">
+            <button @click="showFullBody.value = !showFullBody.value" class="text-blue-600 hover:underline ml-1">
               {{ $t('read more') }}
             </button>
           </span>
