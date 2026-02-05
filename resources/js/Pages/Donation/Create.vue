@@ -10,12 +10,13 @@ import { Link, useForm, usePage } from "@inertiajs/vue3";
 import CenterLayout from "@/Layouts/CenterLayout.vue";
 import TopRightLayout from "@/Layouts/TopRightLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import PhoneInput from "@/Components/PhoneInput.vue";
 const props = defineProps({
   status_options: Array,
   currencies: Array,
   proposals: Array,
+  payment_methods: Array,
 });
 
 // const isAdminChecked = ref(false);
@@ -29,7 +30,9 @@ const props = defineProps({
 const form = useForm({
   phone: "",
   proposal_id: "",
+  document_nickname: "",
   currency_id: "",
+  payment_method_id: "",
   amount: "",
   status: 2 // set donation status as 'approved' by default
 });
@@ -40,6 +43,12 @@ const submit = () => {
     },
   });
 };
+const hasDocument = computed(() => {
+  const proposal = props.proposals.find(p => p.id == form.proposal_id);
+  console.log("proposal", proposal);
+  console.log("proposal_id", form.proposal_id);
+  return proposal && proposal.min_documenting_amount <= form.amount;
+});
 </script>
 <template>
   <Head :title="$t('Add Donation')" />
@@ -72,6 +81,16 @@ const submit = () => {
           />
           <InputError class="mt-2" :message="form.errors.phone" />
         </div>
+        <div v-show="hasDocument">
+          <InputLabel for="document_nickname" value="document_nickname" />
+          <TextInput
+            id="document_nickname"
+            type="text"
+            v-model="form.document_nickname"
+            class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-indigo-300"
+          />
+          <InputError :message="form.errors.document_nickname" class="mt-2" />
+        </div>
 
         <div>
           <InputLabel for="proposal_id" value="Project" />
@@ -99,6 +118,19 @@ const submit = () => {
             required
           />
           <InputError :message="form.errors.currency_id" class="mt-2" />
+        </div>
+
+        <div>
+          <InputLabel for="payment_method_id" value="Payment Method" />
+          <SelectInput
+            :options="payment_methods"
+            :item_name="`name_${i18n_locale}`"
+            id="payment_method_id"
+            v-model="form.payment_method_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+          />
+          <InputError :message="form.errors.payment_method_id" class="mt-2" />
         </div>
 
         <div>

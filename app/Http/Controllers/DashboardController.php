@@ -13,6 +13,7 @@ namespace App\Http\Controllers;
 // use App\Models\User;
 // use App\Models\UserWithStatus;
 
+use App\Http\Resources\ProposalListResource;
 use App\Models\Document;
 use App\Models\Donation;
 use App\Models\Proposal;
@@ -34,6 +35,14 @@ class DashboardController extends Controller
     {
         $userType = auth()->user()->type;
         $arrays = [];
+
+        $proposals = Proposal::query()
+            ->with(['entity', 'area', 'proposalType', 'currency'])
+            ->withComputedAttributes()
+            ->where('status', 1)
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
         
         if (in_array($userType, [1, 2])) {
            $arrays =  array_merge($arrays, [
@@ -46,7 +55,8 @@ class DashboardController extends Controller
                 "completedProposalsLast30Days"     => Proposal::getCompletedProposalsLast30DaysChartData(),
                 "benefitsLast30Days"     => ProposalBeneficiary::getBenefitsLast30DaysChartData(),
                 "donatingStatusProposalsStackedGroup"     => Proposal::getDonatingStatusProposalsStackedGroup(),
-                "proposals_overview"     => Proposal::where('status', 1)->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+                // "proposals_overview"     => Proposal::where('status', 1)->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+                "proposals_overview"     => ProposalListResource::collection($proposals),
                 "proposals_overview_headers"     => Proposal::overviewHeaders(),
             ]);
         }

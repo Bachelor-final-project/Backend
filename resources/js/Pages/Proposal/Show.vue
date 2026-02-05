@@ -20,6 +20,9 @@ const props = defineProps({
   beneficiaries_headers: Array,
 });
 
+// Extract proposal data from resource
+const proposal = props.proposal.data;
+
 
 const donations_table_actions = [
  
@@ -160,7 +163,7 @@ const donations_table_actions = [
         </div>
       </div>
     </section>
-    <section v-if="proposal.files.length > 0" class=" bg-white dark:bg-gray-800 my-4  pt-4 shadow-md rounded-lg">
+    <section v-if="proposal.files?.length > 0" class=" bg-white dark:bg-gray-800 my-4  pt-4 shadow-md rounded-lg">
       <header>
         <h2
         class="py-2 bg-white dark:bg-gray-800 text-center capitalize text-lg font-medium text-gray-900 dark:text-gray-100"

@@ -179,6 +179,8 @@
     payment_methods: Array,
     show_payonline_button: Boolean,
   });
+  // Extract proposal data from resource
+const proposals = props.proposals.data;
   const form = useForm({
     name: '',
     phone: '',

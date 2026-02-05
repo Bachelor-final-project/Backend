@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDonationRequest;
 use App\Http\Requests\UpdateDonationRequest;
-use App\Http\Resources\DonationIndexResource;
+use App\Http\Resources\DonationListResource;
+use App\Http\Resources\ProposalListResource;
 use App\Http\Resources\ShortDonorResource;
 use App\Http\Resources\ShortProposalResource;
 use App\Models\Donation;
 use App\Models\Donor;
 use App\Models\Currency;
 use App\Models\Document;
+use App\Models\PaymentMethod;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -33,17 +35,19 @@ class DonationController extends Controller
      */
     public function index(Request $request)
     {
-        // $dd = ShortProposalResource::collection(Proposal::without(['entity', 'area', 'proposalType', 'currency', 'files'])->select('id', 'title')->latest()->take(100)->get());
-        // dd($dd->toArray($request));
-
+        $donations = Donation::query()
+            ->with(['donor.country', 'payment_method', 'proposal', 'currency'])
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
         
         return Inertia::render(Str::studly("Donation").'/Index', [
             "headers" => Donation::headers(),
             'currencies' => Currency::get(),
-            'proposals' => ShortProposalResource::collection(Proposal::without(['entity', 'area', 'proposalType', 'currency', 'files'])->select('id', 'title')->latest()->take(100)->get())->toArray($request),
+            'proposals' => ShortProposalResource::collection(Proposal::select('id', 'title')->latest()->take(100)->get())->toArray($request),
             'statuses' => Donation::statuses(),
-            'donors' => ShortDonorResource::collection(Donor::without(['country'])->select('id', 'name')->get())->toArray($request),
-            "items" => (Donation::search($request)->sort($request)->paginate($request->per_page?? $this->pagination)),
+            'donors' => ShortDonorResource::collection(Donor::select('id', 'name')->get())->toArray($request),
+            "items" => DonationListResource::collection($donations),
         ]);
     }
 
@@ -55,7 +59,8 @@ class DonationController extends Controller
          return Inertia::render(Str::studly("Donation").'/Create', [
             'status_options' => Donation::statuses(),
             'currencies' => Currency::all(),
-            'proposals' => Proposal::where('status', '=', Proposal::STATUSES['donatable'])->get(),
+            'proposals' => Proposal::where('status', '=', Proposal::STATUSES['donatable'])->select('id', 'title', 'min_documenting_amount')->get(),
+            'payment_methods' => PaymentMethod::all(),
         ]);
     }
 
@@ -90,11 +95,14 @@ class DonationController extends Controller
      */
     public function edit(Donation $donation)
     {
+        $donation->load(['donor.country', 'payment_method', 'proposal', 'currency']);
+        // dd(new DonationListResource($donation) );
         return Inertia::render(Str::studly("Donation").'/Edit', [
             'status_options' => Donation::statuses(),
             'currencies' => Currency::all(),
-            'proposals' => Proposal::where('status', '=', Proposal::STATUSES['donatable'])->get(),
-            'donation' => $donation->toArray()
+            'proposals' => Proposal::where('status', '=', Proposal::STATUSES['donatable'])->select('id', 'title', 'min_documenting_amount')->get(),
+            'payment_methods' => PaymentMethod::where('entity_id', $donation->proposal->entity_id)->get(),
+            'donation' => (new DonationListResource($donation))->toArray(request()) 
         ]);
     }
 

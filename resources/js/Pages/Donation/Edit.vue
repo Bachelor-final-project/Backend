@@ -17,9 +17,10 @@ const props = defineProps({
   status_options: Array,
   currencies: Array,
   proposals: Array,
+  payment_methods: Array,
   donation: Array,
 });
-
+// props.donation = props.donation?.data;
 // const isAdminChecked = ref(false);
 
 // watch(isAdminChecked, (newValue, oldValue) => {
@@ -33,6 +34,7 @@ const form = useForm({
   proposal_id: props.donation.proposal_id,
   document_nickname: props.donation.document_nickname,
   currency_id: props.donation.currency_id,
+  payment_method_id: props.donation.payment_method_id,
   amount: props.donation.amount,
   status: props.donation.status
 });
@@ -48,7 +50,7 @@ const submit = () => {
     },
   });
 };
-const hasDocument = computed(() => props.donation.proposal.min_documenting_amount <= form.amount);
+const hasDocument = computed(() => props.donation.proposal?.min_documenting_amount <= form.amount);
 </script>
 <template>
   <Head :title="$t('Edit Donation')" />
@@ -118,6 +120,19 @@ const hasDocument = computed(() => props.donation.proposal.min_documenting_amoun
             autocomplete="new-password"
           />
           <InputError :message="form.errors.currency_id" class="mt-2" />
+        </div>
+
+        <div>
+          <InputLabel for="payment_method_id" value="Payment Method" />
+          <SelectInput
+            :options="payment_methods"
+            :item_name="`name_${i18n_locale}`"
+            id="payment_method_id"
+            v-model="form.payment_method_id"
+            class="mt-1 block w-full"
+            autocomplete="new-password"
+          />
+          <InputError :message="form.errors.payment_method_id" class="mt-2" />
         </div>
 
         <div>

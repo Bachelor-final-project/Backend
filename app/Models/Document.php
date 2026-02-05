@@ -12,9 +12,7 @@ use App\Traits\TenantScoped;
 class Document extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped;
-    protected $appends = ['proposal_name', 'donor_name', 'donor_phone', 'currency_name', 'is_attached', 'document_file_url', 'document_file_name'];
-
-    protected $with = ['proposal', 'donor', 'currency', 'attachments'];
+    
     public static $controllable = true;
 
     public static function getDocumentsByStatuesChartData(){
@@ -29,8 +27,9 @@ class Document extends BaseModel
 
         return $result;
     }
-    public function getIsAttachedAttribute() {
-        return count($this->files) > 0;
+    public function files()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
     }
     public function proposal()
     {
@@ -45,33 +44,7 @@ class Document extends BaseModel
         return $this->belongsTo(Currency::class, 'currency_id');
     }
 
-    public function getProposalNameAttribute()
-    {
-        return $this->proposal?->title;
-    }
 
-    public function getDonorNameAttribute()
-    {
-        return $this->donor?->name;
-    }
-
-    public function getDonorPhoneAttribute()
-    {
-        return $this->donor?->phone;
-    }
-
-    public function getCurrencyNameAttribute()
-    {
-        return $this->currency?->name;
-    }
-    public function getDocumentFileUrlAttribute()
-    {
-        return  $this->files()->where('attachment_type', 1)->first()?->url;
-    }
-    public function getDocumentFileNameAttribute()
-    {
-        return  $this->files()->where('attachment_type', 1)->first()?->filename;
-    }
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'attachable');

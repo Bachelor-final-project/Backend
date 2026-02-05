@@ -72,13 +72,10 @@ class ProposalPolicy
         if(!in_array($user->type, [1, 2, 3])) return false;
         if($proposal->status !== 1) return false;
 
-        // make sure that all donations are approved
-        $pendingDonations = $proposal->donations()
-        ->where('status', 0)
-        ->exists();
+        $pendingDonationsCount = $proposal->pending_donating_count ?? 
+        $proposal->donations()->where('status', 0)->count();
 
-        return !$pendingDonations;
-
+        return $pendingDonationsCount === 0;
     }
     public function completeExecutionStatus(User $user, Proposal $proposal)
     {

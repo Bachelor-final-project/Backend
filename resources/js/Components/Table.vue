@@ -523,7 +523,7 @@
         <span class="text-sm font-medium dark:text-white">{{$t("count of select items: ")}}{{ selectedRows.length }}</span>
     </div>
     </div>
-    <Paginator :params="route().params" :links="items.links" />
+    <Paginator :params="route().params" :links="items?.meta?.links || items?.links" />
   </div>
 </template>
 

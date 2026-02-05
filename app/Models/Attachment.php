@@ -30,7 +30,7 @@ class Attachment extends BaseModel
         ->where('attachment_type', $attachamentType)
         ->each(function ($attachment) {
             // Delete the file from storage
-            Storage::disk('public')->delete($attachment->path);
+            // Storage::disk('public')->delete($attachment->path);
             $attachment->delete(); // Remove the record from the database
         });
         // dd($data['files']);
