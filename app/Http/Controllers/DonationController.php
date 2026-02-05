@@ -15,6 +15,7 @@ use App\Models\Document;
 use App\Models\PaymentMethod;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -118,14 +119,17 @@ class DonationController extends Controller
             // dd($donorPhone);
             $validated['donor_id'] = Donor::where('phone', '=', $donorPhone)->first()->id;
         }
-        $old_proposal_id = $donation->proposal_id;
-        $old_donor_id = $donation->donor_id;
-        $old_document_nickname = $donation->document_nickname;
         
-        $donation->update($validated);
+        DB::transaction(function($query) use($donation, $validated){
+            $old_proposal_id = $donation->proposal_id;
+            $old_donor_id = $donation->donor_id;
+            $old_document_nickname = $donation->document_nickname;
 
-        // update Document after updating the donation
-        Document::updateOrCreateDocumentForDonation($donation, $old_proposal_id, $old_donor_id, $old_document_nickname);
+            $donation->update($validated);
+    
+            // update Document after updating the donation
+            Document::updateOrCreateDocumentForDonation($donation, $old_proposal_id, $old_donor_id, $old_document_nickname);
+        });
         
 
         return back()->with('res', ['message' => __('Donation Updated Seccessfully'), 'type' => 'success']);
