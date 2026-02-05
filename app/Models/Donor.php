@@ -12,9 +12,8 @@ use App\Traits\TenantScoped;
 class Donor extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
-    protected $appends = ['gender_str', 'country_name'];
-    protected $guarded = ['donations'];
-    protected $with = ['country'];
+    protected $appends = ['gender_str'];
+    protected $with = [];
     public static $controllable = true;
 
     public const STATUSES = [

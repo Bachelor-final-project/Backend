@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\ProposalDonatingStatusApprovedWithDonatedAmount;
+use App\Http\Resources\ProposalListResource;
+use App\Http\Resources\ProposalDetailResource;
+use App\Http\Resources\DonationListResource;
 use App\Models\Proposal;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProposalRequest;
@@ -45,7 +48,25 @@ class ProposalController extends Controller
      */
     public function index(Request $request)
     {
-        
+        $proposals = Proposal::query()
+            ->with([
+                'entity', 
+                'area', 
+                'proposalType', 
+                'currency', 
+                'documents.proposal:id,title',
+                'documents.donor:id,name,phone',
+                'documents.currency:id,name_ar,name_en',
+                'documents.files' => fn($q) => $q->where('attachment_type', 1)
+            ])
+            ->withComputedAttributes()
+            ->withCompleteDonatingStatusDate()
+            ->withPendingDonatingCount()
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
+            // dd($proposals->toArray());
+
         return Inertia::render(Str::studly("Proposal").'/Index', [
             "headers" => Proposal::headers(),
             "statuses" => Proposal::statuses(),
@@ -53,12 +74,19 @@ class ProposalController extends Controller
             'currencies' => Currency::get(),
             'proposalTypes' => ProposalType::get(),
             'areas' => Area::get(),
-            "items" => Proposal::with('documents')->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+            "items" => ProposalListResource::collection($proposals),
             "users" => User::get()
         ]);
     }
     public function overview(Request $request)
     {
+        $proposals = Proposal::query()
+            ->with(['entity', 'area', 'proposalType', 'currency'])
+            ->withComputedAttributes()
+            ->where('status', 1)
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
         
         return Inertia::render(Str::studly("Proposal").'/Overview', [
             "headers" => Proposal::overviewHeaders(),
@@ -67,7 +95,7 @@ class ProposalController extends Controller
             'currencies' => Currency::get(),
             'proposalTypes' => ProposalType::get(),
             'areas' => Area::get(),
-            "items" => Proposal::where('status', 1)->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+            "items" => ProposalListResource::collection($proposals),
             "users" => User::get()
         ]);
     }
@@ -126,16 +154,36 @@ class ProposalController extends Controller
      */
     public function show(Request $request, Proposal $proposal)
     {
+        $proposal->load(['entity', 'area', 'proposalType', 'currency', 'logs']);
+        $proposal->loadCount(['donations', 'documents', 'beneficiaries']);
+        
+        // Load computed attributes
+        $proposalWithComputed = Proposal::withComputedAttributes()
+            ->find($proposal->id);
+        $proposal->paid_amount = $proposalWithComputed->paid_amount;
+        $proposal->remaining_amount = $proposalWithComputed->remaining_amount;
+        
+        $donations = $proposal->donations()
+            ->with(['donor', 'payment_method', 'proposal', 'currency'])
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
+        
         return Inertia::render(Str::studly("Proposal").'/Show', [
-            //'options' => $regions,
-            'proposal' => $proposal->toArray(),
+            'proposal' => new ProposalDetailResource($proposal),
             'currencies' => Currency::all(),
             'proposal_types' => ProposalType::all(),
-            'donations' => $proposal->donations()->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+            'donations' => DonationListResource::collection($donations),
             'donations_headers' => Donation::headers(),
-            'documents' => $proposal->documents()->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+            'documents' => \App\Http\Resources\DocumentResource::collection(
+                $proposal->documents()
+                    ->with(['proposal:id,title', 'donor:id,name,phone', 'currency:id,name_ar,name_en', 'files' => fn($q) => $q->where('attachment_type', 1)])
+                    ->search($request)
+                    ->sort($request)
+                    ->paginate($request->per_page ?? $this->pagination)
+            ),
             'documents_headers' => Document::headers(),
-            'beneficiaries' => $proposal->beneficiaries()->search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
+            'beneficiaries' => $proposal->beneficiaries()->search($request)->sort($request)->paginate($request->per_page ?? $this->pagination),
             'beneficiaries_headers' => Beneficiary::headers(),
         ]);
     }

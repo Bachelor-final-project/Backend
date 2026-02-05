@@ -12,8 +12,8 @@ use App\Models\PaymentMethod;
 class Entity extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
-    protected $appends = [ 'supervisor_name', 'donating_form_link', 'home_page_link', 'country_name', 'completed_projects_count', 'number_of_public_proposal', 'donations_count'];
-    protected $with = [ 'supervisor', 'country'];
+    protected $appends = [];
+    protected $with = [];
     protected $casts = [
         'home_title' => 'array',
         'home_description' => 'array',

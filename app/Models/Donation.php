@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\App;
 class Donation extends BaseModel
 {
     use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
-    protected $appends = [ 'donor_name','currency_name', 'status_str', 'donor_phone', 'payment_method_name', 'proposal_title', 'created_at_date_time'];
-    protected $with = ['donor'];
+    protected $appends = ['status_str'];
+    protected $with = [];
     public static $controllable = true;
 
     public const STATUSES = [
@@ -143,7 +143,7 @@ class Donation extends BaseModel
             ['sortable' => true, 'value' => 'amount', 'key' => 'amount'],
             ['sortable' => true, 'sortBy' => 'created_at', 'value' => 'created at', 'key' => 'created_at_date_time'],
             ['sortable' => true, 'value' => 'currency name', 'key' => 'currency_name'],
-            ['sortable' => true, 'value' => 'payment method', 'key' => 'payment_method_name'],
+            ['sortable' => true, 'value' => 'payment method', 'key' => 'payment_method_name_'. App::currentLocale()],
             ['sortable' => true, 'sortBy' => 'status', 'value' => 'status', 'key' => 'status_str', 'class_value_name' => 'status', 'has_class' => true],
             // ['sortable' => true, 'value' => 'actions', 'key' => 'actions', 'actions' => ['show', 'update', 'delete']],
         ];

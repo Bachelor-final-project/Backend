@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\ForUserTrait;
+use App\Traits\ProposalComputedAttributes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,10 +17,10 @@ use Illuminate\Support\Str;
 
 class Proposal extends BaseModel
 {
-    use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait;
+    use HasFactory, TenantAttributeTrait, TenantScoped, ForUserTrait, ProposalComputedAttributes;
     protected $guarded = ['donated_amount'];
-    protected $appends = ['status_str_ar',  'currency_name',  'currency_code',  'one_unit_price', 'entity_name', 'proposal_type_type_ar', 'area_name', 'can_complete_donating_status', 'can_complete_execution_status', 'can_complete_archiving_status', 'status_details', 'cover_image', 'complete_donating_status_date', 'paid_amount', 'remaining_amount', 'test', 'can_clone'];
-    protected $with = ['entity', 'area', 'proposalType', 'currency', 'files'];
+    protected $appends = ['status_str_ar', 'one_unit_price'];
+    protected $with = [];
     protected $casts = [
         'isPayableOnline' => 'boolean'
     ];
@@ -53,19 +54,39 @@ class Proposal extends BaseModel
     //                 ->select(['id', 'document_nickname', 'amount']);
     // }
     public function getCoverImageAttribute(){
-        return  $this->attachments()->where('attachment_type', 1)->first()?->url;
+        // If already loaded from database (via withCoverImage scope), use that
+        if (array_key_exists('cover_image', $this->attributes)) {
+            return $this->attributes['cover_image'];
+        }
+        // Fallback to query (only when not loaded from scope)
+        return $this->attachments()->where('attachment_type', 1)->first()?->url;
     }
     public function getCompleteDonatingStatusDateAttribute(){
-        return  $this->logs()->where('log_type', 1)->first()?->formatted_created_at;
+        // If already loaded from database (via withCompleteDonatingStatusDate scope), use that
+        if (array_key_exists('complete_donating_status_date', $this->attributes)) {
+            return $this->attributes['complete_donating_status_date'];
+        }
+        // Fallback to query (only when not loaded from scope)
+        return $this->logs()->where('log_type', 1)->first()?->formatted_created_at;
     }
     public function getPaidAmountAttribute(){
-        return  round($this->donations()->where('status', 2)->sum('amount'), 2);
+        // If already loaded from database (via withComputedAttributes scope), use that
+        if (array_key_exists('paid_amount', $this->attributes)) {
+            return round($this->attributes['paid_amount'], 2);
+        }
+        // Fallback to query (only when not loaded from scope)
+        return round($this->donations()->where('status', 2)->sum('amount'), 2);
     }
     public function getCostAttribute($cost){
         return  round($cost, 2);
     }
     public function getRemainingAmountAttribute(){
-        return  max(round($this->cost - $this->paid_amount, 2), 0);
+        // If already loaded from database (via withComputedAttributes scope), use that
+        if (array_key_exists('remaining_amount', $this->attributes)) {
+            return round($this->attributes['remaining_amount'], 2);
+        }
+        // Fallback to calculation
+        return max(round($this->cost - $this->paid_amount, 2), 0);
     }
     public function getEntityNameAttribute(){
         return $this->entity->name;   

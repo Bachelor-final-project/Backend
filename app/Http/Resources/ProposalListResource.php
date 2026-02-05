@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
-class ProposalDetailResource extends JsonResource
+class ProposalListResource extends JsonResource
 {
     public function toArray($request)
     {
@@ -23,34 +23,27 @@ class ProposalDetailResource extends JsonResource
             'status_str_ar' => $this->status_str_ar,
             'one_unit_price' => $this->one_unit_price,
             'isPayableOnline' => $this->isPayableOnline,
-            'entity_id' => $this->entity_id,
-            'area_id' => $this->area_id,
-            'proposal_type_id' => $this->proposal_type_id,
-            'currency_id' => $this->currency_id,
+            'min_documenting_amount' => $this->min_documenting_amount,
             
             // Relationships
-            'entity' => $this->whenLoaded('entity'),
-            'area' => $this->whenLoaded('area'),
-            'proposalType' => $this->whenLoaded('proposalType'),
-            'currency' => $this->whenLoaded('currency'),
             'entity_name' => $this->entity->name,
             'area_name' => $this->area->name,
             'proposal_type_type_ar' => $this->proposalType->type_ar,
+            'currency_id' => $this->currency_id,
             'currency_name' => $this->currency->name,
             'currency_code' => $this->currency->code,
+            'documents' => DocumentResource::collection($this->whenLoaded('documents')),
             
-            // Computed attributes
-            'paid_amount' => round($this->paid_amount ?? 0, 2),
-            'remaining_amount' => round($this->remaining_amount ?? 0, 2),
-            'cover_image' => $this->when(array_key_exists('cover_image', $this->resource->getAttributes()), $this->cover_image),
-            'complete_donating_status_date' => $this->when(array_key_exists('complete_donating_status_date', $this->resource->getAttributes()), $this->complete_donating_status_date),
+            // Computed attributes (from database)
+            'paid_amount' => $this->when(array_key_exists('paid_amount', $this->resource->getAttributes()), round($this->paid_amount ?? 0, 2)),
+            'remaining_amount' => $this->when(array_key_exists('remaining_amount', $this->resource->getAttributes()), round($this->remaining_amount ?? 0, 2)),
+            'complete_donating_status_date' => $this->complete_donating_status_date,
             
             // Authorization
             'can_complete_donating_status' => Gate::allows('completeDonatingStatus', $this->resource),
             'can_complete_execution_status' => Gate::allows('completeExecutionStatus', $this->resource),
             'can_complete_archiving_status' => Gate::allows('completeArchivingStatus', $this->resource),
             'can_clone' => Gate::allows('canClone', $this->resource),
-            'files' => $this->attachments,
         ];
     }
 }

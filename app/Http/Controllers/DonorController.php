@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDonorRequest;
 use App\Http\Requests\UpdateDonorRequest;
+use App\Http\Resources\DonorListResource;
 use App\Models\Donor;
 use App\Models\Country;
 use App\Models\Donation;
@@ -32,10 +33,15 @@ class DonorController extends Controller
      */
     public function index(Request $request)
     {
+        $donors = Donor::query()
+            ->with('country')
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
+        
         return Inertia::render(Str::studly("Donor").'/Index', [
             "headers" => Donor::headers(),
-            "items" => Donor::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
-
+            "items" => DonorListResource::collection($donors),
         ]);
     }
 

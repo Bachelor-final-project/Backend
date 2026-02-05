@@ -6,6 +6,8 @@ use App\Http\Requests\StoreDonatingFormRequest;
 use App\Http\Requests\StoreDonorRequest;
 use App\Http\Requests\StoreEntityRequest;
 use App\Http\Requests\UpdateEntityRequest;
+use App\Http\Resources\EntityListResource;
+use App\Http\Resources\ProposalListResource;
 use App\Models\Entity;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,11 +40,15 @@ class EntityController extends Controller
      */
     public function index(Request $request)
     {
+        $entities = Entity::query()
+            ->with(['supervisor', 'country'])
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
         
         return Inertia::render(Str::studly("Entity").'/Index', [
             "headers" => Entity::headers(),
-            "items" => Entity::search($request)->sort($request)->paginate($request->per_page?? $this->pagination),
-
+            "items" => EntityListResource::collection($entities),
         ]);
     }
     public function homeView(Request $request, string $donating_form_path)
@@ -67,7 +73,7 @@ class EntityController extends Controller
         return Inertia::render(Str::studly("Entity").'/DonatingForm', [
             "headers" => Proposal::guestHeaders(),
             "entity" => $entity,
-            "proposals" => Proposal::withoutGlobalScope(ForUserScope::class)->where('entity_id', $entity->id)->public()->get(),
+            "proposals" => ProposalListResource::collection(Proposal::withoutGlobalScope(ForUserScope::class)->withComputedAttributes()->where('entity_id', $entity->id)->public()->get()),
             'countries' => Country::select('id', 'name', 'calling_code')->get(),
             'genders' => Donor::genders(),
             'payment_methods' => $entity->payment_methods,
@@ -101,7 +107,13 @@ class EntityController extends Controller
         $entity_donating_form_path = Str::afterLast(parse_url(back()->getTargetUrl(), PHP_URL_PATH), '/');
         $entity = Entity::where('donating_form_path', $entity_donating_form_path)->first();
         $data['tenant_id'] = $entity->tenant_id;
-        $donor = Donor::firstOrCreate(['phone' => deterministicEncrypt($data['phone'])], $data);
+        $donor = Donor::firstOrCreate(['phone' => deterministicEncrypt($data['phone'])], [
+            'name' => $data['name'] ?? null,
+            'gender' => $data['gender'] ?? null,
+            'country_id' => $data['country_id'],
+            'tenant_id' => $entity->tenant_id,
+            'phone' => ($data['phone']),
+        ]);
         
         $onlinePayableDonations = [];
         $donationIds = [];

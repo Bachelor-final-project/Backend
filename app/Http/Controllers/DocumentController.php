@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDocumentRequest;
 use App\Http\Requests\UpdateDocumentRequest;
+use App\Http\Resources\DocumentResource;
 use App\Models\Document;
 use App\Models\Proposal;
 use App\Models\Donor;
@@ -29,16 +30,17 @@ class DocumentController extends Controller
      */
     public function index(Request $request)
     {
+        $documents = Document::with(['proposal:id,title', 'donor:id,name,phone', 'currency:id,name_en,name_ar', 'files' => fn($q) => $q->where('attachment_type', 1)])
+            ->search($request)
+            ->sort($request)
+            ->paginate($request->per_page ?? $this->pagination);
         
         return Inertia::render(Str::studly("Document").'/Index', [
             "headers" => Document::headers(),
             'currencies' => Currency::get(),
             'proposals' => Proposal::get(),
             'donors' => Donor::get(),
-            "items" => Document::search($request)
-            ->sort($request)
-            ->paginate($request->per_page?? $this->pagination),
-
+            "items" => DocumentResource::collection($documents),
         ]);
     }
 
@@ -80,11 +82,13 @@ class DocumentController extends Controller
      */
     public function edit(Document $document)
     {
+        $document->load(['proposal:id,title', 'donor:id,name,phone', 'currency:id,name', 'files']);
+        
         return Inertia::render(Str::studly("Document").'/Edit', [
             'proposals' => Proposal::where('status','=', Proposal::STATUSES['completed'])->get(),
             'donors' => Donor::select('id', 'name')->get(),
             'currencies' => Currency::all(),
-            'document' => $document->toArray()
+            'document' => new DocumentResource($document)
         ]);
     }
 
