@@ -123,49 +123,73 @@ class Document extends BaseModel
             ['name' => 'Close', 'id' => '4'],
         ];
     }
-    public static function updateOrCreateDocumentForDonation(Donation $donation, $old_proposal_id = null, $old_donor_id = null, $old_document_nickname = null){
-
-        // check if the proposal, donor or document_nickname have been changed
-        if(
-            $old_proposal_id != null && $old_proposal_id != $donation->proposal_id ||
-            $old_donor_id != null && $old_donor_id != $donation->donor_id ||
-            $old_document_nickname != null && $old_document_nickname != $donation->document_nickname 
-            ){
+    public static function updateOrCreateDocumentForDonation(Donation $donation, $old_proposal_id = null, $old_donor_id = null, $old_document_nickname = null)
+    {
+        if (self::hasChangedIdentifiers($donation, $old_proposal_id, $old_donor_id, $old_document_nickname)) {
             self::updateOrCreateDocumentForDonationOldProposalAndDonor($donation, $old_proposal_id, $old_donor_id, $old_document_nickname);
         }
 
-        $proposal = $donation->proposal;
+        $total_paid = self::calculateTotalPaid($donation);
 
-
-        $total_paid = Donation::where('proposal_id', $proposal->id)
-        ->where('donor_id', $donation->donor_id)
-        ->where('currency_id', $donation->currency_id)
-        ->where('document_nickname', $donation->document_nickname)
-        ->where('status', 2)
-        ->sum('amount');
-        
-
-        if($total_paid < $proposal->min_documenting_amount){
-            
-            Document::where('proposal_id', $proposal->id)
-            ->where('donor_id', $donation->donor_id)
-            ->where('currency_id', $donation->currency_id)
-            ->where('document_nickname', $donation->document_nickname)
-            ->delete();
+        if ($total_paid < $donation->proposal->min_documenting_amount) {
+            self::deleteDocumentByDonation($donation);
             return true;
         }
 
+        $uniqueKeys = self::getDocumentUniqueKeys($donation);
+        
+        if ($old_document_nickname === null && $donation->document_nickname !== null) {
+            self::migrateDocumentNickname($donation, $total_paid);
+        } else {
+            Document::updateOrCreate($uniqueKeys, ['amount' => $total_paid]);
+        }
 
+        return true;
+    }
 
+    private static function hasChangedIdentifiers($donation, $old_proposal_id, $old_donor_id, $old_document_nickname)
+    {
+        return ($old_proposal_id !== null && $old_proposal_id != $donation->proposal_id) ||
+               ($old_donor_id !== null && $old_donor_id != $donation->donor_id) ||
+               ($old_document_nickname !== null && $old_document_nickname != $donation->document_nickname);
+    }
 
-         Document::updateOrCreate(
-            ['proposal_id' =>  $proposal->id,'donor_id' =>  $donation->donor_id, 'document_nickname' => $donation->document_nickname, 'currency_id' =>  $donation->currency_id],
+    private static function calculateTotalPaid(Donation $donation)
+    {
+        return Donation::where(self::getDocumentUniqueKeys($donation))
+            ->where('status', 2)
+            ->sum('amount');
+    }
+
+    private static function getDocumentUniqueKeys(Donation $donation)
+    {
+        return [
+            'proposal_id' => $donation->proposal_id,
+            'donor_id' => $donation->donor_id,
+            'currency_id' => $donation->currency_id,
+            'document_nickname' => $donation->document_nickname,
+        ];
+    }
+
+    private static function deleteDocumentByDonation(Donation $donation)
+    {
+        Document::where(self::getDocumentUniqueKeys($donation))->delete();
+    }
+
+    private static function migrateDocumentNickname(Donation $donation, $total_paid)
+    {
+        Document::updateOrCreate(
+            [
+                'proposal_id' => $donation->proposal_id,
+                'donor_id' => $donation->donor_id,
+                'currency_id' => $donation->currency_id,
+                'document_nickname' => null,
+            ],
             [
                 'amount' => $total_paid,
+                'document_nickname' => $donation->document_nickname,
             ]
-            );
-        return true;
-        
+        );
     }
     // public static function updateOrCreateDocumentForDonationOldPropsal(Donation $donation, $old_proposal_id = null){
 

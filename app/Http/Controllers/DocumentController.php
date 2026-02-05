@@ -82,13 +82,16 @@ class DocumentController extends Controller
      */
     public function edit(Document $document)
     {
-        $document->load(['proposal:id,title', 'donor:id,name,phone', 'currency:id,name', 'files']);
-        
+        $document->load(['proposal:id,title,min_documenting_amount', 'donor:id,name,phone', 'currency:id,name_en,name_ar', 'files']);
+        // dd($document->proposal->min_documenting_amount);
+        // dd((new DocumentResource($document))->toArray(request()));
+        // dd($document->toArray());
         return Inertia::render(Str::studly("Document").'/Edit', [
             'proposals' => Proposal::where('status','=', Proposal::STATUSES['completed'])->get(),
             'donors' => Donor::select('id', 'name')->get(),
             'currencies' => Currency::all(),
-            'document' => new DocumentResource($document)
+            // 'document' => (new DocumentResource($document))->toArray(request())
+            'document' => $document->toArray()
         ]);
     }
 
