@@ -33,6 +33,7 @@ class ProposalListResource extends JsonResource
             'currency_name' => $this->currency->name,
             'currency_code' => $this->currency->code,
             'documents' => DocumentResource::collection($this->whenLoaded('documents')),
+            'cover_image' => $this->cover_image,
             
             // Computed attributes (from database)
             'paid_amount' => $this->when(array_key_exists('paid_amount', $this->resource->getAttributes()), round($this->paid_amount ?? 0, 2)),
