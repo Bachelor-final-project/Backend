@@ -18,7 +18,7 @@ class EntityListResource extends JsonResource
             'initial_completed_projects' => $this->initial_completed_projects,
             
             // Computed attributes
-            'supervisor_name' => $this->supervisor->name,
+            'supervisor_name' => $this->supervisor?->name,
             'country_name' => $this->country?->name,
             'donating_form_link' => url("/donating-form/{$this->donating_form_path}"),
             'home_page_link' => url("/home/{$this->donating_form_path}"),
