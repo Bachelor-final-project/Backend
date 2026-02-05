@@ -21,7 +21,7 @@ trait ProposalComputedAttributes
 
     public function scopeWithCoverImage($query)
     {
-        return $query->selectRaw('proposals.*, (SELECT url FROM attachments WHERE attachments.attachable_id = proposals.id AND attachments.attachable_type = ? AND attachments.attachment_type = 1 ORDER BY id ASC LIMIT 1) as cover_image', ['App\\Models\\Proposal']);
+        return $query->selectRaw('proposals.*, (SELECT CONCAT(?, "/storage/", path) FROM attachments WHERE attachments.attachable_id = proposals.id AND attachments.attachable_type = ? AND attachments.attachment_type = 1 ORDER BY id ASC LIMIT 1) as cover_image', [env('APP_URL'), 'App\\Models\\Proposal']);
     }
 
     public function scopeWithPendingDonatingCount($query)
