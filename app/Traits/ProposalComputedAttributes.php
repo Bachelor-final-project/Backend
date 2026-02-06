@@ -16,12 +16,12 @@ trait ProposalComputedAttributes
 
     public function scopeWithCompleteDonatingStatusDate($query)
     {
-        return $query->selectRaw('proposals.*, DATE_FORMAT((SELECT created_at FROM logs WHERE logs.loggable_id = proposals.id AND logs.loggable_type = ? AND logs.log_type = 1 ORDER BY created_at ASC LIMIT 1), "%Y-%m-%d") as complete_donating_status_date', ['App\\Models\\Proposal']);
+        return $query->selectRaw('proposals.*, DATE_FORMAT((SELECT created_at FROM logs WHERE logs.loggable_id = proposals.id AND logs.loggable_type = ? AND logs.log_type = 1 ORDER BY created_at ASC LIMIT 1), "%Y-%m-%d") as complete_donating_status_date', ['proposal']);
     }
 
     public function scopeWithCoverImage($query)
     {
-        return $query->selectRaw('proposals.*, (SELECT CONCAT(?, "/storage/", path) FROM attachments WHERE attachments.attachable_id = proposals.id AND attachments.attachable_type = ? AND attachments.attachment_type = 1 ORDER BY id ASC LIMIT 1) as cover_image', [env('APP_URL'), 'App\\Models\\Proposal']);
+        return $query->selectRaw('proposals.*, (SELECT CONCAT(?, "/storage/", path) FROM attachments WHERE attachments.attachable_id = proposals.id AND attachments.attachable_type = ? AND attachments.attachment_type = 1 ORDER BY id ASC LIMIT 1) as cover_image', [env('APP_URL'), 'proposal']);
     }
 
     public function scopeWithPendingDonatingCount($query)

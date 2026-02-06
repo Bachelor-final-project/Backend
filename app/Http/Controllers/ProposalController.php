@@ -60,6 +60,7 @@ class ProposalController extends Controller
                 'documents.files' => fn($q) => $q->where('attachment_type', 1)
             ])
             ->withComputedAttributes()
+            ->withCoverImage()
             ->withCompleteDonatingStatusDate()
             ->withPendingDonatingCount()
             ->search($request)
