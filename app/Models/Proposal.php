@@ -163,6 +163,10 @@ class Proposal extends BaseModel
             'donor_id'        // Foreign key on donations (to donors)
         );
     }
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'loggable');
+    }
     // Scopes
 
     public function scopePublic($query){
@@ -206,6 +210,22 @@ class Proposal extends BaseModel
             if(is_numeric($value)) $query->where($column, $value);
             
             else if(is_string($value)) $query->where($column,'like', "%$value%");
+        }
+
+        // Handle complete_donating_status_date_from
+        if ($request->filled('complete_donating_status_date_from')) {
+            $query->whereHas('logs', function($q) use ($request) {
+                $q->where('log_type', 1)
+                  ->whereDate('created_at', '>=', $request->complete_donating_status_date_from);
+            });
+        }
+
+        // Handle complete_donating_status_date_to
+        if ($request->filled('complete_donating_status_date_to')) {
+            $query->whereHas('logs', function($q) use ($request) {
+                $q->where('log_type', 1)
+                  ->whereDate('created_at', '<=', $request->complete_donating_status_date_to);
+            });
         }
     }
     public function scopeForUser($query, $user)
@@ -321,14 +341,17 @@ class Proposal extends BaseModel
             "categories" => $proposals->pluck('title')->toArray()
         ];
     }
-    public static function getCompletedProposalsLast30DaysChartData(){
+    public static function getCompletedProposalsLast30DaysChartData($fromDate = null, $toDate = null){
+        $fromDate = $fromDate ?? now()->subDays(30)->startOfDay();
+        $toDate = $toDate ?? now()->endOfDay();
+        
         $proposals = Proposal::selectRaw('COUNT(*) as count, date(logs.created_at) as date')
         ->join('logs', function($join) {
             $join->on('proposals.id', '=', 'logs.loggable_id')
                  ->where('logs.loggable_type', '=', 'proposal')
                  ->where('logs.log_type', '=', 1);
         })
-        ->where('logs.created_at', '>=', now()->subDays(30)->endOfDay())
+        ->whereBetween('logs.created_at', [$fromDate, $toDate])
         ->groupByRaw('date(logs.created_at)')
         ->get();
 
