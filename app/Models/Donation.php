@@ -44,9 +44,12 @@ class Donation extends BaseModel
 
         return $result;
     }
-    public static function getApprovedDonationLast30DaysChartData(){
+    public static function getApprovedDonationLast30DaysChartData($fromDate = null, $toDate = null){
+        $fromDate = $fromDate ?? now()->subDays(30)->startOfDay();
+        $toDate = $toDate ?? now()->endOfDay();
+        
         $donations = Donation::selectRaw('status, COUNT(*) as count, date(created_at) as date')
-        ->where('created_at', '>', now()->subDays(30)->endOfDay())
+        ->whereBetween('created_at', [$fromDate, $toDate])
         ->where('status', 2)
         ->groupByRaw('status, date(created_at)')
         ->get();
@@ -57,9 +60,12 @@ class Donation extends BaseModel
 
         return $result;
     }
-    public static function getTotalApprovedDonationLast30DaysChartData(){
+    public static function getTotalApprovedDonationLast30DaysChartData($fromDate = null, $toDate = null){
+        $fromDate = $fromDate ?? now()->subDays(30)->startOfDay();
+        $toDate = $toDate ?? now()->endOfDay();
+        
         $donations = Donation::selectRaw('status, sum(amount) as sum, date(created_at) as date')
-        ->where('created_at', '>', now()->subDays(30)->endOfDay())
+        ->whereBetween('created_at', [$fromDate, $toDate])
         ->where('status', 2)
         ->groupByRaw('status, date(created_at)')
         ->get();

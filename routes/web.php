@@ -11,6 +11,7 @@ use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\ExportPDFController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StripeController;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,7 @@ $controllers = array_filter($controllers, function ($controller) {
 
 Route::group(['middleware' => 'auth'], function () use ($controllers) {
     Route::get('/proposal/overview', [ProposalController::class, 'overview'])->name('proposal.overview');
+    Route::get('/report', [ReportController::class, 'index'])->name('report.index');
     // Route::get('/', fn () => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/warehouse_items', [WarehouseController::class, 'warehouse_items'])->name('warehouse.items');
